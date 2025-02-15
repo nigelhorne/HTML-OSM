@@ -122,9 +122,30 @@ sub generate_map {
 
 	die 'No coordinates provided' unless @$coordinates;
 
-	my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+	   my @valid_coordinates;
 
 	foreach my $coord (@$coordinates) {
+		my ($lat, $lon, $label, $icon_url) = @$coord;
+
+		# Validate Latitude and Longitude
+		if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
+			warn "Skipping invalid coordinate: ($lat, $lon)";
+			next;
+		}
+		if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+			warn "Skipping out-of-range coordinate: ($lat, $lon)";
+			next;
+		}
+
+		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
+	}
+
+	# Ensure at least one valid coordinate exists
+	die 'Error: No valid coordinates provided' unless @valid_coordinates;
+
+	my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+
+	foreach my $coord (@valid_coordinates) {
 		my ($lat, $lon, $label) = @$coord;
 		$min_lat = $lat if $lat < $min_lat;
 		$max_lat = $lat if $lat > $max_lat;
@@ -163,7 +184,7 @@ sub generate_map {
 	};
 
 	my @js_markers;
-	foreach my $coord (@$coordinates) {
+	foreach my $coord (@valid_coordinates) {
 		my ($lat, $lon, $label, $icon_url) = @$coord;
 		$label =~ s/'/\\'/g;	# Escape single quotes
 
