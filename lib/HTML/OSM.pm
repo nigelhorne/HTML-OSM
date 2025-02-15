@@ -222,6 +222,7 @@ Marker Customization: Use different icons for predefined coordinates vs. search 
 Add a .catch() and display user feedback
 Allow dynamic addition/removal of markers via user input.
 Fetch coordinates dynamically using an API (e.g., OpenStreetMap Nominatim).
+Allow the map size to be configurable.
 
 Change API to be closer to HTML::GoogleMaps::V3
 
