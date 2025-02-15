@@ -1,0 +1,6 @@
+Use different icons for different locations or categories.
+Ensure that only valid latitude/longitude values are processed.
+Display an error message if no coordinates are found.
+Input Validation: Sanitize coordinates (e.g., validate latitude/longitude ranges).
+Responsive Design: Use CSS frameworks like Bootstrap for better UI.
+Marker Customization: Use different icons for predefined coordinates vs. search results.
