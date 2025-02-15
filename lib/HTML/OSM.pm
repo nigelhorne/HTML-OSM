@@ -5,6 +5,8 @@ package HTML::OSM;
 use strict;
 use warnings;
 use File::Slurp;
+use LWP::UserAgent;
+use JSON::MaybeXS;
 
 =head1 NAME
 
@@ -116,6 +118,20 @@ sub new
 	bless $self, $class;
 	return $self;
 }
+sub fetch_coordinates {
+	my ($address) = @_;
+	my $ua		= LWP::UserAgent->new();
+	my $url = "https://nominatim.openstreetmap.org/search?format=json&q=" . $address;
+	$ua->agent(__PACKAGE__);
+
+	my $response = $ua->get($url);
+	if ($response->is_success) {
+		my $data = decode_json($response->decoded_content);
+		return ($data->[0]{lat}, $data->[0]{lon}) if @$data;
+	}
+	warn "Error fetching coordinates for: $address";
+	return
+}
 
 sub generate_map
 {
@@ -134,14 +150,19 @@ sub generate_map
 	foreach my $coord (@$coordinates) {
 		my ($lat, $lon, $label, $icon_url) = @$coord;
 
-		# Validate Latitude and Longitude
-		if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
-			warn "Skipping invalid coordinate: ($lat, $lon)";
-			next;
-		}
-		if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
-			warn "Skipping out-of-range coordinate: ($lat, $lon)";
-			next;
+		# If an address is provided instead of coordinates, fetch dynamically
+		if (!defined $lat || !defined $lon) {
+			($lat, $lon) = fetch_coordinates($label);
+		} else {
+			# Validate Latitude and Longitude
+			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
+				warn "Skipping invalid coordinate: ($lat, $lon)";
+				next;
+			}
+			if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+				warn "Skipping out-of-range coordinate: ($lat, $lon)";
+				next;
+			}
 		}
 
 		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
@@ -198,9 +219,9 @@ sub generate_map
 		# $icon_url ||= 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png';
 		if ($icon_url) {
 			my $icon_js = qq{
-				var customIcon = L.icon({
+				const customIcon = L.icon({
 					iconUrl: '$icon_url',
-					iconSize: [32, 32],
+					// iconSize: [32, 32],
 					iconAnchor: [16, 32],
 					popupAnchor: [0, -32]
 				});
@@ -208,7 +229,7 @@ sub generate_map
 
 			push @js_markers, qq{
 				$icon_js
-				var marker = L.marker([$lat, $lon], { icon: $icon_url ? customIcon : undefined }).addTo(map).bindPopup('$label');
+				var marker = L.marker([$lat, $lon], { icon: customIcon }).addTo(map).bindPopup('$label');
 				markers.push(marker);
 			};
 		} else {
@@ -280,10 +301,7 @@ automatically be notified of progress on your bug as I make changes.
 
 =head2 TODO
 
-Add a .catch() and display user feedback
 Allow dynamic addition/removal of markers via user input.
-Fetch coordinates dynamically using an API (e.g., OpenStreetMap Nominatim).
-Allow the map size to be configurable.
 
 Change API to be closer to HTML::GoogleMaps::V3
 

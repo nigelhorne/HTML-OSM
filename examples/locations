@@ -1,0 +1,14 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use HTML::OSM;
+
+my @coordinates = (
+        [undef, undef, 'San Francisco', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png'],
+        [undef, undef, 'New York'],
+        [51.5074, -0.1278, 'London'],  # Already has coordinates
+);
+
+my $map_generator = HTML::OSM->new(coordinates => \@coordinates, zoom => 10);
+$map_generator->generate_map();
