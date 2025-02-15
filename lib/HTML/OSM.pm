@@ -106,7 +106,8 @@ This module requires the following external modules:
 
 =cut
 
-sub new {
+sub new
+{
 	my ($class, %args) = @_;
 	my $self = {
 		coordinates => $args{coordinates} || [],
@@ -116,18 +117,19 @@ sub new {
 	return $self;
 }
 
-sub generate_map {
+sub generate_map
+{
 	my ($self, $size) = @_;
 
 	# Default size if not provided
-	my $width  = $size->{width}  || '100%';
+	my $width = $size->{width} || '100%';
 	my $height = $size->{height} || '500px';
 
 	my $coordinates = $self->{coordinates};
 
 	die 'No coordinates provided' unless @$coordinates;
 
-	   my @valid_coordinates;
+	my @valid_coordinates;
 
 	foreach my $coord (@$coordinates) {
 		my ($lat, $lon, $label, $icon_url) = @$coord;
@@ -223,25 +225,37 @@ sub generate_map {
 
 		document.getElementById('search-box').addEventListener('keyup', function(event) {
 			if (event.key === 'Enter') {
-				var query = event.target.value;
+				var query = event.target.value.trim();
+				if (!query) {
+					alert('Please enter a valid location.');
+					return;
+				}
+
 				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${query}`, {
 					headers: { 'User-Agent': '__PACKAGE__' }
 				})
-					.then(response => response.json())
-					.then(data => {
-						if (data.length > 0) {
-							var lat = data[0].lat;
-							var lon = data[0].lon;
-							map.setView([lat, lon], 14);
-							var searchMarker = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
-							markers.push(searchMarker);
-						}
-					});
+				.then(response => response.json())
+				.then(data => {
+					if (data.length > 0) {
+						var lat = data[0].lat;
+						var lon = data[0].lon;
+						map.setView([lat, lon], 14);
+						var searchMarker = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
+						markers.push(searchMarker);
+					} else {
+						alert('No results found. Try a different location.');
+					}
+				})
+				.catch(error => {
+					console.error('Error fetching location:', error);
+					alert('Failed to fetch location. Please check your internet connection and try again.');
+				});
 			}
 		});
-	</script>
-</body>
-</html>
+
+			</script>
+		</body>
+		</html>
 	};
 
 	write_file('map.html', $html);
