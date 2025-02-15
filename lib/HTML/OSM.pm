@@ -23,12 +23,12 @@ our $VERSION = '0.06';
   use HTML::OSM;
 
   my $osm = HTML::OSM->new(
-      coordinates => [
-          [37.7749, -122.4194, 'San Francisco'],
-          [40.7128, -74.0060, 'New York'],
-          [51.5074, -0.1278, 'London'],
-      ],
-      zoom => 10,
+	  coordinates => [
+		  [37.7749, -122.4194, 'San Francisco'],
+		  [40.7128, -74.0060, 'New York'],
+		  [51.5074, -0.1278, 'London'],
+	  ],
+	  zoom => 10,
   );
 
   $osm->generate_map();
@@ -44,8 +44,8 @@ The generated map allows users to view marked locations, zoom, and search for lo
 =head3 new
 
   my $osm = HTML::OSM->new(
-      coordinates => \@coordinates,   # Arrayref of [latitude, longitude, label]
-      zoom => $zoom                    # Optional zoom level (default: 12)
+	  coordinates => \@coordinates,   # Arrayref of [latitude, longitude, label]
+	  zoom => $zoom					# Optional zoom level (default: 12)
   );
 
 Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
@@ -87,20 +87,20 @@ This module requires the following external modules:
 =head2 Example 1: Basic usage
 
   my $osm = HTML::OSM->new(
-      coordinates => [
-          [34.0522, -118.2437, 'Los Angeles'],
-          [48.8566, 2.3522, 'Paris'],
-      ],
+	  coordinates => [
+		  [34.0522, -118.2437, 'Los Angeles'],
+		  [48.8566, 2.3522, 'Paris'],
+	  ],
   );
   $osm->generate_map();
 
 =head2 Example 2: With custom zoom
 
   my $osm = HTML::OSM->new(
-      coordinates => [
-          [40.748817, -73.985428, 'Empire State Building'],
-      ],
-      zoom => 14,
+	  coordinates => [
+		  [40.748817, -73.985428, 'Empire State Building'],
+	  ],
+	  zoom => 14,
   );
   $osm->generate_map();
 
@@ -164,9 +164,28 @@ sub generate_map {
 
 	my @js_markers;
 	foreach my $coord (@$coordinates) {
-		my ($lat, $lon, $label) = @$coord;
+		my ($lat, $lon, $label, $icon_url) = @$coord;
 		$label =~ s/'/\\'/g;	# Escape single quotes
-		push @js_markers, "var marker = L.marker([$lat, $lon]).addTo(map).bindPopup('$label'); markers.push(marker);";
+
+		# $icon_url ||= 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png';
+		if ($icon_url) {
+			my $icon_js = qq{
+				var customIcon = L.icon({
+					iconUrl: '$icon_url',
+					iconSize: [32, 32],
+					iconAnchor: [16, 32],
+					popupAnchor: [0, -32]
+				});
+			};
+
+			push @js_markers, qq{
+				$icon_js
+				var marker = L.marker([$lat, $lon], { icon: $icon_url ? customIcon : undefined }).addTo(map).bindPopup('$label');
+				markers.push(marker);
+			};
+		} else {
+			push @js_markers, "var marker = L.marker([$lat, $lon]).addTo(map).bindPopup('$label'); markers.push(marker);";
+		}
 	}
 
 	$html .= join("\n", @js_markers);
@@ -221,7 +240,6 @@ automatically be notified of progress on your bug as I make changes.
 
 =head2 TODO
 
-Use different icons for different locations or categories.
 Ensure that only valid latitude/longitude values are processed.
 Display an error message if no coordinates are found.
 Input Validation: Sanitize coordinates (e.g., validate latitude/longitude ranges).
