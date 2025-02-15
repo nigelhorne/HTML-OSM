@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Interactive Map</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<style>
+		#map { height: 500px; width: 100%; }
+		#search-box { margin: 10px; padding: 5px; }
+		#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
+	</style>
+</head>
+<body>
+	<input type="text" id="search-box" placeholder="Enter location">
+	<button id="reset-button">Reset Map</button>
+	<div id="map"></div>
+	<script>
+		var map = L.map('map').setView([52.4941, -1.0604], 10);
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; OpenStreetMap contributors'
+		}).addTo(map);
+
+		var markers = [];
+
+	var marker = L.marker([51.5074, -0.1278]).addTo(map).bindPopup('London'); markers.push(marker);
+var marker = L.marker([52.2053, 0.1218]).addTo(map).bindPopup('Cambridge'); markers.push(marker);
+var marker = L.marker([53.4808, -2.2426]).addTo(map).bindPopup('Manchester'); markers.push(marker);
+		document.getElementById('reset-button').addEventListener('click', function() {
+			map.setView([52.4941, -1.0604], 10);
+		});
+
+		document.getElementById('search-box').addEventListener('keyup', function(event) {
+			if (event.key === 'Enter') {
+				var query = event.target.value;
+				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+					.then(response => response.json())
+					.then(data => {
+						if (data.length > 0) {
+							var lat = data[0].lat;
+							var lon = data[0].lon;
+							map.setView([lat, lon], 14);
+							var searchMarker = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
+							markers.push(searchMarker);
+						}
+					});
+			}
+		});
+	</script>
+</body>
+</html>
+	

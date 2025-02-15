@@ -1,0 +1,101 @@
+package HTML::OSM;
+
+use strict;
+use warnings;
+use File::Slurp;
+
+sub new {
+	my ($class, %args) = @_;
+	my $self = {
+		coordinates => $args{coordinates} || [],
+		zoom	   => $args{zoom} || 12,
+	};
+	bless $self, $class;
+	return $self;
+}
+
+sub generate_map {
+	my ($self) = @_;
+	my $coordinates = $self->{coordinates};
+
+	die 'No coordinates provided' unless @$coordinates;
+
+	my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+
+	foreach my $coord (@$coordinates) {
+		my ($lat, $lon, $label) = @$coord;
+		$min_lat = $lat if $lat < $min_lat;
+		$max_lat = $lat if $lat > $max_lat;
+		$min_lon = $lon if $lon < $min_lon;
+		$max_lon = $lon if $lon > $max_lon;
+	}
+
+	my $center_lat = ($min_lat + $max_lat) / 2;
+	my $center_lon = ($min_lon + $max_lon) / 2;
+
+	my $html = qq{
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Interactive Map</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.js"></script>
+	<style>
+		#map { height: 500px; width: 100%; }
+		#search-box { margin: 10px; padding: 5px; }
+		#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
+	</style>
+</head>
+<body>
+	<input type="text" id="search-box" placeholder="Enter location">
+	<button id="reset-button">Reset Map</button>
+	<div id="map"></div>
+	<script>
+		var map = L.map('map').setView([$center_lat, $center_lon], $self->{zoom});
+		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; OpenStreetMap contributors'
+		}).addTo(map);
+
+		var markers = [];
+
+	};
+
+	my @js_markers;
+	foreach my $coord (@$coordinates) {
+		my ($lat, $lon, $label) = @$coord;
+		push @js_markers, "var marker = L.marker([$lat, $lon]).addTo(map).bindPopup('$label'); markers.push(marker);";
+	}
+
+	$html .= join("\n", @js_markers);
+
+	$html .= qq{
+		document.getElementById('reset-button').addEventListener('click', function() {
+			map.setView([$center_lat, $center_lon], $self->{zoom});
+		});
+
+		document.getElementById('search-box').addEventListener('keyup', function(event) {
+			if (event.key === 'Enter') {
+				var query = event.target.value;
+				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${query}`)
+					.then(response => response.json())
+					.then(data => {
+						if (data.length > 0) {
+							var lat = data[0].lat;
+							var lon = data[0].lon;
+							map.setView([lat, lon], 14);
+							var searchMarker = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
+							markers.push(searchMarker);
+						}
+					});
+			}
+		});
+	</script>
+</body>
+</html>
+	};
+
+	write_file('map.html', $html);
+	print "Interactive map saved as map.html. Open this file in a browser.\n";
+}
+
+1;
