@@ -10,6 +10,14 @@ use File::Slurp;
 
 HTML::OSM - A module to generate an interactive OpenStreetMap with customizable coordinates and zoom level.
 
+=head1 VERSION
+
+Version 0.01
+
+=cut
+
+our $VERSION = '0.06';
+
 =head1 SYNOPSIS
 
   use HTML::OSM;
