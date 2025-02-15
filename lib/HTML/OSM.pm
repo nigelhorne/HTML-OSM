@@ -117,7 +117,12 @@ sub new {
 }
 
 sub generate_map {
-	my ($self) = @_;
+	my ($self, $size) = @_;
+
+	# Default size if not provided
+	my $width  = $size->{width}  || '100%';
+	my $height = $size->{height} || '500px';
+
 	my $coordinates = $self->{coordinates};
 
 	die 'No coordinates provided' unless @$coordinates;
@@ -164,7 +169,7 @@ sub generate_map {
 	<link rel="stylesheet" href="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.css" />
 	<script src="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.js"></script>
 	<style>
-		#map { height: 500px; width: 100%; }
+		#map { width: $width; height: $height; }
 		#search-box { margin: 10px; padding: 5px; }
 		#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
 	</style>
@@ -261,11 +266,6 @@ automatically be notified of progress on your bug as I make changes.
 
 =head2 TODO
 
-Ensure that only valid latitude/longitude values are processed.
-Display an error message if no coordinates are found.
-Input Validation: Sanitize coordinates (e.g., validate latitude/longitude ranges).
-Responsive Design: Use CSS frameworks like Bootstrap for better UI.
-Marker Customization: Use different icons for predefined coordinates vs. search results.
 Add a .catch() and display user feedback
 Allow dynamic addition/removal of markers via user input.
 Fetch coordinates dynamically using an API (e.g., OpenStreetMap Nominatim).
