@@ -206,7 +206,7 @@ sub center
 
 	if(ref($params)) {
 		if(ref($point) eq 'ARRAY') {
-			($lat, $lon) = @{$params};
+			($lat, $lon) = @{$point};
 		} elsif($point->can('latitude')) {
 			$lat = $point->latitude();
 			$lon = $point->longitude();
