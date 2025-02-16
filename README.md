@@ -17,28 +17,59 @@ The generated map allows users to view marked locations, zoom, and search for lo
     # ...
 
     $map = HTML::OSM->new(
-          coordinates => [
-                  [34.0522, -118.2437, 'Los Angeles'],
-                  [undef, undef, 'Paris'],
-          ],
-          zoom => 14,
+        coordinates => [
+          [34.0522, -118.2437, 'Los Angeles'],
+          [undef, undef, 'Paris'],
+        ],
+        zoom => 14,
     );
     my ($head, $map_div) = $map->onload_render();
+
+- Caching
+
+    Identical geocode requests are cached (using [CHI](https://metacpan.org/pod/CHI) or a user-supplied caching object),
+    reducing the number of HTTP requests to the API and speeding up repeated queries.
+
+    This module leverages [CHI](https://metacpan.org/pod/CHI) for caching geocoding responses.
+    When a geocode request is made,
+    a cache key is constructed from the request.
+    If a cached response exists,
+    it is returned immediately,
+    avoiding unnecessary API calls.
+
+- Rate-Limiting
+
+    A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
+
+    Rate-limiting is implemented using [Time::HiRes](https://metacpan.org/pod/Time%3A%3AHiRes).
+    A minimum interval between API
+    calls can be specified via the `min_interval` parameter in the constructor.
+    Before making an API call,
+    the module checks how much time has elapsed since the
+    last request and,
+    if necessary,
+    sleeps for the remaining time.
 
 # SUBROUTINES/METHODS
 
 ## new
 
     $map = HTML::OSM->new(
-          coordinates => [
-                  [37.7749, -122.4194, 'San Francisco'],
-                  [40.7128, -74.0060, 'New York'],
-                  [51.5074, -0.1278, 'London'],
-          ],
-          zoom => 10,
+        coordinates => [
+          [37.7749, -122.4194, 'San Francisco'],
+          [40.7128, -74.0060, 'New York'],
+          [51.5074, -0.1278, 'London'],
+        ],
+        zoom => 10,
     );
 
 Creates a new `HTML::OSM` object with the provided coordinates and optional zoom level.
+
+- `cache`
+
+    A caching object.
+    If not provided,
+    an in-memory cache is created with a default expiration of one hour.
 
 - coordinates
 
@@ -59,7 +90,17 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 
     Height (in pixels or using your own unit), the default is 500px.
 
-- width
+- `ua`
+
+    An object to use for HTTP requests.
+    If not provided, a default user agent is created.
+
+- `host`
+
+    The API host endpoint.
+    Defaults to [https://nominatim.openstreetmap.org/search](https://nominatim.openstreetmap.org/search).
+
+- `width`
 
     Width (in pixels or using your own unit), the default is 100%.
 
@@ -72,7 +113,7 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 Add a marker to the map at the given point.
 A point can be a unique place name, like an address,
 an object that understands `latitude()` and `longitude()`,
-or a pair of coordinates passed in as an arrayref: \[ longitude, latitude \].
+or a pair of coordinates passed in as an arrayref: `[ longitude, latitude ]`.
 Will return 0 if the point is not found and 1 on success.
 
 It takes two optional arguments:
@@ -83,7 +124,7 @@ It takes two optional arguments:
 
 - icon
 
-    A url to the icon to be added
+    A url to the icon to be added.
 
 ## center
 

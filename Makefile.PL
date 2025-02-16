@@ -21,11 +21,13 @@ WriteMakefile(
 		: ()),
 	PREREQ_PM => {
 		'Carp' => 0,
+		'CHI' => 0,
 		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
 		'File::Slurp' => 0,
 		'LWP::UserAgent' => 0,
 		'JSON::MaybeXS' => 0,
 		'Scalar::Util' => 0,
+		'Time::HiRes' => 0,
 	},
 	META_MERGE => {
 		resources => {

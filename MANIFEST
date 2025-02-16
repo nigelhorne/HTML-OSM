@@ -13,6 +13,7 @@ t/20-new.t
 t/30-basics.t
 t/eof.t
 t/eol.t
+t/limiting.t
 t/mock.t
 t/pod-coverage.t
 t/pod-snippets.t

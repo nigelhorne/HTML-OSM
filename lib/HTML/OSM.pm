@@ -6,10 +6,12 @@ use strict;
 use warnings;
 
 use Carp;
+use CHI;
 use File::Slurp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
 use Scalar::Util;
+use Time::HiRes;
 
 =head1 NAME
 
@@ -34,30 +36,65 @@ The generated map allows users to view marked locations, zoom, and search for lo
     # ...
 
     $map = HTML::OSM->new(
-	  coordinates => [
-		  [34.0522, -118.2437, 'Los Angeles'],
-		  [undef, undef, 'Paris'],
-	  ],
-	  zoom => 14,
+	coordinates => [
+	  [34.0522, -118.2437, 'Los Angeles'],
+	  [undef, undef, 'Paris'],
+	],
+	zoom => 14,
     );
     my ($head, $map_div) = $map->onload_render();
+
+=over 4
+
+=item * Caching
+
+Identical geocode requests are cached (using L<CHI> or a user-supplied caching object),
+reducing the number of HTTP requests to the API and speeding up repeated queries.
+
+This module leverages L<CHI> for caching geocoding responses.
+When a geocode request is made,
+a cache key is constructed from the request.
+If a cached response exists,
+it is returned immediately,
+avoiding unnecessary API calls.
+
+=item * Rate-Limiting
+
+A minimum interval between successive API calls can be enforced to ensure that the API is not overwhelmed and to comply with any request throttling requirements.
+
+Rate-limiting is implemented using L<Time::HiRes>.
+A minimum interval between API
+calls can be specified via the C<min_interval> parameter in the constructor.
+Before making an API call,
+the module checks how much time has elapsed since the
+last request and,
+if necessary,
+sleeps for the remaining time.
+
+=back
 
 =head1 SUBROUTINES/METHODS
 
 =head2 new
 
     $map = HTML::OSM->new(
-	  coordinates => [
-		  [37.7749, -122.4194, 'San Francisco'],
-		  [40.7128, -74.0060, 'New York'],
-		  [51.5074, -0.1278, 'London'],
-	  ],
-	  zoom => 10,
+	coordinates => [
+	  [37.7749, -122.4194, 'San Francisco'],
+	  [40.7128, -74.0060, 'New York'],
+	  [51.5074, -0.1278, 'London'],
+	],
+	zoom => 10,
     );
 
 Creates a new C<HTML::OSM> object with the provided coordinates and optional zoom level.
 
 =over 4
+
+=item * C<cache>
+
+A caching object.
+If not provided,
+an in-memory cache is created with a default expiration of one hour.
 
 =item * coordinates
 
@@ -78,7 +115,17 @@ An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
 
 Height (in pixels or using your own unit), the default is 500px.
 
-=item * width
+=item * C<ua>
+
+An object to use for HTTP requests.
+If not provided, a default user agent is created.
+
+=item * C<host>
+
+The API host endpoint.
+Defaults to L<https://nominatim.openstreetmap.org/search>.
+
+=item * C<width>
 
 Width (in pixels or using your own unit), the default is 100%.
 
@@ -126,11 +173,25 @@ sub new
 		Carp::croak(__PACKAGE__, ': coordinates must be a reference to an array');
 	}
 
+	# Set up caching (default to an in-memory cache if none provided)
+	my $cache = $args{cache} || CHI->new(
+		driver => 'Memory',
+		global => 1,
+		expires_in => '1 day',
+	);
+
+	# Set up rate-limiting: minimum interval between requests (in seconds)
+	my $min_interval = $args{min_interval} || 0;	# default: no delay
+
 	return bless {
+		cache => $cache,
 		coordinates => $args{coordinates} || [],
 		height => $args{'height'} || '500px',
+		host => $args{'host'} || 'nominatim.openstreetmap.org/search',
 		width => $args{'width'} || '100%',
 		zoom => $args{zoom} || 12,
+		min_interval => $min_interval,
+		last_request => 0,	# Initialize last_request timestamp
 		%args
 	}, $class;
 }
@@ -140,7 +201,7 @@ sub new
 Add a marker to the map at the given point.
 A point can be a unique place name, like an address,
 an object that understands C<latitude()> and C<longitude()>,
-or a pair of coordinates passed in as an arrayref: [ longitude, latitude ].
+or a pair of coordinates passed in as an arrayref: C<[ longitude, latitude ]>.
 Will return 0 if the point is not found and 1 on success.
 
 It takes two optional arguments:
@@ -153,7 +214,7 @@ Add a popup info window as well.
 
 =item * icon
 
-A url to the icon to be added
+A url to the icon to be added.
 
 =back
 
@@ -269,12 +330,12 @@ sub zoom
 
 sub _fetch_coordinates
 {
-	my ($self, $address) = @_;
+	my ($self, $location) = @_;
 
-	die 'address not given to _fetch_coordinates' unless($address);
+	die 'address not given to _fetch_coordinates' unless($location);
 
 	if(my $geocoder = $self->{'geocoder'}) {
-		if(my $rc = $geocoder->geocode($address)) {
+		if(my $rc = $geocoder->geocode($location)) {
 			if(Scalar::Util::blessed($rc) && $rc->can('latitude')) {
 				return ($rc->latitude(), $rc->longitude());
 			}
@@ -287,16 +348,40 @@ sub _fetch_coordinates
 		}
 		return;
 	}
-	my $ua = $self->{'ua'} || LWP::UserAgent->new();
-	my $url = "https://nominatim.openstreetmap.org/search?format=json&q=" . $address;
-	$ua->agent(__PACKAGE__ . "/$VERSION");
+	my $ua = $self->{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
+	$ua->default_header(accept_encoding => 'gzip,deflate');
+	$ua->env_proxy(1);
+	my $url = 'https://' . $self->{'host'} . "?format=json&q=$location";
+
+	# Create a cache key based on the location (might want to use a stronger hash function if needed)
+	my $cache_key = "osm:$location";
+	if(my $cached = $self->{cache}->get($cache_key)) {
+		return ($cached->{lat}, $cached->{lon});
+	}
+
+	# Enforce rate-limiting: ensure at least min_interval seconds between requests.
+	my $now = time();
+	my $elapsed = $now - $self->{last_request};
+	if($elapsed < $self->{min_interval}) {
+		Time::HiRes::sleep($self->{min_interval} - $elapsed);
+	}
 
 	my $response = $ua->get($url);
+
+	# Update last_request timestamp
+	$self->{'last_request'} = time();
+
 	if($response->is_success()) {
-		my $data = decode_json($response->decoded_content());
-		return ($data->[0]{lat}, $data->[0]{lon}) if @$data;
+		if(my $data = decode_json($response->decoded_content())) {
+			if(ref($data) eq 'HASH') {
+				# Cache the result before returning it
+				$self->{'cache'}->set($cache_key, $data);
+
+				return ($data->{lat}, $data->{lon});
+			}
+		}
 	}
-	# Carp::croak("Error fetching coordinates for: $address");
+	# Carp::croak("Error fetching coordinates for: $location");
 	return
 }
 
