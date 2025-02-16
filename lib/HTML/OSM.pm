@@ -23,24 +23,13 @@ our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
-  use HTML::OSM;
-
-  my $osm = HTML::OSM->new(
-	  coordinates => [
-		  [37.7749, -122.4194, 'San Francisco'],
-		  [40.7128, -74.0060, 'New York'],
-		  [51.5074, -0.1278, 'London'],
-	  ],
-	  zoom => 10,
-  );
-
-  $osm->generate_map();
-
-=head1 SYNOPSIS
-
 C<HTML::OSM> is a Perl module for generating an interactive map using OpenStreetMap (OSM) and Leaflet.
 The module accepts a list of coordinates with optional labels and zoom level to create a dynamic HTML file containing an interactive map.
 The generated map allows users to view marked locations, zoom, and search for locations using the Nominatim API.
+
+    use HTML::OSM;
+    my $info = HTML::OSM->new();
+    # ...
 
 =head1 SUBROUTINES/METHODS
 
@@ -55,6 +44,16 @@ The generated map allows users to view marked locations, zoom, and search for lo
 	  ],
 	  zoom => 14,
     );
+    $osm = HTML::OSM->new(
+	  coordinates => [
+		  [37.7749, -122.4194, 'San Francisco'],
+		  [40.7128, -74.0060, 'New York'],
+		  [51.5074, -0.1278, 'London'],
+	  ],
+	  zoom => 10,
+    );
+
+    $osm->generate_map();
 
 Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
 
@@ -304,6 +303,34 @@ Nigel Horne, C<< <njh at bandsman.co.uk> >>
 =item * L<File::Slurp>
 
 =item * L<Leaflet>
+
+=item * L<https://wiki.openstreetmap.org/wiki/API>
+
+=back
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc HTML::OSM
+
+You can also look for information at:
+
+=over 4
+
+=item * MetaCPAN
+
+L<https://metacpan.org/dist/HTML-OSM>
+
+=item * RT: CPAN's request tracker
+
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM>
+
+=item * CPAN Testers' Matrix
+
+L<http://matrix.cpantesters.org/?dist=HTML-OSM>
+
+=item * CPAN Testers Dependencies
+
+L<http://deps.cpantesters.org/?module=HTML::OSM>
 
 =back
 

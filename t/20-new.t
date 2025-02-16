@@ -5,9 +5,7 @@ use strict;
 # use lib 'lib';
 use Test::Most tests => 7;
 
-BEGIN {
-	use_ok('HTML::OSM')
-}
+BEGIN { use_ok('HTML::OSM') }
 
 isa_ok(HTML::OSM->new(), 'HTML::OSM', 'Creating HTML::OSM object');
 isa_ok(HTML::OSM::new(), 'HTML::OSM', 'Creating HTML::OSM object');

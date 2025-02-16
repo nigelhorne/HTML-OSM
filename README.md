@@ -8,24 +8,13 @@ Version 0.01
 
 # SYNOPSIS
 
-    use HTML::OSM;
-
-    my $osm = HTML::OSM->new(
-            coordinates => [
-                    [37.7749, -122.4194, 'San Francisco'],
-                    [40.7128, -74.0060, 'New York'],
-                    [51.5074, -0.1278, 'London'],
-            ],
-            zoom => 10,
-    );
-
-    $osm->generate_map();
-
-# SYNOPSIS
-
 `HTML::OSM` is a Perl module for generating an interactive map using OpenStreetMap (OSM) and Leaflet.
 The module accepts a list of coordinates with optional labels and zoom level to create a dynamic HTML file containing an interactive map.
 The generated map allows users to view marked locations, zoom, and search for locations using the Nominatim API.
+
+    use HTML::OSM;
+    my $info = HTML::OSM->new();
+    # ...
 
 # SUBROUTINES/METHODS
 
@@ -40,6 +29,16 @@ The generated map allows users to view marked locations, zoom, and search for lo
           ],
           zoom => 14,
     );
+    $osm = HTML::OSM->new(
+          coordinates => [
+                  [37.7749, -122.4194, 'San Francisco'],
+                  [40.7128, -74.0060, 'New York'],
+                  [51.5074, -0.1278, 'London'],
+          ],
+          zoom => 10,
+    );
+
+    $osm->generate_map();
 
 Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
 
@@ -73,6 +72,29 @@ Nigel Horne, `<njh at bandsman.co.uk>`
 
 - [File::Slurp](https://metacpan.org/pod/File%3A%3ASlurp)
 - [Leaflet](https://metacpan.org/pod/Leaflet)
+- [https://wiki.openstreetmap.org/wiki/API](https://wiki.openstreetmap.org/wiki/API)
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc HTML::OSM
+
+You can also look for information at:
+
+- MetaCPAN
+
+    [https://metacpan.org/dist/HTML-OSM](https://metacpan.org/dist/HTML-OSM)
+
+- RT: CPAN's request tracker
+
+    [https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM](https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM)
+
+- CPAN Testers' Matrix
+
+    [http://matrix.cpantesters.org/?dist=HTML-OSM](http://matrix.cpantesters.org/?dist=HTML-OSM)
+
+- CPAN Testers Dependencies
+
+    [http://deps.cpantesters.org/?module=HTML::OSM](http://deps.cpantesters.org/?module=HTML::OSM)
 
 # SUPPORT
 
