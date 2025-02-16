@@ -2,6 +2,8 @@
 
 use strict;
 use warnings;
+
+use File::Slurp;
 use HTML::OSM;
 
 my @coordinates = (
@@ -9,6 +11,30 @@ my @coordinates = (
 	[52.2053, 0.1218, 'Cambridge'],	# Cambridge
 );
 
-my $map_generator = HTML::OSM->new(coordinates => \@coordinates, zoom => 10);
-$map_generator->add_marker([53.4808, -2.2426], html => 'Manchester');
-$map_generator->generate_map();
+my $map = HTML::OSM->new(coordinates => \@coordinates, zoom => 10);
+$map->add_marker([53.4808, -2.2426], html => 'Manchester');
+
+my ($head, $map_div) = $map->onload_render();
+
+my $html = qq {
+	<!DOCTYPE html>
+	<html>
+	<head>
+};
+
+$html .= $head;
+
+$html .= qq {
+	</head>
+	<body>
+};
+
+$html .= $map_div;
+
+$html .= qq {
+	</body>
+	</html>
+};
+
+write_file('map.html', $html);
+print "Interactive map saved as map.html. Open this file in a browser.\n";

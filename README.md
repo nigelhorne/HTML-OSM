@@ -13,23 +13,23 @@ The module accepts a list of coordinates with optional labels and zoom level to 
 The generated map allows users to view marked locations, zoom, and search for locations using the Nominatim API.
 
     use HTML::OSM;
-    my $info = HTML::OSM->new();
+    my $map = HTML::OSM->new();
     # ...
+
+    my $map = HTML::OSM->new(
+          coordinates => [
+                  [34.0522, -118.2437, 'Los Angeles'],
+                  [undef, undef, 'Paris'],
+          ],
+          zoom => 14,
+    );
+    my ($head, $map_div) = $map->onload_render();
 
 # SUBROUTINES/METHODS
 
 ## new
 
-    use HTML::OSM;
-
-    my $osm = HTML::OSM->new(
-          coordinates => [
-                  [34.0522, -118.2437, 'Los Angeles'],
-                  [48.8566, 2.3522, 'Paris'],
-          ],
-          zoom => 14,
-    );
-    $osm = HTML::OSM->new(
+    $map = HTML::OSM->new(
           coordinates => [
                   [37.7749, -122.4194, 'San Francisco'],
                   [40.7128, -74.0060, 'New York'],
@@ -38,7 +38,7 @@ The generated map allows users to view marked locations, zoom, and search for lo
           zoom => 10,
     );
 
-    $osm->generate_map();
+    $map->generate_map();
 
 Creates a new `HTML::OSM` object with the provided coordinates and optional zoom level.
 
@@ -69,12 +69,39 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 
     An optional zoom level for the map, with a default value of 12.
 
-## generate\_map
+## add\_marker
 
-Generates an HTML file (`map.html`) containing the interactive map with the specified coordinates.
-The file includes basic functionality such as zooming, resetting the map view, and searching locations.
+Add a marker to the map at the given point.
+A point can be a unique place name, like an address,
+an object that understands `latitude()` and `longitude()`,
+or a pair of coordinates passed in as an arrayref: \[ longitude, latitude \].
+Will return 0 if the point is not found and 1 on success.
 
-    $osm->generate_map();
+It takes two optional arguments:
+
+- html
+
+    Add a popup info window as well.
+
+- icon
+
+    A url to the icon to be added
+
+## center
+
+Center the map at a given point. Returns 1 on success, 0 if the point could not be found.
+
+## zoom
+
+Get/set the new zoom level (0 is corsest)
+
+    $map->zoom(10);
+
+## onload\_render
+
+Renders the map and returns a two element list.
+The first element needs to be placed in the head section of your HTML document.
+The second in the body where you want the map to appear.
 
 # AUTHOR
 
