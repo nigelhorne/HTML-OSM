@@ -1,5 +1,6 @@
 examples/england
 examples/locations
+examples/onmap_render
 lib/HTML/OSM.pm
 LICENSE
 Makefile.PL

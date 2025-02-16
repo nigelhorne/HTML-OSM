@@ -28,14 +28,12 @@ The module accepts a list of coordinates with optional labels and zoom level to 
 The generated map allows users to view marked locations, zoom, and search for locations using the Nominatim API.
 
     use HTML::OSM;
-    my $info = HTML::OSM->new();
+    my $map = HTML::OSM->new();
     # ...
 
 =head1 SUBROUTINES/METHODS
 
 =head2 new
-
-    use HTML::OSM;
 
     my $osm = HTML::OSM->new(
 	  coordinates => [
@@ -280,7 +278,7 @@ sub generate_map
 			}
 		});
 
-			</script>
+		</script>
 		</body>
 		</html>
 	};
@@ -292,6 +290,8 @@ sub generate_map
 sub _fetch_coordinates
 {
 	my ($self, $address) = @_;
+
+	die 'address not given to _fetch_coordinates' unless($address);
 
 	if(my $geocoder = $self->{'geocoder'}) {
 		if(my $rc = $geocoder->geocode($address)) {
@@ -377,9 +377,89 @@ sub onload_render
 				#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
 			</style>
 		</head>
-	}
-}
+	};
 
+	my $body = qq{
+		<input type="text" id="search-box" placeholder="Enter location">
+		<button id="reset-button">Reset Map</button>
+		<div id="map"></div>
+		<script>
+			var map = L.map('map').setView([$center_lat, $center_lon], $self->{zoom});
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; OpenStreetMap contributors'
+			}).addTo(map);
+
+			var markers = [];
+	};
+
+	my @js_markers;
+	foreach my $coord (@valid_coordinates) {
+		my ($lat, $lon, $label, $icon_url) = @$coord;
+		$label =~ s/'/\\'/g;	# Escape single quotes
+
+		# $icon_url ||= 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png';
+		if ($icon_url) {
+			my $icon_js = qq{
+				const customIcon = L.icon({
+					iconUrl: '$icon_url',
+					// iconSize: [32, 32],
+					iconAnchor: [16, 32],
+					popupAnchor: [0, -32]
+				});
+			};
+
+			push @js_markers, qq{
+				$icon_js
+				var marker = L.marker([$lat, $lon], { icon: customIcon }).addTo(map).bindPopup('$label');
+				markers.push(marker);
+			};
+		} else {
+			push @js_markers, "var marker = L.marker([$lat, $lon]).addTo(map).bindPopup('$label'); markers.push(marker);";
+		}
+	}
+
+	$body .= join("\n", @js_markers);
+
+	$body .= qq{
+		document.getElementById('reset-button').addEventListener('click', function() {
+			map.setView([$center_lat, $center_lon], $self->{zoom});
+		});
+
+		document.getElementById('search-box').addEventListener('keyup', function(event) {
+			if (event.key === 'Enter') {
+				var query = event.target.value.trim();
+				if (!query) {
+					alert('Please enter a valid location.');
+					return;
+				}
+
+				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${query}`, {
+					headers: { 'User-Agent': '__PACKAGE__' }
+				})
+				.then(response => response.json())
+				.then(data => {
+					if (data.length > 0) {
+						var lat = data[0].lat;
+						var lon = data[0].lon;
+						map.setView([lat, lon], 14);
+						var searchMarker = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
+						markers.push(searchMarker);
+					} else {
+						alert('No results found. Try a different location.');
+					}
+				})
+				.catch(error => {
+					console.error('Error fetching location:', error);
+					alert('Failed to fetch location. Please check your internet connection and try again.');
+				});
+			}
+		});
+
+		</script>
+	};
+
+	return ($head, $body);
+}
 
 =head1 AUTHOR
 
