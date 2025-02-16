@@ -1,5 +1,8 @@
 Revision history for HTML-OSM
 
+0.03
+	Change the default size to be the same as HTML::GoogleMaps::V3
+
 0.02	Sun Feb 16 14:44:32 EST 2025
 	Added rate-limiting and caching support
 

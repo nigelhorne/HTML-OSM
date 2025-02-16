@@ -113,7 +113,7 @@ An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
 
 =item * height
 
-Height (in pixels or using your own unit), the default is 500px.
+Height (in pixels or using your own unit), the default is 400px.
 
 =item * C<ua>
 
@@ -127,7 +127,7 @@ Defaults to L<https://nominatim.openstreetmap.org/search>.
 
 =item * C<width>
 
-Width (in pixels or using your own unit), the default is 100%.
+Width (in pixels or using your own unit), the default is 600px.
 
 =item * zoom
 
@@ -186,9 +186,9 @@ sub new
 	return bless {
 		cache => $cache,
 		coordinates => $args{coordinates} || [],
-		height => $args{'height'} || '500px',
+		height => $args{'height'} || '400px',
 		host => $args{'host'} || 'nominatim.openstreetmap.org/search',
-		width => $args{'width'} || '100%',
+		width => $args{'width'} || '600px',
 		zoom => $args{zoom} || 12,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
