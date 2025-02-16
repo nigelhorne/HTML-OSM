@@ -45,48 +45,37 @@ The generated map allows users to view marked locations, zoom, and search for lo
 
 =head2 new
 
-  my $osm = HTML::OSM->new(
-	  coordinates => \@coordinates,   # Arrayref of [latitude, longitude, label]
-	  zoom => $zoom					# Optional zoom level (default: 12)
-  );
+    use HTML::OSM;
+
+    my $osm = HTML::OSM->new(
+	  coordinates => [
+		  [34.0522, -118.2437, 'Los Angeles'],
+		  [48.8566, 2.3522, 'Paris'],
+	  ],
+	  zoom => 14,
+    );
 
 Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
 
 Generates an HTML file (C<map.html>) containing the interactive map with the specified coordinates. The file includes basic functionality such as zooming, resetting the map view, and searching locations.
 
-=head2 coordinates
+=over 4
+
+=item * coordinates
 
 An array reference containing a list of coordinates. Each entry should be an array with latitude, longitude, and an optional label, in the format:
 
-  [latitude, longitude, label]
+  [latitude, longitude, label, icon_url]
 
+If latitude and/or longitude is undefined,
+the label is taken to be a location to be added.
 If no coordinates are provided, an error will be thrown.
 
-=head2 zoom
+=item * zoom
 
 An optional zoom level for the map, with a default value of 12.
 
-=head1 EXAMPLES
-
-=head2 Example 1: Basic usage
-
-  my $osm = HTML::OSM->new(
-	  coordinates => [
-		  [34.0522, -118.2437, 'Los Angeles'],
-		  [48.8566, 2.3522, 'Paris'],
-	  ],
-  );
-  $osm->generate_map();
-
-=head2 Example 2: With custom zoom
-
-  my $osm = HTML::OSM->new(
-	  coordinates => [
-		  [40.748817, -73.985428, 'Empire State Building'],
-	  ],
-	  zoom => 14,
-  );
-  $osm->generate_map();
+=back
 
 =cut
 
@@ -100,6 +89,7 @@ sub new
 	bless $self, $class;
 	return $self;
 }
+
 sub fetch_coordinates {
 	my ($address) = @_;
 	my $ua		= LWP::UserAgent->new();
@@ -271,13 +261,23 @@ sub generate_map
 	print "Interactive map saved as map.html. Open this file in a browser.\n";
 }
 
-1;
-
 =head1 AUTHOR
 
 Nigel Horne, C<< <njh at bandsman.co.uk> >>
 
 =head1 BUGS
+
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<File::Slurp>
+
+=item * L<Leaflet>
+
+=back
+
+=head1 SUPPORT
 
 This module is provided as-is without any warranty.
 
@@ -287,21 +287,20 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML-OSM>.
 I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-=head1 SEE ALSO
-
-=item * L<File::Slurp>
-
-=item * L<Leaflet>
-
 =head2 TODO
 
 Allow dynamic addition/removal of markers via user input.
 
 Change API to be closer to HTML::GoogleMaps::V3
 
-=head1 LICENSE
+=head1 LICENSE AND COPYRIGHT
 
-GPL-2
+Copyright 2025 Nigel Horne.
+
+This program is released under the following licence: GPL2
 
 =cut
 
+1;
+
+__END__

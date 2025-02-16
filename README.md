@@ -31,48 +31,33 @@ The generated map allows users to view marked locations, zoom, and search for lo
 
 ## new
 
+    use HTML::OSM;
+
     my $osm = HTML::OSM->new(
-            coordinates => \@coordinates,   # Arrayref of [latitude, longitude, label]
-            zoom => $zoom                                 # Optional zoom level (default: 12)
+          coordinates => [
+                  [34.0522, -118.2437, 'Los Angeles'],
+                  [48.8566, 2.3522, 'Paris'],
+          ],
+          zoom => 14,
     );
 
 Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
 
 Generates an HTML file (`map.html`) containing the interactive map with the specified coordinates. The file includes basic functionality such as zooming, resetting the map view, and searching locations.
 
-## coordinates
+- coordinates
 
-An array reference containing a list of coordinates. Each entry should be an array with latitude, longitude, and an optional label, in the format:
+    An array reference containing a list of coordinates. Each entry should be an array with latitude, longitude, and an optional label, in the format:
 
-    [latitude, longitude, label]
+        [latitude, longitude, label, icon_url]
 
-If no coordinates are provided, an error will be thrown.
+    If latitude and/or longitude is undefined,
+    the label is taken to be a location to be added.
+    If no coordinates are provided, an error will be thrown.
 
-## zoom
+- zoom
 
-An optional zoom level for the map, with a default value of 12.
-
-# EXAMPLES
-
-## Example 1: Basic usage
-
-    my $osm = HTML::OSM->new(
-            coordinates => [
-                    [34.0522, -118.2437, 'Los Angeles'],
-                    [48.8566, 2.3522, 'Paris'],
-            ],
-    );
-    $osm->generate_map();
-
-## Example 2: With custom zoom
-
-    my $osm = HTML::OSM->new(
-            coordinates => [
-                    [40.748817, -73.985428, 'Empire State Building'],
-            ],
-            zoom => 14,
-    );
-    $osm->generate_map();
+    An optional zoom level for the map, with a default value of 12.
 
 ## generate\_map
 
@@ -84,6 +69,13 @@ Nigel Horne, `<njh at bandsman.co.uk>`
 
 # BUGS
 
+# SEE ALSO
+
+- [File::Slurp](https://metacpan.org/pod/File%3A%3ASlurp)
+- [Leaflet](https://metacpan.org/pod/Leaflet)
+
+# SUPPORT
+
 This module is provided as-is without any warranty.
 
 Please report any bugs or feature requests to `bug-html-osm at rt.cpan.org`,
@@ -92,29 +84,14 @@ or through the web interface at
 I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
-# SEE ALSO
-
-- [File::Slurp](https://metacpan.org/pod/File%3A%3ASlurp)
-- [Leaflet](https://metacpan.org/pod/Leaflet)
-
 ## TODO
 
 Allow dynamic addition/removal of markers via user input.
 
 Change API to be closer to HTML::GoogleMaps::V3
 
-# LICENSE
+# LICENSE AND COPYRIGHT
 
-GPL-2
+Copyright 2025 Nigel Horne.
 
-# POD ERRORS
-
-Hey! **The above document had some coding errors, which are explained below:**
-
-- Around line 292:
-
-    '=item' outside of any '=over'
-
-- Around line 296:
-
-    You forgot a '=back' before '=head2'
+This program is released under the following licence: GPL2
