@@ -7,6 +7,7 @@ use warnings;
 use File::Slurp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
+use Scalar::Util;
 
 =head1 NAME
 
@@ -81,7 +82,36 @@ An optional zoom level for the map, with a default value of 12.
 
 sub new
 {
-	my ($class, %args) = @_;
+	my $class = shift;
+
+	# Handle hash or hashref arguments
+	my %args;
+	if((@_ == 1) && (ref $_[0] eq 'HASH')) {
+		# If the first argument is a hash reference, dereference it
+		%args = %{$_[0]};
+	} elsif((scalar(@_) % 2) == 0) {
+		# If there is an even number of arguments, treat them as key-value pairs
+		%args = @_;
+	} else {
+		# If there is an odd number of arguments, treat it as an error
+		carp(__PACKAGE__, ': Invalid arguments passed to new()');
+		return;
+	}
+
+	if(!defined($class)) {
+		if((scalar keys %args) > 0) {
+			# Using HTML::OSM:new(), not HTML::OSM->new()
+			carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
+			return;
+		}
+
+		# FIXME: this only works when no arguments are given
+		$class = __PACKAGE__;
+	} elsif(Scalar::Util::blessed($class)) {
+		# If $class is an object, clone it with new arguments
+		return bless { %{$class}, %args }, ref($class);
+	}
+
 	my $self = {
 		coordinates => $args{coordinates} || [],
 		zoom => $args{zoom} || 12,
@@ -90,7 +120,7 @@ sub new
 	return $self;
 }
 
-sub fetch_coordinates {
+sub _fetch_coordinates {
 	my ($address) = @_;
 	my $ua		= LWP::UserAgent->new();
 	my $url = "https://nominatim.openstreetmap.org/search?format=json&q=" . $address;
@@ -130,7 +160,7 @@ sub generate_map
 
 		# If an address is provided instead of coordinates, fetch dynamically
 		if (!defined $lat || !defined $lon) {
-			($lat, $lon) = fetch_coordinates($label);
+			($lat, $lon) = _fetch_coordinates($label);
 		} else {
 			# Validate Latitude and Longitude
 			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {

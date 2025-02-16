@@ -24,6 +24,7 @@ WriteMakefile(
 		'File::Slurp' => 0,
 		'LWP::UserAgent' => 0,
 		'JSON::MaybeXS' => 0,
+		'Scalar::Util' => 0,
 	},
 	META_MERGE => {
 		resources => {
