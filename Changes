@@ -1,6 +1,6 @@
 Revision history for HTML-OSM
 
-0.02
+0.02	Sun Feb 16 14:44:32 EST 2025
 	Added rate-limiting and caching support
 
 0.01	Sun Feb 16 12:46:54 EST 2025

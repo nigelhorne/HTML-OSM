@@ -1,8 +1,12 @@
 #!/usr/bin/env perl
+
 use strict;
 use warnings;
+
 use Test::Most;
-use HTML::OSM;
+use Test::RequiresInternet ('nominatim.openstreetmap.org/search' => 'https');
+
+BEGIN { use_ok('HTML::OSM') }
 
 # Helper to silence warnings in error-checking tests
 local $SIG{__WARN__} = sub { };
