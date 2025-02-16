@@ -53,8 +53,6 @@ The generated map allows users to view marked locations, zoom, and search for lo
 	  zoom => 10,
     );
 
-    $map->generate_map();
-
 Creates a new C<HTML::OSM> object with the provided coordinates and optional zoom level.
 
 =over 4

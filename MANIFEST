@@ -9,3 +9,4 @@ MANIFEST.SKIP
 README.md
 t/10-compile.t
 t/20-new.t
+t/pod-snippets.t
