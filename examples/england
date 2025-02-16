@@ -7,8 +7,8 @@ use HTML::OSM;
 my @coordinates = (
 	[51.5074, -0.1278, 'London'],   # London
 	[52.2053, 0.1218, 'Cambridge'],	# Cambridge
-	[53.4808, -2.2426, 'Manchester']	# Manchester
 );
 
 my $map_generator = HTML::OSM->new(coordinates => \@coordinates, zoom => 10);
+$map_generator->add_marker([53.4808, -2.2426], html => 'Manchester');
 $map_generator->generate_map();

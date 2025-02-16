@@ -158,6 +158,47 @@ A url to the icon to be added
 sub add_marker
 {
 	my $self = shift;
+	my $params;
+	my $point;
+
+	if(ref($_[0]) eq 'ARRAY') {
+		$point = shift;
+		$params = $self->_get_params(undef, @_);
+	} else {
+		$params = $self->_get_params('point', @_);
+		$point = $params->{'point'};
+	}
+
+	my ($lat, $lon);
+
+	if(ref($params)) {
+		if(ref($point) eq 'ARRAY') {
+			($lat, $lon) = @{$point};
+		} elsif($point->can('latitude')) {
+			$lat = $point->latitude();
+			$lon = $point->longitude();
+		} else {
+			die 'add_marker(): what is the type of point?'
+		}
+	} else {
+		($lat, $lon) = $self->_fetch_coordinates($point);
+	}
+	return 0 unless(defined($lat) && defined($lon));
+
+	push @{$self->{coordinates}}, [$lat, $lon, $params->{'html'}, $params->{'icon'}];
+
+	return 1;
+}
+
+=head2 center
+
+Center the map at a given point. Returns 1 on success, 0 if the point could not be found.
+
+=cut
+
+sub center
+{
+	my $self = shift;
 	my $params = $self->_get_params('point', @_);
 	my $point = $params->{'point'};
 
@@ -177,7 +218,7 @@ sub add_marker
 	}
 	return 0 unless(defined($lat) && defined($lon));
 
-	push @{$self->{coordinates}}, [$lat, $lon, $params->{'html'}, $params->{'icon'}];
+	$self->{'center'} = [$lat, $lon];
 
 	return 1;
 }
@@ -260,8 +301,8 @@ sub generate_map
 		$max_lon = $lon if $lon > $max_lon;
 	}
 
-	my $center_lat = ($min_lat + $max_lat) / 2;
-	my $center_lon = ($min_lon + $max_lon) / 2;
+	my $center_lat = @{$self->{'center'}}[0] || (($min_lat + $max_lat) / 2);
+	my $center_lon = @{$self->{'center'}}[1] || (($min_lon + $max_lon) / 2);
 
 	my $html = qq{
 <!DOCTYPE html>
