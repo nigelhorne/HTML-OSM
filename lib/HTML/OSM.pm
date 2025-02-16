@@ -124,6 +124,8 @@ sub new
 
 	return bless {
 		coordinates => $args{coordinates} || [],
+		height => $args{'height'} || '500px',
+		width => $args{'width'} || '100%',
 		zoom => $args{zoom} || 12,
 		%args
 	}, $class;
@@ -213,7 +215,6 @@ sub generate_map
 		}).addTo(map);
 
 		var markers = [];
-
 	};
 
 	my @js_markers;
@@ -288,7 +289,8 @@ sub generate_map
 	print "Interactive map saved as map.html. Open this file in a browser.\n";
 }
 
-sub _fetch_coordinates {
+sub _fetch_coordinates
+{
 	my ($self, $address) = @_;
 
 	if(my $geocoder = $self->{'geocoder'}) {
@@ -312,6 +314,72 @@ sub _fetch_coordinates {
 	warn "Error fetching coordinates for: $address";
 	return
 }
+
+sub onload_render
+{
+	my $self = shift;
+
+	# Default size if not provided
+	my $height = $self->{'height'} || '500px';
+	my $width = $self->{'width'} || '100%';
+
+	my $coordinates = $self->{coordinates};
+
+	die 'No coordinates provided' unless @$coordinates;
+
+	my @valid_coordinates;
+
+	foreach my $coord (@$coordinates) {
+		my ($lat, $lon, $label, $icon_url) = @$coord;
+
+		# If an address is provided instead of coordinates, fetch dynamically
+		if (!defined $lat || !defined $lon) {
+			($lat, $lon) = $self->_fetch_coordinates($label);
+		} else {
+			# Validate Latitude and Longitude
+			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
+				warn "Skipping invalid coordinate: ($lat, $lon)";
+				next;
+			}
+			if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+				warn "Skipping out-of-range coordinate: ($lat, $lon)";
+				next;
+			}
+		}
+
+		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
+	}
+
+	# Ensure at least one valid coordinate exists
+	die 'Error: No valid coordinates provided' unless @valid_coordinates;
+
+	my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+
+	foreach my $coord (@valid_coordinates) {
+		my ($lat, $lon, $label) = @$coord;
+		$min_lat = $lat if $lat < $min_lat;
+		$max_lat = $lat if $lat > $max_lat;
+		$min_lon = $lon if $lon < $min_lon;
+		$max_lon = $lon if $lon > $max_lon;
+	}
+
+	my $center_lat = ($min_lat + $max_lat) / 2;
+	my $center_lon = ($min_lon + $max_lon) / 2;
+
+	my $head = qq{
+		<head>
+			<title>Interactive Map</title>
+			<link rel="stylesheet" href="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.css" />
+			<script src="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.js"></script>
+			<style>
+				#map { width: $width; height: $height; }
+				#search-box { margin: 10px; padding: 5px; }
+				#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
+			</style>
+		</head>
+	}
+}
+
 
 =head1 AUTHOR
 
