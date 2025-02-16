@@ -41,9 +41,9 @@ C<HTML::OSM> is a Perl module for generating an interactive map using OpenStreet
 The module accepts a list of coordinates with optional labels and zoom level to create a dynamic HTML file containing an interactive map.
 The generated map allows users to view marked locations, zoom, and search for locations using the Nominatim API.
 
-=head2 METHODS
+=head1 SUBROUTINES/METHODS
 
-=head3 new
+=head2 new
 
   my $osm = HTML::OSM->new(
 	  coordinates => \@coordinates,   # Arrayref of [latitude, longitude, label]
@@ -52,13 +52,7 @@ The generated map allows users to view marked locations, zoom, and search for lo
 
 Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
 
-=head3 generate_map
-
-  $osm->generate_map();
-
 Generates an HTML file (C<map.html>) containing the interactive map with the specified coordinates. The file includes basic functionality such as zooming, resetting the map view, and searching locations.
-
-=head1 PARAMETERS
 
 =head2 coordinates
 
@@ -71,18 +65,6 @@ If no coordinates are provided, an error will be thrown.
 =head2 zoom
 
 An optional zoom level for the map, with a default value of 12.
-
-=head1 DEPENDENCIES
-
-This module requires the following external modules:
-
-=over 4
-
-=item * L<File::Slurp>
-
-=item * L<Leaflet>
-
-=back
 
 =head1 EXAMPLES
 
@@ -132,6 +114,12 @@ sub fetch_coordinates {
 	warn "Error fetching coordinates for: $address";
 	return
 }
+
+=head2 generate_map
+
+  $osm->generate_map();
+
+=cut
 
 sub generate_map
 {
@@ -298,6 +286,12 @@ or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=HTML-OSM>.
 I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
+
+=head1 SEE ALSO
+
+=item * L<File::Slurp>
+
+=item * L<Leaflet>
 
 =head2 TODO
 
