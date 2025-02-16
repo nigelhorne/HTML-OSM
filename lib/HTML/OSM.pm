@@ -31,17 +31,19 @@ The generated map allows users to view marked locations, zoom, and search for lo
     my $map = HTML::OSM->new();
     # ...
 
+    my $osm = HTML::OSM->new(
+	  coordinates => [
+		  [34.0522, -118.2437, 'Los Angeles'],
+		  [undef, undef, 'Paris'],
+	  ],
+	  zoom => 14,
+    );
+    my ($head, $map_div) = $map->onload_render();
+
 =head1 SUBROUTINES/METHODS
 
 =head2 new
 
-    my $osm = HTML::OSM->new(
-	  coordinates => [
-		  [34.0522, -118.2437, 'Los Angeles'],
-		  [48.8566, 2.3522, 'Paris'],
-	  ],
-	  zoom => 14,
-    );
     $osm = HTML::OSM->new(
 	  coordinates => [
 		  [37.7749, -122.4194, 'San Francisco'],
@@ -314,6 +316,14 @@ sub _fetch_coordinates
 	warn "Error fetching coordinates for: $address";
 	return
 }
+
+=head2 onload_render
+
+Renders the map and returns a two element list.
+The first element needs to be placed in the head section of your HTML document.
+The second in the body where you want the map to appear.
+
+=cut
 
 sub onload_render
 {
