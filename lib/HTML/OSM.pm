@@ -131,6 +131,57 @@ sub new
 	}, $class;
 }
 
+=head2 add_marker
+
+Add a marker to the map at the given point.
+A point can be a unique place name, like an address,
+an object that understands C<latitude()> and C<longitude()>,
+or a pair of coordinates passed in as an arrayref: [ longitude, latitude ].
+Will return 0 if the point is not found and 1 on success.
+
+It takes two optional arguments:
+
+=over 4
+
+=item * html
+
+Add a popup info window as well.
+
+=item * icon
+
+A url to the icon to be added
+
+=back
+
+=cut
+
+sub add_marker
+{
+	my $self = shift;
+	my $params = $self->_get_params('point', @_);
+	my $point = $params->{'point'};
+
+	my ($lat, $lon);
+
+	if(ref($params)) {
+		if(ref($point) eq 'ARRAY') {
+			($lat, $lon) = @{$params};
+		} elsif($point->can('latitude')) {
+			$lat = $point->latitude();
+			$lon = $point->longitude();
+		} else {
+			die 'add_marker(): what is the type of point?'
+		}
+	} else {
+		($lat, $lon) = $self->_fetch_coordinates($point);
+	}
+	return 0 unless(defined($lat) && defined($lon));
+
+	push @{$self->{coordinates}}, [$lat, $lon, $params->{'html'}, $params->{'icon'}];
+
+	return 1;
+}
+
 =head2 zoom
 
 Get/set the new zoom level (0 is corsest)
@@ -176,18 +227,18 @@ sub generate_map
 	my @valid_coordinates;
 
 	foreach my $coord (@$coordinates) {
-		my ($lat, $lon, $label, $icon_url) = @$coord;
+		my ($lat, $lon, $label, $icon_url) = @{$coord};
 
 		# If an address is provided instead of coordinates, fetch dynamically
-		if (!defined $lat || !defined $lon) {
+		if(!defined $lat || !defined $lon) {
 			($lat, $lon) = $self->_fetch_coordinates($label);
 		} else {
 			# Validate Latitude and Longitude
-			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
+			if(!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
 				warn "Skipping invalid coordinate: ($lat, $lon)";
 				next;
 			}
-			if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+			if($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
 				warn "Skipping out-of-range coordinate: ($lat, $lon)";
 				next;
 			}
