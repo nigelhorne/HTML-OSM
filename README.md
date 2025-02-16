@@ -16,7 +16,7 @@ The generated map allows users to view marked locations, zoom, and search for lo
     my $map = HTML::OSM->new();
     # ...
 
-    my $map = HTML::OSM->new(
+    $map = HTML::OSM->new(
           coordinates => [
                   [34.0522, -118.2437, 'Los Angeles'],
                   [undef, undef, 'Paris'],
@@ -152,8 +152,6 @@ automatically be notified of progress on your bug as I make changes.
 ## TODO
 
 Allow dynamic addition/removal of markers via user input.
-
-Change API to be closer to HTML::GoogleMaps::V3
 
 # LICENSE AND COPYRIGHT
 
