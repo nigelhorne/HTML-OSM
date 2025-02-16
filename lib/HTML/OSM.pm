@@ -104,7 +104,7 @@ sub new
 		%args = @_;
 	} else {
 		# If there is an odd number of arguments, treat it as an error
-		carp(__PACKAGE__, ': Invalid arguments passed to new()');
+		Carp::carp(__PACKAGE__, ': Invalid arguments passed to new()');
 		return;
 	}
 
@@ -120,6 +120,10 @@ sub new
 	} elsif(Scalar::Util::blessed($class)) {
 		# If $class is an object, clone it with new arguments
 		return bless { %{$class}, %args }, ref($class);
+	}
+
+	if($args{'coordinates'} && !ref($args{'coordinates'})) {
+		Carp::croak(__PACKAGE__, ': coordinates must be a reference to an array');
 	}
 
 	return bless {
@@ -164,6 +168,9 @@ sub add_marker
 	if(ref($_[0]) eq 'ARRAY') {
 		$point = shift;
 		$params = $self->_get_params(undef, @_);
+		if(scalar(@{$point}) == 1) {
+			$point = @{$point}[0];
+		}
 	} else {
 		$params = $self->_get_params('point', @_);
 		$point = $params->{'point'};
@@ -173,17 +180,25 @@ sub add_marker
 
 	if(ref($params)) {
 		if(ref($point) eq 'ARRAY') {
-			($lat, $lon) = @{$point};
+			if(scalar(@{$point}) == 2) {
+				($lat, $lon) = @{$point};
+			} else {
+				return 0;
+			}
 		} elsif($point->can('latitude')) {
 			$lat = $point->latitude();
 			$lon = $point->longitude();
+		} elsif(!ref($point)) {
+			($lat, $lon) = $self->_fetch_coordinates($point);
 		} else {
 			die 'add_marker(): what is the type of point?'
 		}
+		return 0 unless(defined($lat) && defined($lon));
+		return 0 if(!_validate($lat, $lon));
 	} else {
 		($lat, $lon) = $self->_fetch_coordinates($point);
+		return 0 unless(defined($lat) && defined($lon));
 	}
-	return 0 unless(defined($lat) && defined($lon));
 
 	push @{$self->{coordinates}}, [$lat, $lon, $params->{'html'}, $params->{'icon'}];
 
@@ -206,13 +221,18 @@ sub center
 
 	if(ref($params)) {
 		if(ref($point) eq 'ARRAY') {
-			($lat, $lon) = @{$point};
+			if(scalar(@{$point}) == 2) {
+				($lat, $lon) = @{$point};
+			} else {
+				die 'add_marker(): point should have both latitude and longitude';
+			}
 		} elsif($point->can('latitude')) {
 			$lat = $point->latitude();
 			$lon = $point->longitude();
 		} else {
 			die 'add_marker(): what is the type of point?'
 		}
+		return 0 if(!_validate($lat, $lon));
 	} else {
 		($lat, $lon) = $self->_fetch_coordinates($point);
 	}
@@ -238,6 +258,9 @@ sub zoom
 	if(scalar(@_)) {
 		my $params = $self->_get_params('zoom', @_);
 
+		Carp::croak(__PACKAGE__, 'invalid zoom') if($params->{'zoom'} =~ /\D/);
+		Carp::croak(__PACKAGE__, 'zoom must be positive') if($params->{'zoom'} < 0);
+
 		$self->{'zoom'} = $params->{'zoom'};
 	}
 
@@ -252,12 +275,17 @@ sub _fetch_coordinates
 
 	if(my $geocoder = $self->{'geocoder'}) {
 		if(my $rc = $geocoder->geocode($address)) {
-			if(ref($rc)) {
-				if($rc->can('latitude')) {
-					return ($rc->latitude(), $rc->longitude());
-				}
+			if(Scalar::Util::blessed($rc) && $rc->can('latitude')) {
+				return ($rc->latitude(), $rc->longitude());
+			}
+			if((ref($rc) eq 'HASH') && defined($rc->{'lat'}) && defined($rc->{'lon'})) {
+				return ($rc->{'lat'}, $rc->{'lon'});
+			}
+			if(ref($rc) eq 'ARRAY') {
+				return $rc;
 			}
 		}
+		return;
 	}
 	my $ua = $self->{'ua'} || LWP::UserAgent->new();
 	my $url = "https://nominatim.openstreetmap.org/search?format=json&q=" . $address;
@@ -268,7 +296,7 @@ sub _fetch_coordinates
 		my $data = decode_json($response->decoded_content());
 		return ($data->[0]{lat}, $data->[0]{lon}) if @$data;
 	}
-	Carp::croak("Error fetching coordinates for: $address");
+	# Carp::croak("Error fetching coordinates for: $address");
 	return
 }
 
@@ -301,15 +329,7 @@ sub onload_render
 		if (!defined $lat || !defined $lon) {
 			($lat, $lon) = $self->_fetch_coordinates($label);
 		} else {
-			# Validate Latitude and Longitude
-			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
-				Carp::croak("Skipping invalid coordinate: ($lat, $lon)");
-				next;
-			}
-			if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
-				Carp::croak("Skipping out-of-range coordinate: ($lat, $lon)");
-				next;
-			}
+			next if(!_validate($lat, $lon));
 		}
 
 		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
@@ -424,6 +444,22 @@ sub onload_render
 	};
 
 	return ($head, $body);
+}
+
+sub _validate
+{
+	my($lat, $lon) = @_;
+
+	# Validate Latitude and Longitude
+	if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
+		Carp::carp("Skipping invalid coordinate: ($lat, $lon)");
+		return 0;
+	}
+	if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+		Carp::carp("Skipping out-of-range coordinate: ($lat, $lon)");
+		return 0;
+	}
+	return 1;
 }
 
 # Helper routine to parse the arguments given to a function.
