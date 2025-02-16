@@ -471,11 +471,15 @@ Nigel Horne, C<< <njh at bandsman.co.uk> >>
 
 =over 4
 
+=item * L<https://wiki.openstreetmap.org/wiki/API>
+
 =item * L<File::Slurp>
 
-=item * L<Leaflet>
+=item * C<HTML::GoogleMaps::V3>
 
-=item * L<https://wiki.openstreetmap.org/wiki/API>
+Much of the interface to C<HTML::OSM> mimicks this for compatability.
+
+=item * L<Leaflet>
 
 =back
 

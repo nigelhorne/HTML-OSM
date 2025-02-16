@@ -111,9 +111,13 @@ Nigel Horne, `<njh at bandsman.co.uk>`
 
 # SEE ALSO
 
-- [File::Slurp](https://metacpan.org/pod/File%3A%3ASlurp)
-- [Leaflet](https://metacpan.org/pod/Leaflet)
 - [https://wiki.openstreetmap.org/wiki/API](https://wiki.openstreetmap.org/wiki/API)
+- [File::Slurp](https://metacpan.org/pod/File%3A%3ASlurp)
+- `HTML::GoogleMaps::V3`
+
+    Much of the interface to `HTML::OSM` mimicks this for compatability.
+
+- [Leaflet](https://metacpan.org/pod/Leaflet)
 
 You can find documentation for this module with the perldoc command.
 
