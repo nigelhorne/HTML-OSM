@@ -55,21 +55,32 @@ The generated map allows users to view marked locations, zoom, and search for lo
 
     $osm->generate_map();
 
-Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
-
-Generates an HTML file (C<map.html>) containing the interactive map with the specified coordinates. The file includes basic functionality such as zooming, resetting the map view, and searching locations.
+Creates a new C<HTML::OSM> object with the provided coordinates and optional zoom level.
 
 =over 4
 
 =item * coordinates
 
-An array reference containing a list of coordinates. Each entry should be an array with latitude, longitude, and an optional label, in the format:
+An array reference containing a list of coordinates.
+Each entry should be an array with latitude, longitude, and an optional label, in the format:
 
   [latitude, longitude, label, icon_url]
 
 If latitude and/or longitude is undefined,
 the label is taken to be a location to be added.
 If no coordinates are provided, an error will be thrown.
+
+=item * geocoder
+
+An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
+
+=item * height
+
+Height (in pixels or using your own unit), the default is 500px.
+
+=item * width
+
+Width (in pixels or using your own unit), the default is 100%.
 
 =item * zoom
 
@@ -111,30 +122,17 @@ sub new
 		return bless { %{$class}, %args }, ref($class);
 	}
 
-	my $self = {
+	return bless {
 		coordinates => $args{coordinates} || [],
 		zoom => $args{zoom} || 12,
-	};
-	bless $self, $class;
-	return $self;
-}
-
-sub _fetch_coordinates {
-	my ($address) = @_;
-	my $ua		= LWP::UserAgent->new();
-	my $url = "https://nominatim.openstreetmap.org/search?format=json&q=" . $address;
-	$ua->agent(__PACKAGE__);
-
-	my $response = $ua->get($url);
-	if ($response->is_success) {
-		my $data = decode_json($response->decoded_content);
-		return ($data->[0]{lat}, $data->[0]{lon}) if @$data;
-	}
-	warn "Error fetching coordinates for: $address";
-	return
+		%args
+	}, $class;
 }
 
 =head2 generate_map
+
+Generates an HTML file (C<map.html>) containing the interactive map with the specified coordinates.
+The file includes basic functionality such as zooming, resetting the map view, and searching locations.
 
   $osm->generate_map();
 
@@ -142,11 +140,11 @@ sub _fetch_coordinates {
 
 sub generate_map
 {
-	my ($self, $size) = @_;
+	my $self = shift;
 
 	# Default size if not provided
-	my $width = $size->{width} || '100%';
-	my $height = $size->{height} || '500px';
+	my $height = $self->{height} || '500px';
+	my $width = $self->{width} || '100%';
 
 	my $coordinates = $self->{coordinates};
 
@@ -159,7 +157,7 @@ sub generate_map
 
 		# If an address is provided instead of coordinates, fetch dynamically
 		if (!defined $lat || !defined $lon) {
-			($lat, $lon) = _fetch_coordinates($label);
+			($lat, $lon) = $self->_fetch_coordinates($label);
 		} else {
 			# Validate Latitude and Longitude
 			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
@@ -288,6 +286,31 @@ sub generate_map
 
 	write_file('map.html', $html);
 	print "Interactive map saved as map.html. Open this file in a browser.\n";
+}
+
+sub _fetch_coordinates {
+	my ($self, $address) = @_;
+
+	if(my $geocoder = $self->{'geocoder'}) {
+		if(my $rc = $geocoder->geocode($address)) {
+			if(ref($rc)) {
+				if($rc->can('latitude')) {
+					return ($rc->latitude(), $rc->longitude());
+				}
+			}
+		}
+	}
+	my $ua = $self->{'ua'} || LWP::UserAgent->new();
+	my $url = "https://nominatim.openstreetmap.org/search?format=json&q=" . $address;
+	$ua->agent(__PACKAGE__ . "/$VERSION");
+
+	my $response = $ua->get($url);
+	if($response->is_success()) {
+		my $data = decode_json($response->decoded_content());
+		return ($data->[0]{lat}, $data->[0]{lon}) if @$data;
+	}
+	warn "Error fetching coordinates for: $address";
+	return
 }
 
 =head1 AUTHOR

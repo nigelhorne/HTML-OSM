@@ -40,13 +40,12 @@ The generated map allows users to view marked locations, zoom, and search for lo
 
     $osm->generate_map();
 
-Creates a new HTML::OSM object with the provided coordinates and optional zoom level.
-
-Generates an HTML file (`map.html`) containing the interactive map with the specified coordinates. The file includes basic functionality such as zooming, resetting the map view, and searching locations.
+Creates a new `HTML::OSM` object with the provided coordinates and optional zoom level.
 
 - coordinates
 
-    An array reference containing a list of coordinates. Each entry should be an array with latitude, longitude, and an optional label, in the format:
+    An array reference containing a list of coordinates.
+    Each entry should be an array with latitude, longitude, and an optional label, in the format:
 
         [latitude, longitude, label, icon_url]
 
@@ -54,11 +53,26 @@ Generates an HTML file (`map.html`) containing the interactive map with the spec
     the label is taken to be a location to be added.
     If no coordinates are provided, an error will be thrown.
 
+- geocoder
+
+    An optional geocoder object such as [Geo::Coder::List](https://metacpan.org/pod/Geo%3A%3ACoder%3A%3AList) or [Geo::Coder::Free](https://metacpan.org/pod/Geo%3A%3ACoder%3A%3AFree).
+
+- height
+
+    Height (in pixels or using your own unit), the default is 500px.
+
+- width
+
+    Width (in pixels or using your own unit), the default is 100%.
+
 - zoom
 
     An optional zoom level for the map, with a default value of 12.
 
 ## generate\_map
+
+Generates an HTML file (`map.html`) containing the interactive map with the specified coordinates.
+The file includes basic functionality such as zooming, resetting the map view, and searching locations.
 
     $osm->generate_map();
 
