@@ -4,6 +4,8 @@ package HTML::OSM;
 
 use strict;
 use warnings;
+
+use Carp;
 use File::Slurp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
@@ -266,7 +268,7 @@ sub _fetch_coordinates
 		my $data = decode_json($response->decoded_content());
 		return ($data->[0]{lat}, $data->[0]{lon}) if @$data;
 	}
-	warn "Error fetching coordinates for: $address";
+	Carp::croak("Error fetching coordinates for: $address");
 	return
 }
 
@@ -301,11 +303,11 @@ sub onload_render
 		} else {
 			# Validate Latitude and Longitude
 			if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
-				warn "Skipping invalid coordinate: ($lat, $lon)";
+				Carp::croak("Skipping invalid coordinate: ($lat, $lon)");
 				next;
 			}
 			if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
-				warn "Skipping out-of-range coordinate: ($lat, $lon)";
+				Carp::croak("Skipping out-of-range coordinate: ($lat, $lon)");
 				next;
 			}
 		}

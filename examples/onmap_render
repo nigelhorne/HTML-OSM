@@ -8,7 +8,7 @@ use HTML::OSM;
 
 my $map = HTML::OSM->new(coordinates => [
 	[ undef, undef, '1810 Melrose St, Madison, WI' ],
-	[ undef, undef, '1210 W Dayton St, Madison, WI'], 
+	[ undef, undef, '1210 W Dayton St, Madison, WI'],
 	[  39.1155, -77.5644, 'Leesburg, VA' ]
 ]);
 
