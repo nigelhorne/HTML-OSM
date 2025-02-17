@@ -299,7 +299,6 @@ sub center
 		} elsif(!ref($point)) {
 			($lat, $lon) = $self->_fetch_coordinates($point);
 		} else {
-		print STDERR Data::Dumper->new([$params])->Dump();
 			die 'add_marker(): what is the type of point?'
 		}
 		return 0 if(!_validate($lat, $lon));
@@ -348,12 +347,18 @@ sub _fetch_coordinates
 			if(Scalar::Util::blessed($rc) && $rc->can('latitude')) {
 				return ($rc->latitude(), $rc->longitude());
 			}
-			if((ref($rc) eq 'HASH') && defined($rc->{'lat'}) && defined($rc->{'lon'})) {
-				return ($rc->{'lat'}, $rc->{'lon'});
+			if(ref($rc) eq 'HASH') {
+				if(defined($rc->{'lat'}) && defined($rc->{'lon'})) {
+					return ($rc->{'lat'}, $rc->{'lon'});
+				}
+				if(defined($rc->{'geometry'}{'location'}{'lat'})) {
+					return ($rc->{'geometry'}{'location'}{'lat'}, $rc->{'geometry'}{'location'}{'lng'});
+				}
 			}
 			if(ref($rc) eq 'ARRAY') {
 				return $rc;
 			}
+			print ref($rc), "\n";
 		}
 		return;
 	}

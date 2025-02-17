@@ -1,5 +1,8 @@
 Revision history for HTML-OSM
 
+0.05
+	More compatiblity with Geo::Coder::* modules
+
 0.04	Mon Feb 17 14:32:21 EST 2025
 	Allow center() to be given a location string
 
