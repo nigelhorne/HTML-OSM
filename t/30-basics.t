@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Most;
-use Test::RequiresInternet ('nominatim.openstreetmap.org/search' => 'https');
+use Test::RequiresInternet ('nominatim.openstreetmap.org' => 'https');
 
 BEGIN { use_ok('HTML::OSM') }
 
@@ -17,8 +17,8 @@ isa_ok($osm, 'HTML::OSM', 'Object is of class HTML::OSM');
 
 # Check default values
 is($osm->{zoom}, 12, 'Default zoom is 12');
-is($osm->{height}, '500px', 'Default height is 500px');
-is($osm->{width}, '100%', 'Default width is 100%');
+is($osm->{height}, '400px', 'Default height is 400px');
+is($osm->{width}, '600px', 'Default width is 600px');
 is_deeply($osm->{coordinates}, [], 'Coordinates default to an empty array');
 
 # Invalid constructor arguments
