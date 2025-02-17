@@ -296,7 +296,10 @@ sub center
 		} elsif($point->can('latitude')) {
 			$lat = $point->latitude();
 			$lon = $point->longitude();
+		} elsif(!ref($point)) {
+			($lat, $lon) = $self->_fetch_coordinates($point);
 		} else {
+		print STDERR Data::Dumper->new([$params])->Dump();
 			die 'add_marker(): what is the type of point?'
 		}
 		return 0 if(!_validate($lat, $lon));
@@ -549,7 +552,7 @@ sub _validate
 
 	# Validate Latitude and Longitude
 	if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
-		Carp::carp("Skipping invalid coordinate: ($lat, $lon)");
+		Carp::carp("Skipping invalid coordinate: ($lat, $lon)") if(defined($lat) && defined($lon));
 		return 0;
 	}
 	if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
