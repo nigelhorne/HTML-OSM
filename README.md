@@ -4,7 +4,7 @@ HTML::OSM - A module to generate an interactive OpenStreetMap with customizable 
 
 # VERSION
 
-Version 0.03
+Version 0.04
 
 # SYNOPSIS
 
