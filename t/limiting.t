@@ -70,5 +70,7 @@ RATE_LIMIT: {
 		cmp_ok($elapsed, '>=', $min_interval, "Rate limiting enforced: elapsed time >= $min_interval sec");
 	}
 
-	cmp_ok(ref($cache->get('osm:New York')), 'eq', 'HASH');
+	diag(join(', ', $cache->get_keys())) if($ENV{'TEST_VERBOSE'});
+
+	cmp_ok(ref($cache->get('osm:New%20York')), 'eq', 'HASH');
 }

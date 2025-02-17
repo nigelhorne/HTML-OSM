@@ -4,7 +4,7 @@ HTML::OSM - A module to generate an interactive OpenStreetMap with customizable 
 
 # VERSION
 
-Version 0.02
+Version 0.03
 
 # SYNOPSIS
 
@@ -86,9 +86,15 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 
     An optional geocoder object such as [Geo::Coder::List](https://metacpan.org/pod/Geo%3A%3ACoder%3A%3AList) or [Geo::Coder::Free](https://metacpan.org/pod/Geo%3A%3ACoder%3A%3AFree).
 
-- height
+- `height`
 
-    Height (in pixels or using your own unit), the default is 500px.
+    Height (in pixels or using your own unit), the default is 400px.
+
+- `min_interval`
+
+    Minimum number of seconds to wait between API requests.
+    Defaults to `0` (no delay).
+    Use this option to enforce rate-limiting.
 
 - `ua`
 
@@ -102,7 +108,7 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 
 - `width`
 
-    Width (in pixels or using your own unit), the default is 100%.
+    Width (in pixels or using your own unit), the default is 600px.
 
 - zoom
 

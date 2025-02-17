@@ -19,11 +19,11 @@ HTML::OSM - A module to generate an interactive OpenStreetMap with customizable 
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 =head1 SYNOPSIS
 
@@ -111,9 +111,15 @@ If no coordinates are provided, an error will be thrown.
 
 An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
 
-=item * height
+=item * C<height>
 
 Height (in pixels or using your own unit), the default is 400px.
+
+=item * C<min_interval>
+
+Minimum number of seconds to wait between API requests.
+Defaults to C<0> (no delay).
+Use this option to enforce rate-limiting.
 
 =item * C<ua>
 
@@ -351,6 +357,7 @@ sub _fetch_coordinates
 	my $ua = $self->{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->default_header(accept_encoding => 'gzip,deflate');
 	$ua->env_proxy(1);
+	$location =~ s/\s/%20/g;
 	my $url = 'https://' . $self->{'host'} . "?format=json&q=$location";
 
 	# Create a cache key based on the location (might want to use a stronger hash function if needed)
@@ -373,6 +380,9 @@ sub _fetch_coordinates
 
 	if($response->is_success()) {
 		if(my $data = decode_json($response->decoded_content())) {
+			if(ref($data) eq 'ARRAY') {
+				$data = @{$data}[0];
+			}
 			if(ref($data) eq 'HASH') {
 				# Cache the result before returning it
 				$self->{'cache'}->set($cache_key, $data);
@@ -450,8 +460,10 @@ sub onload_render
 	};
 
 	my $body = qq{
-		<input type="text" id="search-box" placeholder="Enter location">
-		<button id="reset-button">Reset Map</button>
+		<!--
+			<input type="text" id="search-box" placeholder="Enter location">
+			<button id="reset-button">Reset Map</button>
+		-->
 		<div id="map"></div>
 		<script>
 			var map = L.map('map').setView([$center_lat, $center_lon], $self->{zoom});
