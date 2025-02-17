@@ -556,7 +556,7 @@ sub _validate
 	my($lat, $lon) = @_;
 
 	# Validate Latitude and Longitude
-	if (!defined $lat || !defined $lon || $lat !~ /^-?\d+(\.\d+)?$/ || $lon !~ /^-?\d+(\.\d+)?$/) {
+	if(!defined $lat || !defined $lon || $lat !~ /^-?\d*(\.\d+)?$/ || $lon !~ /^-?\d*(\.\d+)?$/) {
 		Carp::carp("Skipping invalid coordinate: ($lat, $lon)") if(defined($lat) && defined($lon));
 		return 0;
 	}
