@@ -3,6 +3,7 @@ Revision history for HTML-OSM
 0.05
 	More compatiblity with Geo::Coder::* modules
 	Allow coordinates to start with a decimal point, e.g. "-.516667"
+	Changed the default zoom to 17
 
 0.04	Mon Feb 17 14:32:21 EST 2025
 	Allow center() to be given a location string
