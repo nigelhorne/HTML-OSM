@@ -1,6 +1,6 @@
 Revision history for HTML-OSM
 
-0.05
+0.05	Mon Feb 17 20:24:18 EST 2025
 	More compatiblity with Geo::Coder::* modules
 	Allow coordinates to start with a decimal point, e.g. "-.516667"
 	Changed the default zoom to 17

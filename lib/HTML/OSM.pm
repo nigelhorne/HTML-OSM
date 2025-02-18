@@ -19,11 +19,11 @@ HTML::OSM - A module to generate an interactive OpenStreetMap with customizable 
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 =head1 SYNOPSIS
 
@@ -107,7 +107,7 @@ If latitude and/or longitude is undefined,
 the label is taken to be a location to be added.
 If no coordinates are provided, an error will be thrown.
 
-=item * geocoder
+=item * C<geocoder>
 
 An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
 
