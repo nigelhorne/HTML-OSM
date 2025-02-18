@@ -455,8 +455,6 @@ sub onload_render
 	my $center_lon = ($min_lon + $max_lon) / 2;
 
 	my $head = qq{
-		<head>
-			<title>Interactive Map</title>
 			<link rel="stylesheet" href="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.css" />
 			<script src="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.js"></script>
 			<style>
@@ -464,7 +462,6 @@ sub onload_render
 				#search-box { margin: 10px; padding: 5px; }
 				#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
 			</style>
-		</head>
 	};
 
 	my $body = qq{
