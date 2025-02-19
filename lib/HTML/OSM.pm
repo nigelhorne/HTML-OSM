@@ -19,11 +19,11 @@ HTML::OSM - A module to generate an interactive OpenStreetMap with customizable 
 
 =head1 VERSION
 
-Version 0.05
+Version 0.06
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 =head1 SYNOPSIS
 
@@ -96,7 +96,7 @@ A caching object.
 If not provided,
 an in-memory cache is created with a default expiration of one hour.
 
-=item * coordinates
+=item * C<coordinates>
 
 An array reference containing a list of coordinates.
 Each entry should be an array with latitude, longitude, and an optional label, in the format:
@@ -444,7 +444,7 @@ sub onload_render
 	my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
 
 	foreach my $coord (@valid_coordinates) {
-		my ($lat, $lon, $label) = @$coord;
+		my ($lat, $lon) = @$coord;
 		$min_lat = $lat if $lat < $min_lat;
 		$max_lat = $lat if $lat > $max_lat;
 		$min_lon = $lon if $lon < $min_lon;
