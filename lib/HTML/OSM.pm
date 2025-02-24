@@ -137,7 +137,7 @@ Width (in pixels or using your own unit), the default is 600px.
 
 =item * zoom
 
-An optional zoom level for the map, with a default value of 17.
+An optional zoom level for the map, with a default value of 15.
 
 =back
 
@@ -195,7 +195,7 @@ sub new
 		height => $args{'height'} || '400px',
 		host => $args{'host'} || 'nominatim.openstreetmap.org/search',
 		width => $args{'width'} || '600px',
-		zoom => $args{zoom} || 17,
+		zoom => $args{zoom} || 15,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
 		%args
