@@ -15,7 +15,7 @@ local $SIG{__WARN__} = sub { };
 my $osm = new_ok('HTML::OSM');
 
 # Check default values
-cmp_ok($osm->{zoom}, '==', 15, 'Default zoom is 15');
+cmp_ok($osm->{zoom}, '==', 12, 'Default zoom is 12');
 is($osm->{height}, '400px', 'Default height is 400px');
 is($osm->{width}, '600px', 'Default width is 600px');
 is_deeply($osm->{coordinates}, [], 'Coordinates default to an empty array');

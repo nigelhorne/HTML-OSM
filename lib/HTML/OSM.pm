@@ -451,8 +451,16 @@ sub onload_render
 		$max_lon = $lon if $lon > $max_lon;
 	}
 
-	my $center_lat = ($min_lat + $max_lat) / 2;
-	my $center_lon = ($min_lon + $max_lon) / 2;
+	my $center_lat;
+	my $center_lon;
+
+	if($self->{'center'}) {
+		$center_lat = $self->{'center'}[0];
+		$center_lon = $self->{'center'}[1];
+	} else {
+		$center_lat = ($min_lat + $max_lat) / 2;
+		$center_lon = ($min_lon + $max_lon) / 2;
+	}
 
 	my $head = qq{
 			<link rel="stylesheet" href="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.css" />
@@ -615,7 +623,7 @@ Nigel Horne, C<< <njh at bandsman.co.uk> >>
 
 =item * C<HTML::GoogleMaps::V3>
 
-Much of the interface to C<HTML::OSM> mimicks this for compatability.
+Much of the interface to C<HTML::OSM> mimicks this for compatibility.
 
 =item * L<Leaflet>
 
