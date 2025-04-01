@@ -107,6 +107,10 @@ If latitude and/or longitude is undefined,
 the label is taken to be a location to be added.
 If no coordinates are provided, an error will be thrown.
 
+=item * C<csss_url>
+
+Location of the CSS, default L<https://unpkg.com/leaflet@1.9.4/dist/leaflet.css>.
+
 =item * C<geocoder>
 
 An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
@@ -117,7 +121,7 @@ Height (in pixels or using your own unit), the default is 400px.
 
 =item * C<js_url>
 
-Location of the JavaScript, default L<https://unpkg.com/leaflet@1.7.1/dist/leaflet.js>.
+Location of the JavaScript, default L<https://unpkg.com/leaflet@1.9.4/dist/leaflet.js>.
 
 =item * C<min_interval>
 
@@ -202,8 +206,8 @@ sub new
 		zoom => $args{zoom} || 12,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
-		css_url => 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css',
-		js_url => 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
+		css_url => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
+		js_url => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
 		%args
 	}, $class;
 }
