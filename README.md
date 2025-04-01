@@ -90,6 +90,10 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 
     Height (in pixels or using your own unit), the default is 400px.
 
+- `js_url`
+
+    Location of the JavaScript, default [https://unpkg.com/leaflet@1.7.1/dist/leaflet.js](https://unpkg.com/leaflet@1.7.1/dist/leaflet.js).
+
 - `min_interval`
 
     Minimum number of seconds to wait between API requests.

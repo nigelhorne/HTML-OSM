@@ -115,6 +115,10 @@ An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
 
 Height (in pixels or using your own unit), the default is 400px.
 
+=item * C<js_url>
+
+Location of the JavaScript, default L<https://unpkg.com/leaflet@1.7.1/dist/leaflet.js>.
+
 =item * C<min_interval>
 
 Minimum number of seconds to wait between API requests.
@@ -198,6 +202,8 @@ sub new
 		zoom => $args{zoom} || 12,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
+		css_url => 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css',
+		js_url => 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js',
 		%args
 	}, $class;
 }
@@ -462,9 +468,12 @@ sub onload_render
 		$center_lon = ($min_lon + $max_lon) / 2;
 	}
 
+	my $css_url = $self->{'css_url'};
+	my $js_url = $self->{'js_url'};
+
 	my $head = qq{
-			<link rel="stylesheet" href="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.css" />
-			<script src="https://unpkg.com/leaflet\@1.7.1/dist/leaflet.js"></script>
+			<link rel="stylesheet" href="$css_url" />
+			<script src="$js_url"></script>
 			<style>
 				#map { width: $width; height: $height; }
 				#search-box { margin: 10px; padding: 5px; }
@@ -492,7 +501,7 @@ sub onload_render
 		my ($lat, $lon, $label, $icon_url) = @$coord;
 		$label =~ s/'/\\'/g;	# Escape single quotes
 
-		# $icon_url ||= 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png';
+		# $icon_url ||= 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/$leaflet_version/images/marker-icon.png';
 		if ($icon_url) {
 			my $icon_js = qq{
 				const customIcon = L.icon({

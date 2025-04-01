@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use Test::HTTPStatus;
 use Test::Most;
 use Test::RequiresInternet ('nominatim.openstreetmap.org' => 'https');
 
@@ -68,5 +69,8 @@ dies_ok { $osm_empty->onload_render() } 'Dies if no coordinates are provided';
 my $osm_clone = $osm->new(zoom => 17);
 isa_ok($osm_clone, 'HTML::OSM', 'Cloned object is still HTML::OSM');
 is($osm_clone->{zoom}, 17, 'Cloned object has updated zoom');
+
+http_ok($osm->{'css_url'}, HTTP_OK);
+http_ok($osm->{'js_url'}, HTTP_OK);
 
 done_testing();
