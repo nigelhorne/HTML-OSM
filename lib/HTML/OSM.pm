@@ -7,6 +7,7 @@ use warnings;
 
 use Carp;
 use CHI;
+use Config::Auto;
 use File::Slurp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
@@ -107,7 +108,14 @@ If latitude and/or longitude is undefined,
 the label is taken to be a location to be added.
 If no coordinates are provided, an error will be thrown.
 
-=item * C<csss_url>
+=item * C<config_file>
+
+Points to a configuration file which contains the parameters to C<new()>.
+The file can be in any common format,
+including C<YAML>, C<XML>, and C<INI>.
+This allows the parameters to be set at run time.
+
+=item * C<css_url>
 
 Location of the CSS, default L<https://unpkg.com/leaflet@1.9.4/dist/leaflet.css>.
 
@@ -181,6 +189,15 @@ sub new
 	} elsif(Scalar::Util::blessed($class)) {
 		# If $class is an object, clone it with new arguments
 		return bless { %{$class}, %args }, ref($class);
+	}
+
+	# Load the configuration from a config file, if provided
+	if(exists($args{'config_file'}) && (my $config = Config::Auto::parse($args{'config_file'}))) {
+		# my $config = YAML::XS::LoadFile($args{'config_file'});
+		if($config->{$class}) {
+			$config = $config->{$class};
+		}
+		%args = (%{$config}, %args);
 	}
 
 	if($args{'coordinates'} && !ref($args{'coordinates'})) {
