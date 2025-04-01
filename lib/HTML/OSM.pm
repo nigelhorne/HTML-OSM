@@ -634,7 +634,7 @@ Nigel Horne, C<< <njh at bandsman.co.uk> >>
 
 Much of the interface to C<HTML::OSM> mimicks this for compatibility.
 
-=item * L<Leaflet>
+=item * L<https://leafletjs.com/>
 
 =back
 

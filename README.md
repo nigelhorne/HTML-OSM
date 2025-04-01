@@ -166,7 +166,7 @@ Nigel Horne, `<njh at bandsman.co.uk>`
 
     Much of the interface to `HTML::OSM` mimicks this for compatibility.
 
-- [Leaflet](https://metacpan.org/pod/Leaflet)
+- [https://leafletjs.com/](https://leafletjs.com/)
 
 You can find documentation for this module with the perldoc command.
 
