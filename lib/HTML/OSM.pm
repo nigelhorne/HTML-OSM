@@ -20,11 +20,11 @@ HTML::OSM - A module to generate an interactive OpenStreetMap with customizable 
 
 =head1 VERSION
 
-Version 0.07
+Version 0.08
 
 =cut
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 =head1 SYNOPSIS
 
