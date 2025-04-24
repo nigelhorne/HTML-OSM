@@ -8,7 +8,6 @@ use warnings;
 use Carp;
 use CHI;
 use Config::Auto;
-use File::Slurp;
 use LWP::UserAgent;
 use JSON::MaybeXS;
 use Scalar::Util;
@@ -648,8 +647,6 @@ Nigel Horne, C<< <njh at bandsman.co.uk> >>
 =over 4
 
 =item * L<https://wiki.openstreetmap.org/wiki/API>
-
-=item * L<File::Slurp>
 
 =item * C<HTML::GoogleMaps::V3>
 

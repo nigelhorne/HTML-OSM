@@ -172,7 +172,6 @@ Nigel Horne, `<njh at bandsman.co.uk>`
 # SEE ALSO
 
 - [https://wiki.openstreetmap.org/wiki/API](https://wiki.openstreetmap.org/wiki/API)
-- [File::Slurp](https://metacpan.org/pod/File%3A%3ASlurp)
 - `HTML::GoogleMaps::V3`
 
     Much of the interface to `HTML::OSM` mimicks this for compatibility.
