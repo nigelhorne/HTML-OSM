@@ -183,14 +183,8 @@ sub new
 		return bless { %{$class}, %args }, ref($class);
 	}
 
-	# Load the configuration from a config file, if provided
-	if(exists($args{'config_file'}) && (my $config = Config::Auto::parse($args{'config_file'}))) {
-		# my $config = YAML::XS::LoadFile($args{'config_file'});
-		if($config->{$class}) {
-			$config = $config->{$class};
-		}
-		%args = (%{$config}, %args);
-	}
+	use Class::Debug;
+	%args = %{Class::Debug::setup($class, \%args)};
 
 	if($args{'coordinates'} && !ref($args{'coordinates'})) {
 		Carp::croak(__PACKAGE__, ': coordinates must be a reference to an array');

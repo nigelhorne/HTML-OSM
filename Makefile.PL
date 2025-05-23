@@ -22,7 +22,7 @@ WriteMakefile(
 	PREREQ_PM => {
 		'Carp' => 0,
 		'CHI' => 0,
-		'Config::Auto' => 0,
+		'Class::Debug' => 0,
 		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
 		'LWP::UserAgent' => 0,
 		'JSON::MaybeXS' => 0,
