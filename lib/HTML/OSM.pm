@@ -10,6 +10,7 @@ use CHI;
 use Config::Auto;
 use LWP::UserAgent;
 use JSON::MaybeXS;
+use Params::Get;
 use Scalar::Util;
 use Time::HiRes;
 
@@ -260,12 +261,12 @@ sub add_marker
 
 	if(ref($_[0]) eq 'ARRAY') {
 		$point = shift;
-		$params = $self->_get_params(undef, @_);
+		$params = Params::Get::get_params(undef, @_);
 		if(scalar(@{$point}) == 1) {
 			$point = @{$point}[0];
 		}
 	} else {
-		$params = $self->_get_params('point', @_);
+		$params = Params::Get::get_params('point', @_);
 		$point = $params->{'point'};
 	}
 
@@ -307,7 +308,7 @@ Center the map at a given point. Returns 1 on success, 0 if the point could not 
 sub center
 {
 	my $self = shift;
-	my $params = $self->_get_params('point', @_);
+	my $params = Params::Get::get_params('point', @_);
 	my $point = $params->{'point'};
 
 	my ($lat, $lon);
@@ -351,7 +352,7 @@ sub zoom
 	my $self = shift;
 
 	if(scalar(@_)) {
-		my $params = $self->_get_params('zoom', @_);
+		my $params = Params::Get::get_params('zoom', @_);
 
 		Carp::croak(__PACKAGE__, 'invalid zoom') if($params->{'zoom'} =~ /\D/);
 		Carp::croak(__PACKAGE__, 'zoom must be positive') if($params->{'zoom'} < 0);
@@ -601,44 +602,9 @@ sub _validate
 	return 1;
 }
 
-# Helper routine to parse the arguments given to a function.
-# Processes arguments passed to methods and ensures they are in a usable format,
-#	allowing the caller to call the function in anyway that they want
-#	e.g. foo('bar'), foo(arg => 'bar'), foo({ arg => 'bar' }) all mean the same
-#	when called _get_params('arg', @_);
-sub _get_params
-{
-	shift;  # Discard the first argument (typically $self)
-	my $default = shift;
-
-	# Directly return hash reference if the first parameter is a hash reference
-	return $_[0] if(ref($_[0]) eq 'HASH');
-
-	my %rc;
-	my $num_args = scalar @_;
-
-	# Populate %rc based on the number and type of arguments
-	if(($num_args == 1) && (defined $default)) {
-		# %rc = ($default => shift);
-		return { $default => shift };
-	} elsif($num_args == 1) {
-		Carp::croak('Usage: ', __PACKAGE__, '->', (caller(1))[3], '()');
-	} elsif(($num_args == 0) && (defined($default))) {
-		Carp::croak('Usage: ', __PACKAGE__, '->', (caller(1))[3], "($default => \$val)");
-	} elsif(($num_args % 2) == 0) {
-		%rc = @_;
-	} elsif($num_args == 0) {
-		return;
-	} else {
-		Carp::croak('Usage: ', __PACKAGE__, '->', (caller(1))[3], '()');
-	}
-
-	return \%rc;
-}
-
 =head1 AUTHOR
 
-Nigel Horne, C<< <njh at bandsman.co.uk> >>
+Nigel Horne, C<< <njh at nigelhorne.com> >>
 
 =head1 BUGS
 
