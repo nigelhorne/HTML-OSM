@@ -180,11 +180,11 @@ sub new
 		return bless { %{$class}, %{$params} }, ref($class);
 	}
 
-	$params = Object::Configure::configure($class, $params);
-
 	if($params->{'coordinates'} && !ref($params->{'coordinates'})) {
 		Carp::croak(__PACKAGE__, ': coordinates must be a reference to an array');
 	}
+
+	$params = Object::Configure::configure($class, $params);
 
 	# Set up caching (default to an in-memory cache if none provided)
 	my $cache = $params->{cache} || CHI->new(
