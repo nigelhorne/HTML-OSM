@@ -3,7 +3,7 @@ Revision history for HTML-OSM
 0.09
 	Remove unused module, File::Slurp
 	Use Params::Get
-	Use Class::Debug
+	Use Object::Configure
 
 0.08	Wed Apr  2 07:51:24 EDT 2025
 	Added css_url and js_url arguments to new()

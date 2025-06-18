@@ -7,7 +7,7 @@ use warnings;
 
 use Carp;
 use CHI;
-use Config::Auto;
+use Object::Configure;
 use LWP::UserAgent;
 use JSON::MaybeXS;
 use Params::Get;
@@ -164,13 +164,10 @@ sub new
 	my $class = shift;
 
 	# Handle hash or hashref arguments
-	my %args;
-	if(my $params = Params::Get::get_params(undef, @_)) {
-		%args = %{$params};
-	}
+	my $params = Params::Get::get_params(undef, @_) || {};
 
 	if(!defined($class)) {
-		if((scalar keys %args) > 0) {
+		if((scalar keys %{$params}) > 0) {
 			# Using HTML::OSM:new(), not HTML::OSM->new()
 			carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
 			return;
@@ -180,38 +177,37 @@ sub new
 		$class = __PACKAGE__;
 	} elsif(Scalar::Util::blessed($class)) {
 		# If $class is an object, clone it with new arguments
-		return bless { %{$class}, %args }, ref($class);
+		return bless { %{$class}, %{$params} }, ref($class);
 	}
 
-	use Class::Debug;
-	%args = %{Class::Debug::setup($class, \%args)};
+	$params = Object::Configure::configure($class, $params);
 
-	if($args{'coordinates'} && !ref($args{'coordinates'})) {
+	if($params->{'coordinates'} && !ref($params->{'coordinates'})) {
 		Carp::croak(__PACKAGE__, ': coordinates must be a reference to an array');
 	}
 
 	# Set up caching (default to an in-memory cache if none provided)
-	my $cache = $args{cache} || CHI->new(
+	my $cache = $params->{cache} || CHI->new(
 		driver => 'Memory',
 		global => 1,
 		expires_in => '1 day',
 	);
 
 	# Set up rate-limiting: minimum interval between requests (in seconds)
-	my $min_interval = $args{min_interval} || 0;	# default: no delay
+	my $min_interval = $params->{min_interval} || 0;	# default: no delay
 
 	return bless {
 		cache => $cache,
-		coordinates => $args{coordinates} || [],
-		height => $args{'height'} || '400px',
-		host => $args{'host'} || 'nominatim.openstreetmap.org/search',
-		width => $args{'width'} || '600px',
-		zoom => $args{zoom} || 12,
+		coordinates => $params->{coordinates} || [],
+		height => $params->{'height'} || '400px',
+		host => $params->{'host'} || 'nominatim.openstreetmap.org/search',
+		width => $params->{'width'} || '600px',
+		zoom => $params->{zoom} || 12,
 		min_interval => $min_interval,
 		last_request => 0,	# Initialize last_request timestamp
 		css_url => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
 		js_url => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-		%args
+		%{$params}
 	}, $class;
 }
 
@@ -479,13 +475,13 @@ sub onload_render
 	my $js_url = $self->{'js_url'};
 
 	my $head = qq{
-			<link rel="stylesheet" href="$css_url" />
-			<script src="$js_url"></script>
-			<style>
-				#map { width: $width; height: $height; }
-				#search-box { margin: 10px; padding: 5px; }
-				#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
-			</style>
+		<link rel="stylesheet" href="$css_url" />
+		<script src="$js_url"></script>
+		<style>
+			#map { width: $width; height: $height; }
+			#search-box { margin: 10px; padding: 5px; }
+			#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
+		</style>
 	};
 
 	my $body = qq{
