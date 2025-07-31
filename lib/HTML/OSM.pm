@@ -164,7 +164,7 @@ sub new
 	my $class = shift;
 
 	# Handle hash or hashref arguments
-	my $params = Params::Get::get_params(undef, @_) || {};
+	my $params = Params::Get::get_params(undef, \@_) || {};
 
 	if(!defined($class)) {
 		if((scalar keys %{$params}) > 0) {
@@ -243,7 +243,7 @@ sub add_marker
 
 	if(ref($_[0]) eq 'ARRAY') {
 		$point = shift;
-		$params = Params::Get::get_params(undef, @_);
+		$params = Params::Get::get_params(undef, \@_);
 		if(scalar(@{$point}) == 1) {
 			$point = @{$point}[0];
 		}
@@ -283,14 +283,15 @@ sub add_marker
 
 =head2 center
 
-Center the map at a given point. Returns 1 on success, 0 if the point could not be found.
+Center the map at a given point.
+Returns 1 on success, 0 if the point could not be found.
 
 =cut
 
 sub center
 {
 	my $self = shift;
-	my $params = Params::Get::get_params('point', @_);
+	my $params = Params::Get::get_params('point', \@_);
 	my $point = $params->{'point'};
 
 	my ($lat, $lon);
@@ -334,7 +335,7 @@ sub zoom
 	my $self = shift;
 
 	if(scalar(@_)) {
-		my $params = Params::Get::get_params('zoom', @_);
+		my $params = Params::Get::get_params('zoom', \@_);
 
 		Carp::croak(__PACKAGE__, 'invalid zoom') if($params->{'zoom'} =~ /\D/);
 		Carp::croak(__PACKAGE__, 'zoom must be positive') if($params->{'zoom'} < 0);
