@@ -16,15 +16,15 @@ use Time::HiRes;
 
 =head1 NAME
 
-HTML::OSM - A module to generate an interactive OpenStreetMap with customizable coordinates and zoom level.
+HTML::OSM - Generate an interactive OpenStreetMap with customizable coordinates and zoom level
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 =head1 SYNOPSIS
 
@@ -597,7 +597,7 @@ Nigel Horne, C<< <njh at nigelhorne.com> >>
 
 =item * L<https://wiki.openstreetmap.org/wiki/API>
 
-=item * C<HTML::GoogleMaps::V3>
+=item * L<HTML::GoogleMaps::V3>
 
 Much of the interface to C<HTML::OSM> mimicks this for compatibility.
 
