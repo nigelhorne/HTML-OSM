@@ -216,7 +216,7 @@ sub new
 Add a marker to the map at the given point.
 A point can be a unique place name, like an address,
 an object that understands C<latitude()> and C<longitude()>,
-or a pair of coordinates passed in as an arrayref: C<[ longitude, latitude ]>.
+or a pair of coordinates passed in as an arrayref: C<[ latitude, longitude ]>.
 Will return 0 if the point is not found and 1 on success.
 
 It takes two optional arguments:
@@ -261,11 +261,11 @@ sub add_marker
 			} else {
 				return 0;
 			}
+		} elsif(!ref($point)) {
+			($lat, $lon) = $self->_fetch_coordinates($point);
 		} elsif($point->can('latitude')) {
 			$lat = $point->latitude();
 			$lon = $point->longitude();
-		} elsif(!ref($point)) {
-			($lat, $lon) = $self->_fetch_coordinates($point);
 		} else {
 			die 'add_marker(): what is the type of point?'
 		}
