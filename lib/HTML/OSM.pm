@@ -267,6 +267,9 @@ sub add_marker
 			$lat = $point->latitude();
 			$lon = $point->longitude();
 		} else {
+			if(my $logger = $self->{'logger'}) {
+				$logger->error('add_marker(): what is the type of point?')
+			}
 			die 'add_marker(): what is the type of point?'
 		}
 		return 0 unless(defined($lat) && defined($lon));
@@ -309,6 +312,9 @@ sub center
 		} elsif(!ref($point)) {
 			($lat, $lon) = $self->_fetch_coordinates($point);
 		} else {
+			if(my $logger = $self->{'logger'}) {
+				$logger->error('add_marker(): what is the type of point?')
+			}
 			die 'add_marker(): what is the type of point?'
 		}
 		return 0 if(!_validate($lat, $lon));
