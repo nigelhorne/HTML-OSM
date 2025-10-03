@@ -2,6 +2,7 @@ Revision history for HTML-OSM
 
 0.10
 	Don't try to call a method on an ininitialized variable
+	Use consistent default sizes
 
 0.09	Thu Jul 31 11:15:55 EDT 2025
 	Remove unused module: File::Slurp

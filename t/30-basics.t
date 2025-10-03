@@ -67,7 +67,7 @@ is_deeply($osm->{center}, [40.7128, -74.0060], 'Center is correctly updated');
 
 # Invalid center inputs
 ok(!$osm->center([999, 999]), 'Invalid coordinates do not update the center');
-ok(!$osm->center('place not found'), 'Fails on unknown center location');
+ok(!$osm->center('xyzzy'), 'Fails on unknown center location');
 
 # 4. Zoom Level Tests
 # Valid zoom changes

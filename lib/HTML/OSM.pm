@@ -370,7 +370,7 @@ sub _fetch_coordinates
 			}
 			print ref($rc), "\n";
 		}
-		return;
+		return undef;
 	}
 	my $ua = $self->{'ua'} || LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
 	$ua->default_header(accept_encoding => 'gzip,deflate');
@@ -426,12 +426,19 @@ sub onload_render
 	my $self = shift;
 
 	# Default size if not provided
-	my $height = $self->{'height'} || '500px';
-	my $width = $self->{'width'} || '100%';
+	my $height = $self->{'height'} || '400px';
+	# my $width = $self->{'width'} || '100%';
+	my $width = $self->{'width'} || '600px';
 
 	my $coordinates = $self->{coordinates};
 
-	die 'No coordinates provided' unless @$coordinates;
+	unless(@$coordinates) {
+		if(my $logger = $self->{'logger'}) {
+			$logger->error('No coordinates provided');
+		}
+		Carp::croak('No coordinates provided');
+		return;
+	}
 
 	my @valid_coordinates;
 
