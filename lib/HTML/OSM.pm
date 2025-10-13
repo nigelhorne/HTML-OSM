@@ -7,10 +7,10 @@ use warnings;
 
 use Carp;
 use CHI;
-use Object::Configure;
+use Object::Configure 0.15;
 use LWP::UserAgent;
 use JSON::MaybeXS;
-use Params::Get;
+use Params::Get 0.13;
 use Scalar::Util;
 use Time::HiRes;
 

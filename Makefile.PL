@@ -19,18 +19,19 @@ WriteMakefile(
 	((defined($ExtUtils::MakeMaker::VERSION) && ($ExtUtils::MakeMaker::VERSION >= 6.3002))
 		? ('LICENSE'=> 'GPL')
 		: ()),
-	PREREQ_PM => {
+	CONFIGURE_REQUIRES => {
+		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
+	}, PREREQ_PM => {
 		'Carp' => 0,
 		'CHI' => 0,
 		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
 		'LWP::UserAgent' => 0,
 		'JSON::MaybeXS' => 0,
-		'Object::Configure' => 0,
-		'Params::Get' => 0,
+		'Object::Configure' => 0.15,
+		'Params::Get' => 0.13,
 		'Scalar::Util' => 0,
 		'Time::HiRes' => 0
-	},
-	META_MERGE => {
+	}, META_MERGE => {
 		resources => {
 			repository => {
 				type => 'git',
