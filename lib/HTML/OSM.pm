@@ -297,6 +297,10 @@ sub center
 	my $params = Params::Get::get_params('point', \@_);
 	my $point = $params->{'point'};
 
+	if(!defined($point)) {
+		croak(__PACKAGE__, '::center: usage(point => [ latitude, longitude ])');
+	}
+
 	my ($lat, $lon);
 
 	if(ref($params)) {
