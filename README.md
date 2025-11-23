@@ -134,7 +134,7 @@ Creates a new `HTML::OSM` object with the provided coordinates and optional zoom
 Add a marker to the map at the given point.
 A point can be a unique place name, like an address,
 an object that understands `latitude()` and `longitude()`,
-or a pair of coordinates passed in as an arrayref: `[ longitude, latitude ]`.
+or a pair of coordinates passed in as an arrayref: `[ latitude, longitude ]`.
 Will return 0 if the point is not found and 1 on success.
 
 It takes two optional arguments:
@@ -150,6 +150,14 @@ It takes two optional arguments:
 ## center
 
 Center the map at a given point.
+
+### INPUT
+
+    $latitude - float (+/- 90 to 0), the latitude
+    $longitude - float (+/- 180 to 0), the longitude
+
+### OUTPUT
+
 Returns 1 on success, 0 if the point could not be found.
 
 ## zoom
