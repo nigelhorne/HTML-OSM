@@ -287,6 +287,14 @@ sub add_marker
 =head2 center
 
 Center the map at a given point.
+
+=head3 INPUT
+
+  $latitude - float (+/- 90 to 0), the latitude
+  $longitude - float (+/- 180 to 0), the longitude
+
+=head3 OUTPUT
+
 Returns 1 on success, 0 if the point could not be found.
 
 =cut
