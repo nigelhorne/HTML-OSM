@@ -346,6 +346,14 @@ Get/set the new zoom level (0 is corsest)
 
     $map->zoom(10);
 
+=head3 INPUT
+
+  $zoom - integer (>= 0), 0 is the corsest
+
+=head3 OUTPUT
+
+Returns integer zoom value
+
 =cut
 
 sub zoom
