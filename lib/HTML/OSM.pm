@@ -363,8 +363,8 @@ sub zoom
 	if(scalar(@_)) {
 		my $params = Params::Get::get_params('zoom', \@_);
 
-		Carp::croak(__PACKAGE__, 'invalid zoom') if($params->{'zoom'} =~ /\D/);
-		Carp::croak(__PACKAGE__, 'zoom must be positive') if($params->{'zoom'} < 0);
+		Carp::croak(__PACKAGE__, ' invalid zoom') if($params->{'zoom'} =~ /\D/);
+		Carp::croak(__PACKAGE__, ' zoom must be positive') if($params->{'zoom'} < 0);
 
 		$self->{'zoom'} = $params->{'zoom'};
 	}
