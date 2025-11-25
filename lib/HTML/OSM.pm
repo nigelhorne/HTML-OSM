@@ -348,7 +348,7 @@ Get/set the new zoom level (0 is corsest)
 
 =head3 INPUT
 
-  $zoom - integer (>= 0), 0 is the corsest
+  $zoom - integer (0..19), 0 is the corsest
 
 =head3 OUTPUT
 
@@ -365,6 +365,7 @@ sub zoom
 
 		Carp::croak(__PACKAGE__, ' invalid zoom') if($params->{'zoom'} =~ /\D/);
 		Carp::croak(__PACKAGE__, ' zoom must be positive') if($params->{'zoom'} < 0);
+		Carp::croak(__PACKAGE__, ' zoom maximum is 19') if($params->{'zoom'} > 19);
 
 		$self->{'zoom'} = $params->{'zoom'};
 	}
