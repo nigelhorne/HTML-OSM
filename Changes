@@ -5,6 +5,7 @@ Revision history for HTML-OSM
 	Use consistent default sizes
 	Bump minimum versions
 	Set maximum zoom to 19
+	Started fuzz testing
 
 0.09	Thu Jul 31 11:15:55 EDT 2025
 	Remove unused module: File::Slurp

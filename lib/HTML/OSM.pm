@@ -11,6 +11,7 @@ use Object::Configure 0.15;
 use LWP::UserAgent;
 use JSON::MaybeXS;
 use Params::Get 0.13;
+use Params::Validate::Strict 0.28;
 use Scalar::Util;
 use Time::HiRes;
 
@@ -344,17 +345,30 @@ sub center
 
 =head2 zoom
 
-Get/set the new zoom level (0 is coarsest)
+Get/set the new zoom level (0 is coarsest, 19 is the finest)
 
     $map->zoom(10);
 
-=head3 INPUT
+=head3 API SPECIFICATION
 
-    zoom => integer (0..19), 0 is the coarsest
+=head4 INPUT
 
-=head3 OUTPUT
+  {
+    zoom => {
+      type => 'integer',
+      min => 0,
+      max => 19,
+      optional => 1
+    }
+  }
 
-Returns an integer zoom value
+=head4 OUTPUT
+
+  {
+    type => 'integer',
+    min => 0,
+    max => 19
+  }
 
 =cut
 
@@ -363,13 +377,21 @@ sub zoom
 	my $self = shift;
 
 	if(scalar(@_)) {
-		my $params = Params::Get::get_params('zoom', \@_);
+		my $params = Params::Validate::Strict::validate_strict({
+			args => Params::Get::get_params('zoom', \@_),
+			schema => {
+				zoom => {
+					optional => 1,
+					type => 'integer',
+					min => 0,
+					max => 19,
+				}
+			}
+		});
 
-		Carp::croak(__PACKAGE__, ' invalid zoom') if($params->{'zoom'} =~ /\D/);
-		Carp::croak(__PACKAGE__, ' zoom must be positive') if($params->{'zoom'} < 0);
-		Carp::croak(__PACKAGE__, ' zoom maximum is 19') if($params->{'zoom'} > 19);
-
-		$self->{'zoom'} = $params->{'zoom'};
+		if(defined($params->{'zoom'})) {
+			$self->{'zoom'} = $params->{'zoom'};
+		}
 	}
 
 	return $self->{'zoom'};
@@ -683,7 +705,7 @@ Allow dynamic addition/removal of markers via user input.
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2025 Nigel Horne.
+Copyright 2025-2026 Nigel Horne.
 
 This program is released under the following licence: GPL2
 

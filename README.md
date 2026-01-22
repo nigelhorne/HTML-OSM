@@ -164,17 +164,30 @@ Returns 1 on success, 0 if the point could not be found.
 
 ## zoom
 
-Get/set the new zoom level (0 is coarsest)
+Get/set the new zoom level (0 is coarsest, 19 is the finest)
 
     $map->zoom(10);
 
-### INPUT
+### API SPECIFICATION
 
-    zoom => integer (0..19), 0 is the coarsest
+#### INPUT
 
-### OUTPUT
+    {
+      zoom => {
+        type => 'integer',
+        min => 0,
+        max => 19,
+        optional => 1
+      }
+    }
 
-Returns an integer zoom value
+#### OUTPUT
+
+    {
+      type => 'integer',
+      min => 0,
+      max => 19
+    }
 
 ## onload\_render
 
@@ -235,6 +248,6 @@ Allow dynamic addition/removal of markers via user input.
 
 # LICENSE AND COPYRIGHT
 
-Copyright 2025 Nigel Horne.
+Copyright 2025-2026 Nigel Horne.
 
 This program is released under the following licence: GPL2

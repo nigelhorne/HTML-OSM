@@ -29,6 +29,7 @@ WriteMakefile(
 		'JSON::MaybeXS' => 0,
 		'Object::Configure' => 0.15,
 		'Params::Get' => 0.13,
+		'Params::Validate::Strict' => 0.28,
 		'Scalar::Util' => 0,
 		'Time::HiRes' => 0
 	}, META_MERGE => {
