@@ -290,8 +290,10 @@ Center the map at a given point.
 
 =head3 INPUT
 
-  $latitude - float (+/- 90 to 0), the latitude
-  $longitude - float (+/- 180 to 0), the longitude
+  $point is an object that understands latitude() and longitude()
+
+  $point->latitude() - float (+/- 90 to 0), the latitude
+  $point->longitude() - float (+/- 180 to 0), the longitude
 
 =head3 OUTPUT
 
@@ -342,17 +344,17 @@ sub center
 
 =head2 zoom
 
-Get/set the new zoom level (0 is corsest)
+Get/set the new zoom level (0 is coarsest)
 
     $map->zoom(10);
 
 =head3 INPUT
 
-  $zoom - integer (0..19), 0 is the corsest
+    zoom => integer (0..19), 0 is the coarsest
 
 =head3 OUTPUT
 
-Returns integer zoom value
+Returns an integer zoom value
 
 =cut
 

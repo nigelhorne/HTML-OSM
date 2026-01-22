@@ -153,8 +153,10 @@ Center the map at a given point.
 
 ### INPUT
 
-    $latitude - float (+/- 90 to 0), the latitude
-    $longitude - float (+/- 180 to 0), the longitude
+    $point is an object that understands latitude() and longitude()
+
+    $point->latitude() - float (+/- 90 to 0), the latitude
+    $point->longitude() - float (+/- 180 to 0), the longitude
 
 ### OUTPUT
 
@@ -162,9 +164,17 @@ Returns 1 on success, 0 if the point could not be found.
 
 ## zoom
 
-Get/set the new zoom level (0 is corsest)
+Get/set the new zoom level (0 is coarsest)
 
     $map->zoom(10);
+
+### INPUT
+
+    zoom => integer (0..19), 0 is the coarsest
+
+### OUTPUT
+
+Returns an integer zoom value
 
 ## onload\_render
 
