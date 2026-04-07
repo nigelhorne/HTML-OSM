@@ -1,4 +1,4 @@
-# Generated from Makefile.PL
+# Generated from Makefile.PL using makefilepl2cpanfile
 
 requires 'CHI';
 requires 'Carp';
@@ -14,6 +14,7 @@ requires 'Time::HiRes';
 on 'configure' => sub {
 	requires 'ExtUtils::MakeMaker', '6.64';
 };
+
 on 'test' => sub {
 	requires 'File::Temp';
 	requires 'Test::Compile';
@@ -27,6 +28,7 @@ on 'test' => sub {
 	requires 'Test::RequiresInternet';
 	requires 'Test::Warnings';
 };
+
 on 'develop' => sub {
 	requires 'Devel::Cover';
 	requires 'Perl::Critic';

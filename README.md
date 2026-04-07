@@ -153,7 +153,7 @@ Center the map at a given point.
 
 ### INPUT
 
-    $point is an object that understands latitude() and longitude()
+    $point is an object that understands latitude() and longitude(), or a two element array
 
     $point->latitude() - float (+/- 90 to 0), the latitude
     $point->longitude() - float (+/- 180 to 0), the longitude
