@@ -708,6 +708,8 @@ Allow dynamic addition/removal of markers via user input.
 Copyright 2025-2026 Nigel Horne.
 
 This program is released under the following licence: GPL2
+If you use it,
+please let me know.
 
 =cut
 
