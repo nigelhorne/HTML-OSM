@@ -244,7 +244,7 @@ automatically be notified of progress on your bug as I make changes.
 
 ## TODO
 
-Allow dynamic addition/removal of markers via user input.
+Allow per-marker removal via clicking on a marker.
 
 # LICENSE AND COPYRIGHT
 

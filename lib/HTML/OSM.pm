@@ -164,17 +164,17 @@ sub new
 {
 	my $class = shift;
 
+	# Detect function-style call: HTML::OSM::new(key => val)
+	# Perl passes the first argument as $class rather than the package name.
+	if(defined($class) && !Scalar::Util::blessed($class) && !UNIVERSAL::isa($class, __PACKAGE__)) {
+		unshift @_, $class;
+		$class = __PACKAGE__;
+	}
+
 	# Handle hash or hashref arguments
 	my $params = Params::Get::get_params(undef, \@_) || {};
 
 	if(!defined($class)) {
-		if((scalar keys %{$params}) > 0) {
-			# Using HTML::OSM:new(), not HTML::OSM->new()
-			carp(__PACKAGE__, ' use ->new() not ::new() to instantiate');
-			return;
-		}
-
-		# FIXME: this only works when no arguments are given
 		$class = __PACKAGE__;
 	} elsif(Scalar::Util::blessed($class)) {
 		# If $class is an object, clone it with new arguments
@@ -544,10 +544,9 @@ sub onload_render
 	};
 
 	my $body = qq{
-		<!--
-			<input type="text" id="search-box" placeholder="Enter location">
-			<button id="reset-button">Reset Map</button>
-		-->
+		<input type="text" id="search-box" placeholder="Enter location">
+		<button id="clear-search-button">Clear search markers</button>
+		<button id="reset-button">Reset Map</button>
 		<div id="map"></div>
 		<script>
 			var map = L.map('map').setView([$center_lat, $center_lon], $self->{zoom});
@@ -555,7 +554,7 @@ sub onload_render
 				attribution: '&copy; OpenStreetMap contributors'
 			}).addTo(map);
 
-			var markers = [];
+			var searchMarkers = [];
 	};
 
 	my @js_markers;
@@ -576,11 +575,10 @@ sub onload_render
 
 			push @js_markers, qq{
 				$icon_js
-				var marker = L.marker([$lat, $lon], { icon: customIcon }).addTo(map).bindPopup('$label');
-				markers.push(marker);
+				L.marker([$lat, $lon], { icon: customIcon }).addTo(map).bindPopup('$label');
 			};
 		} else {
-			push @js_markers, "var marker = L.marker([$lat, $lon]).addTo(map).bindPopup('$label'); markers.push(marker);";
+			push @js_markers, "L.marker([$lat, $lon]).addTo(map).bindPopup('$label');";
 		}
 	}
 
@@ -589,6 +587,11 @@ sub onload_render
 	$body .= qq{
 		document.getElementById('reset-button').addEventListener('click', function() {
 			map.setView([$center_lat, $center_lon], $self->{zoom});
+		});
+
+		document.getElementById('clear-search-button').addEventListener('click', function() {
+			searchMarkers.forEach(function(m) { map.removeLayer(m); });
+			searchMarkers = [];
 		});
 
 		document.getElementById('search-box').addEventListener('keyup', function(event) {
@@ -608,8 +611,8 @@ sub onload_render
 						var lat = data[0].lat;
 						var lon = data[0].lon;
 						map.setView([lat, lon], 14);
-						var searchMarker = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
-						markers.push(searchMarker);
+						var m = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
+						searchMarkers.push(m);
 					} else {
 						alert('No results found. Try a different location.');
 					}
@@ -701,7 +704,7 @@ automatically be notified of progress on your bug as I make changes.
 
 =head2 TODO
 
-Allow dynamic addition/removal of markers via user input.
+Allow per-marker removal via clicking on a marker.
 
 =head1 LICENSE AND COPYRIGHT
 
