@@ -90,31 +90,33 @@ for my $spec (@locales) {
 # they interpolate $!), not directly from the C library.
 
 subtest 'ENOENT error string is non-empty in C locale' => sub {
-	_try_locale('C') or skip('Cannot set C locale', 1);
-	setlocale(LC_ALL, 'C');
-	my $msg = do { local $! = ENOENT; "$!" };
-	setlocale(LC_ALL, $saved_locale // 'C');
-	ok(length($msg), "ENOENT produces a non-empty string in C locale: '$msg'");
+	SKIP: {
+		skip('Cannot set C locale', 1) unless _try_locale('C');
+		setlocale(LC_ALL, 'C');
+		my $msg = do { local $! = ENOENT; "$!" };
+		setlocale(LC_ALL, $saved_locale // 'C');
+		ok(length($msg), "ENOENT produces a non-empty string in C locale: '$msg'");
+	}
 };
 
 subtest 'ENOENT error string is non-empty in en_US.UTF-8 locale' => sub {
-	unless(_try_locale('en_US.UTF-8')) {
-		skip('en_US.UTF-8 locale not installed', 1);
+	SKIP: {
+		skip('en_US.UTF-8 locale not installed', 1) unless _try_locale('en_US.UTF-8');
+		setlocale(LC_ALL, 'en_US.UTF-8');
+		my $msg = do { local $! = ENOENT; "$!" };
+		setlocale(LC_ALL, $saved_locale // 'C');
+		ok(length($msg), "ENOENT produces a non-empty string in en_US.UTF-8: '$msg'");
 	}
-	setlocale(LC_ALL, 'en_US.UTF-8');
-	my $msg = do { local $! = ENOENT; "$!" };
-	setlocale(LC_ALL, $saved_locale // 'C');
-	ok(length($msg), "ENOENT produces a non-empty string in en_US.UTF-8: '$msg'");
 };
 
 subtest 'ENOENT error string is non-empty in de_DE.UTF-8 locale' => sub {
-	unless(_try_locale('de_DE.UTF-8')) {
-		skip('de_DE.UTF-8 locale not installed', 1);
+	SKIP: {
+		skip('de_DE.UTF-8 locale not installed', 1) unless _try_locale('de_DE.UTF-8');
+		setlocale(LC_ALL, 'de_DE.UTF-8');
+		my $de_msg = do { local $! = ENOENT; "$!" };
+		setlocale(LC_ALL, $saved_locale // 'C');
+		ok(length($de_msg), "ENOENT produces a non-empty string in de_DE.UTF-8: '$de_msg'");
 	}
-	setlocale(LC_ALL, 'de_DE.UTF-8');
-	my $de_msg = do { local $! = ENOENT; "$!" };
-	setlocale(LC_ALL, $saved_locale // 'C');
-	ok(length($de_msg), "ENOENT produces a non-empty string in de_DE.UTF-8: '$de_msg'");
 };
 
 # ── Module error messages stay ASCII/English regardless of LC_ALL ──────────────
