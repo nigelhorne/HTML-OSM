@@ -12,7 +12,10 @@ README.md
 t/10-compile.t
 t/20-new.t
 t/30-basics.t
+t/40-layers.t
 t/comment-spelling.t
+t/conf/new.yml
+t/conf/zoom.yml
 t/cover.t
 t/eof.t
 t/eol.t

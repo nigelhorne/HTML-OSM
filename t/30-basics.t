@@ -46,6 +46,11 @@ cmp_ok($osm->{zoom}, '==', 12, 'Default zoom is 12');
 is($osm->{height}, '400px', 'Default height is 400px');
 is($osm->{width}, '600px', 'Default width is 600px');
 is_deeply($osm->{coordinates}, [], 'Coordinates default to an empty array');
+ok(!$osm->{cluster}, 'cluster disabled by default');
+like($osm->{cluster_js_url},      qr/markercluster/, 'cluster_js_url default set');
+like($osm->{cluster_css_url},     qr/MarkerCluster/, 'cluster_css_url default set');
+like($osm->{heatmap_js_url},      qr/leaflet-heat/,  'heatmap_js_url default set');
+like($osm->{gpx_js_url},          qr/leaflet-gpx/,   'gpx_js_url default set');
 
 # Invalid constructor arguments
 dies_ok { HTML::OSM->new({ coordinates => 'not an array' }) } 'Dies with invalid coordinate structure';
@@ -87,9 +92,9 @@ my ($head, $body) = $osm->onload_render();
 like($head, qr/leaflet/, 'Leaflet script is included in the head');
 like($body, qr/map\.setView/, 'Body includes map initialization');
 
-# No coordinates error
+# No map data at all
 my $osm_empty = HTML::OSM->new();
-dies_ok { $osm_empty->onload_render() } 'Dies if no coordinates are provided';
+dies_ok { $osm_empty->onload_render() } 'Dies if no map data of any kind is provided';
 
 # Clone Tests
 my $osm_clone = $osm->new(zoom => 17);
