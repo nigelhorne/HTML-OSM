@@ -20,76 +20,78 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/HTML/OSM.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c0">66.2%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c2">90.3%</td></tr>
 </table>
 <div><br/></div>
 <table>
 <tr><th>line</th><th>%</th><th colspan="2">coverage</th><th>branch</th></tr>
-<tr><td class="h"><a id="L149">149</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (defined $class and not &amp;blessed($class) and not UNIVERSAL::isa($class, __PACKAGE__))</td></tr>
+<tr><td class="h"><a id="L149">149</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (defined $class and not &amp;blessed($class) and not UNIVERSAL::isa($class, __PACKAGE__))</td></tr>
 <tr><td class="h"><a id="L156">156</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (&amp;blessed($class))</td></tr>
 <tr><td class="h"><a id="L255">255</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $_[0] eq &#39;ARRAY&#39;) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (&amp;blessed($_[0]) and $_[0]-&gt;can(&#39;latitude&#39;)) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (defined $_[0] and not ref $_[0] and scalar(@_) % 2 != 0) { }</td></tr>
 <tr><td class="h"><a id="L259">259</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if scalar @{$point;} == 1</td></tr>
-<tr><td class="h"><a id="L267">267</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $point eq &#39;ARRAY&#39;) { }</td></tr>
-<tr><td class="h"></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">elsif (not ref $point) { }</td></tr>
-<tr><td class="h"></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">elsif ($point-&gt;can(&#39;latitude&#39;)) { }</td></tr>
-<tr><td class="h"><a id="L268">268</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if scalar @{$point;} != 2</td></tr>
-<tr><td class="h"><a id="L276">276</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;logger&#39;}</td></tr>
-<tr><td class="h"><a id="L280">280</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $lat and defined $lon</td></tr>
-<tr><td class="h"><a id="L281">281</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless _validate($lat, $lon)</td></tr>
-<tr><td class="h"><a id="L323">323</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $data</td></tr>
-<tr><td class="h"><a id="L365">365</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $points eq &quot;ARRAY&quot;</td></tr>
-<tr><td class="h"><a id="L405">405</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $url</td></tr>
-<tr><td class="h"><a id="L455">455</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $features eq &quot;ARRAY&quot;</td></tr>
-<tr><td class="h"><a id="L456">456</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $values eq &quot;HASH&quot;</td></tr>
-<tr><td class="h"><a id="L465">465</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $max == $min</td></tr>
-<tr><td class="h"><a id="L470">470</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $idx &gt; $#{$scale;}</td></tr>
-<tr><td class="h"><a id="L519">519</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $point</td></tr>
-<tr><td class="h"><a id="L523">523</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (ref $point eq &#39;ARRAY&#39;) { }</td></tr>
-<tr><td class="h"></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">elsif (ref $point and $point-&gt;can(&#39;latitude&#39;)) { }</td></tr>
-<tr><td class="h"></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">elsif (not ref $point) { }</td></tr>
-<tr><td class="h"><a id="L525">525</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if scalar @{$point;} != 2</td></tr>
-<tr><td class="h"><a id="L533">533</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;logger&#39;}</td></tr>
-<tr><td class="h"><a id="L537">537</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $lat and defined $lon</td></tr>
-<tr><td class="h"><a id="L538">538</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless _validate($lat, $lon)</td></tr>
-<tr><td class="h"><a id="L573">573</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (scalar @_)</td></tr>
-<tr><td class="h"><a id="L580">580</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $params-&gt;{&#39;zoom&#39;}</td></tr>
-<tr><td class="h"><a id="L658">658</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (@$coordinates or @$geojson_layers or @$heatmap_layers or @$gpx_tracks or @$choropleth_layers)</td></tr>
-<tr><td class="h"><a id="L660">660</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;logger&#39;}</td></tr>
-<tr><td class="h"><a id="L668">668</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (not defined $lat &amp;&amp; defined $lon) { }</td></tr>
-<tr><td class="h"><a id="L671">671</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless _validate($lat, $lon)</td></tr>
-<tr><td class="h"><a id="L673">673</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $lat and defined $lon</td></tr>
-<tr><td class="h"><a id="L679">679</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($self-&gt;{&#39;center&#39;}) { }</td></tr>
+<tr><td class="h"><a id="L277">277</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $point eq &#39;ARRAY&#39;) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (not ref $point) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($point-&gt;can(&#39;latitude&#39;)) { }</td></tr>
+<tr><td class="h"><a id="L278">278</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if scalar @{$point;} != 2</td></tr>
+<tr><td class="h"><a id="L286">286</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;logger&#39;}</td></tr>
+<tr><td class="h"><a id="L290">290</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $lat and defined $lon</td></tr>
+<tr><td class="h"><a id="L291">291</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless _validate($lat, $lon)</td></tr>
+<tr><td class="h"><a id="L333">333</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $data</td></tr>
+<tr><td class="h"><a id="L375">375</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $points eq &quot;ARRAY&quot;</td></tr>
+<tr><td class="h"><a id="L415">415</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $url</td></tr>
+<tr><td class="h"><a id="L465">465</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $features eq &quot;ARRAY&quot;</td></tr>
+<tr><td class="h"><a id="L466">466</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless ref $values eq &quot;HASH&quot;</td></tr>
+<tr><td class="h"><a id="L475">475</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $max == $min</td></tr>
+<tr><td class="h"><a id="L480">480</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if $idx &gt; $#{$scale;}</td></tr>
+<tr><td class="h"><a id="L529">529</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless defined $point</td></tr>
+<tr><td class="h"><a id="L533">533</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $point eq &#39;ARRAY&#39;) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (ref $point and $point-&gt;can(&#39;latitude&#39;)) { }</td></tr>
+<tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (not ref $point) { }</td></tr>
+<tr><td class="h"><a id="L535">535</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if scalar @{$point;} != 2</td></tr>
+<tr><td class="h"><a id="L543">543</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;logger&#39;}</td></tr>
+<tr><td class="h"><a id="L547">547</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $lat and defined $lon</td></tr>
+<tr><td class="h"><a id="L548">548</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless _validate($lat, $lon)</td></tr>
+<tr><td class="h"><a id="L583">583</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (scalar @_)</td></tr>
+<tr><td class="h"><a id="L590">590</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $params-&gt;{&#39;zoom&#39;}</td></tr>
+<tr><td class="h"><a id="L668">668</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless (@$coordinates or @$geojson_layers or @$heatmap_layers or @$gpx_tracks or @$choropleth_layers)</td></tr>
+<tr><td class="h"><a id="L670">670</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $self-&gt;{&#39;logger&#39;}</td></tr>
+<tr><td class="h"><a id="L678">678</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (not defined $lat &amp;&amp; defined $lon) { }</td></tr>
+<tr><td class="h"><a id="L681">681</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless _validate($lat, $lon)</td></tr>
+<tr><td class="h"><a id="L683">683</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $lat and defined $lon</td></tr>
+<tr><td class="h"><a id="L689">689</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($self-&gt;{&#39;center&#39;}) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif (@valid_coordinates) { }</td></tr>
-<tr><td class="h"><a id="L684">684</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $c-&gt;[0] &lt; $min_lat</td></tr>
-<tr><td class="h"><a id="L685">685</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $c-&gt;[0] &gt; $max_lat</td></tr>
-<tr><td class="h"><a id="L686">686</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $c-&gt;[1] &lt; $min_lon</td></tr>
-<tr><td class="h"><a id="L687">687</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $c-&gt;[1] &gt; $max_lon</td></tr>
-<tr><td class="h"><a id="L701">701</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($self-&gt;{&#39;cluster&#39;})</td></tr>
-<tr><td class="h"><a id="L708">708</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if @$heatmap_layers</td></tr>
-<tr><td class="h"><a id="L709">709</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if @$gpx_tracks</td></tr>
-<tr><td class="h"><a id="L735">735</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@valid_coordinates)</td></tr>
-<tr><td class="h"><a id="L736">736</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $self-&gt;{&#39;cluster&#39;}</td></tr>
-<tr><td class="h"><a id="L741">741</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ($icon_url) { }</td></tr>
+<tr><td class="h"><a id="L694">694</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if $c-&gt;[0] &lt; $min_lat</td></tr>
+<tr><td class="h"><a id="L695">695</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $c-&gt;[0] &gt; $max_lat</td></tr>
+<tr><td class="h"><a id="L696">696</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $c-&gt;[1] &lt; $min_lon</td></tr>
+<tr><td class="h"><a id="L697">697</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $c-&gt;[1] &gt; $max_lon</td></tr>
+<tr><td class="h"><a id="L711">711</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($self-&gt;{&#39;cluster&#39;})</td></tr>
+<tr><td class="h"><a id="L718">718</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if @$heatmap_layers</td></tr>
+<tr><td class="h"><a id="L719">719</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if @$gpx_tracks</td></tr>
+<tr><td class="h"><a id="L745">745</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (@valid_coordinates)</td></tr>
+<tr><td class="h"><a id="L746">746</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $self-&gt;{&#39;cluster&#39;}</td></tr>
+<tr><td class="h"><a id="L751">751</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($icon_url) { }</td></tr>
 <tr><td class="h"></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">elsif ($self-&gt;{&#39;cluster&#39;}) { }</td></tr>
-<tr><td class="h"><a id="L744">744</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">$self-&gt;{&#39;cluster&#39;} ? :</td></tr>
-<tr><td class="h"><a id="L760">760</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $self-&gt;{&#39;cluster&#39;}</td></tr>
-<tr><td class="h"><a id="L769">769</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $style = $opts-&gt;{&#39;style&#39;})</td></tr>
-<tr><td class="h"><a id="L772">772</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $prop = $opts-&gt;{&#39;popup&#39;})</td></tr>
-<tr><td class="h"><a id="L870">870</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">unless $location</td></tr>
-<tr><td class="h"><a id="L873">873</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $geocoder = $self-&gt;{&#39;geocoder&#39;})</td></tr>
-<tr><td class="h"><a id="L875">875</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $rc</td></tr>
-<tr><td class="h"><a id="L877">877</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if (&amp;blessed($rc) and $rc-&gt;can(&quot;latitude&quot;))</td></tr>
-<tr><td class="h"><a id="L880">880</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (ref $rc eq &quot;HASH&quot;)</td></tr>
-<tr><td class="h"><a id="L882">882</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $rc-&gt;{&#39;lat&#39;} and defined $rc-&gt;{&#39;lon&#39;}</td></tr>
-<tr><td class="h"><a id="L884">884</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if defined $rc-&gt;{&#39;geometry&#39;}{&#39;location&#39;}{&#39;lat&#39;}</td></tr>
-<tr><td class="h"><a id="L887">887</a></td><td class="c0">0</td><td class="c0">T</td><td class="c0">F</td><td class="s">if ref $rc eq &quot;ARRAY&quot;</td></tr>
-<tr><td class="h"><a id="L896">896</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $cached = $self-&gt;{&#39;cache&#39;}-&gt;get($cache_key))</td></tr>
-<tr><td class="h"><a id="L902">902</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
-<tr><td class="h"><a id="L915">915</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if ($response-&gt;is_success)</td></tr>
-<tr><td class="h"><a id="L917">917</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">if ref $data eq &quot;ARRAY&quot;</td></tr>
-<tr><td class="h"><a id="L918">918</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (ref $data eq &quot;HASH&quot; and defined $data-&gt;{&#39;lat&#39;})</td></tr>
-<tr><td class="h"><a id="L946">946</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if not $ok and defined $lat and defined $lon</td></tr>
-<tr><td class="h"><a id="L950">950</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$ok ? :</td></tr>
+<tr><td class="h"><a id="L754">754</a></td><td class="c0">50</td><td class="c0">T</td><td class="c3">F</td><td class="s">$self-&gt;{&#39;cluster&#39;} ? :</td></tr>
+<tr><td class="h"><a id="L770">770</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if $self-&gt;{&#39;cluster&#39;}</td></tr>
+<tr><td class="h"><a id="L779">779</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $style = $opts-&gt;{&#39;style&#39;})</td></tr>
+<tr><td class="h"><a id="L782">782</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $prop = $opts-&gt;{&#39;popup&#39;})</td></tr>
+<tr><td class="h"><a id="L880">880</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless $location</td></tr>
+<tr><td class="h"><a id="L883">883</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $geocoder = $self-&gt;{&#39;geocoder&#39;})</td></tr>
+<tr><td class="h"><a id="L885">885</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">unless defined $rc</td></tr>
+<tr><td class="h"><a id="L887">887</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (&amp;blessed($rc) and $rc-&gt;can(&quot;latitude&quot;))</td></tr>
+<tr><td class="h"><a id="L890">890</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $rc eq &quot;HASH&quot;)</td></tr>
+<tr><td class="h"><a id="L892">892</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $rc-&gt;{&#39;lat&#39;} and defined $rc-&gt;{&#39;lon&#39;}</td></tr>
+<tr><td class="h"><a id="L894">894</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $rc-&gt;{&#39;geometry&#39;}{&#39;location&#39;}{&#39;lat&#39;}</td></tr>
+<tr><td class="h"><a id="L897">897</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ref $rc eq &quot;ARRAY&quot;</td></tr>
+<tr><td class="h"><a id="L906">906</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $cached = $self-&gt;{&#39;cache&#39;}-&gt;get($cache_key))</td></tr>
+<tr><td class="h"><a id="L912">912</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
+<tr><td class="h"><a id="L925">925</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($response-&gt;is_success)</td></tr>
+<tr><td class="h"><a id="L927">927</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ref $data eq &quot;ARRAY&quot;</td></tr>
+<tr><td class="h"><a id="L928">928</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (ref $data eq &quot;HASH&quot; and defined $data-&gt;{&#39;lat&#39;})</td></tr>
+<tr><td class="h"><a id="L956">956</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if not $ok and defined $lat and defined $lon</td></tr>
+<tr><td class="h"><a id="L960">960</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$ok ? :</td></tr>
 </table>
 </body>
 </html>
