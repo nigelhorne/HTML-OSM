@@ -818,11 +818,12 @@ sub onload_render
 		my ($lat, $lon, $label, $icon_url) = @$coord;
 		if(!defined $lat || !defined $lon) {
 			($lat, $lon) = $self->_fetch_coordinates($label);
-		} else {
-			next unless _validate($lat, $lon);
 		}
-		push @valid_coordinates, [$lat, $lon, $label, $icon_url]
-			if defined($lat) && defined($lon);
+		# Validate ALL coordinates here — including geocoder-returned ones.
+		# A compromised geocoder or Nominatim response could return a crafted
+		# lat/lon string that would inject JS if embedded without validation.
+		next unless defined($lat) && defined($lon) && _validate($lat, $lon);
+		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
 	}
 
 	# Determine map centre: caller-set wins; else compute from marker bounds.
@@ -913,12 +914,12 @@ sub onload_render
 
 	# GeoJSON layers.
 	for my $layer (@$geojson_layers) {
-		my $json     = encode_json($layer->{data});
+		my $json     = _html_json($layer->{data});
 		my $opts     = $layer->{opts} || {};
 		my $style_js = '';
 		my $popup_js = '';
 		if(my $style = $opts->{style}) {
-			$style_js = 'style: ' . encode_json($style) . ',';
+			$style_js = 'style: ' . _html_json($style) . ',';
 		}
 		if(my $prop = $opts->{popup}) {
 			my $js_prop = _js_string($prop);
@@ -929,7 +930,7 @@ sub onload_render
 
 	# Heatmap layers.
 	for my $layer (@$heatmap_layers) {
-		my $pts    = encode_json($layer->{points});
+		my $pts    = _html_json($layer->{points});
 		my $opts   = $layer->{opts} || {};
 		my $radius = $opts->{radius} || 25;
 		my $blur   = $opts->{blur}   || 15;
@@ -944,9 +945,9 @@ sub onload_render
 
 	# Choropleth layers — colours are pre-baked; no browser-side scale maths.
 	for my $layer (@$choropleth_layers) {
-		my $fc_json     = encode_json({ type => 'FeatureCollection', features => $layer->{features} });
-		my $colors_json = encode_json($layer->{colors});
-		my $values_json = encode_json($layer->{values});
+		my $fc_json     = _html_json({ type => 'FeatureCollection', features => $layer->{features} });
+		my $colors_json = _html_json($layer->{colors});
+		my $values_json = _html_json($layer->{values});
 		my $js_key      = _js_string($layer->{key});
 		$body .= qq{
 			(function() {
@@ -1099,6 +1100,20 @@ sub _validate
 		if !$ok && defined($lat) && defined($lon);
 
 	return $ok ? 1 : 0;
+}
+
+# _html_json: Encode data as JSON and make the result safe for embedding in a
+# <script> block.  JSON encoders do not escape '/' by default, so a value like
+# '</script>' would close the enclosing script tag and allow HTML injection.
+# Escaping every '</' as '<\/' prevents this without altering the decoded value.
+# Entry:   Any Perl data structure accepted by encode_json.
+# Exit:    JSON string safe for direct insertion inside a <script> block.
+# Side Effects: None.
+sub _html_json
+{
+	my $j = encode_json(shift);
+	$j =~ s|</|<\\/|g;
+	return $j;
 }
 
 # _js_string: Escape a Perl string for safe embedding in a JS single-quoted literal.

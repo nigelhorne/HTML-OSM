@@ -17,6 +17,7 @@ t/comment-spelling.t
 t/conf/new.yml
 t/conf/zoom.yml
 t/cover.t
+t/edge_cases.t
 t/eof.t
 t/eol.t
 t/function.t

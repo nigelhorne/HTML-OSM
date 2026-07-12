@@ -27,12 +27,14 @@ on 'test' => sub {
 	requires 'Test::JSON';
 	requires 'Test::Memory::Cycle';
 	requires 'Test::MockObject';
+	requires 'Test::Mockingbird';
 	requires 'Test::Most';
 	requires 'Test::Needs';
 	requires 'Test::RequiresInternet';
 	requires 'Test::Returns';
 	requires 'Test::Warnings';
 	requires 'Test::Which';
+	requires 'Test::Without::Module';
 };
 
 on 'develop' => sub {
