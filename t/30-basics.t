@@ -37,8 +37,8 @@ subtest 'should load config file if provided' => sub {
 	close $fh;
 
 	my $osm = HTML::OSM->new(config_file => $config_file);
-	is $osm->{'css_url'}, 'https://example.com', 'Config file loaded correctly';
 	unlink $config_file;
+	is $osm->{'css_url'}, 'https://example.com', 'Config file loaded correctly';
 };
 
 # Check default values

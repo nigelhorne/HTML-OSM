@@ -1,14 +1,21 @@
 Revision history for HTML-OSM
 
 0.10
-	[ Bug Fixes]
+	[ Bug Fixes ]
 	- Don't try to call a method on an ininitialized variable
 	- Use consistent default sizes
 	- Bump minimum versions
 	- Set maximum zoom to 19
+	- Fix function-style HTML::OSM::new() with arguments blessing into wrong package
+
+	[ Enhancements ]
+	- Re-enable search box and reset button in rendered map
+	- Add "Clear search markers" button to remove dynamically-added markers
+	- Use Params::Validate::Strict on new()
 
 	[ Tests ]
 	- Started fuzz testing
+	- Extend new() fuzz schema with zoom, height, width and min_interval inputs
 
 0.09	Thu Jul 31 11:15:55 EDT 2025
 	Remove unused module: File::Slurp

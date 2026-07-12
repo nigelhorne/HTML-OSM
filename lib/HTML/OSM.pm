@@ -172,7 +172,44 @@ sub new
 	}
 
 	# Handle hash or hashref arguments
-	my $params = Params::Get::get_params(undef, \@_) || {};
+        my $params = Params::Validate::Strict::validate_strict({
+		args => Params::Get::get_params(undef, \@_) || {},
+		schema => {
+			zoom => {
+				type => 'integer',
+				min => 0,
+				max => 19,
+				optional => 1
+			}, height => {
+				type => 'string',
+				optional => 1,
+			}, width => {
+				type => 'string',
+				optional => 1,
+			}, min_interval => {
+				type => 'number',
+				min => 0,
+				optional => 1
+			}, coordinates => {
+				type => 'arrayref',
+				optional => 1
+			}, cache => {
+				type => 'object',
+				can => ['get', 'set'],
+				optional => 1
+			}, ua => {
+				type => 'object',
+				optional => 1
+			}, geocoder => {
+				type => 'object',
+				can => 'geocode',
+				optional => 1
+			}, config_file => {
+				type => 'string',
+				optional => 1
+			}
+		}
+	});
 
 	if(!defined($class)) {
 		$class = __PACKAGE__;
