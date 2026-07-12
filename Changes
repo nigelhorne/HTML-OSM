@@ -12,6 +12,7 @@ Revision history for HTML-OSM
 	- Re-enable search box and reset button in rendered map
 	- Add "Clear search markers" button to remove dynamically-added markers
 	- Use Params::Validate::Strict on new()
+	- Added the test dashboard
 
 	[ Tests ]
 	- Started fuzz testing
