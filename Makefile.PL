@@ -41,8 +41,10 @@ WriteMakefile(
 		'Object::Configure' => 0.15,
 		'Params::Get' => 0.13,
 		'Params::Validate::Strict' => 0.28,
+		'Readonly' => 0,
 		'Scalar::Util' => 0,
-		'Time::HiRes' => 0
+		'Time::HiRes' => 0,
+		'URI::Escape' => 0
 	}, TEST_REQUIRES => {
 		'File::Temp' => 0,
 		'IPC::System::Simple' => 0,

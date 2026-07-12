@@ -1,6 +1,7 @@
-#!perl -w
+#!/usr/bin/env perl
 
 use strict;
+use warnings;
 
 # use lib 'lib';
 use Test::Most tests => 7;
