@@ -209,6 +209,8 @@ Nigel Horne, `<njh at nigelhorne.com>`
     Much of the interface to `HTML::OSM` mimicks this for compatibility.
 
 - [https://leafletjs.com/](https://leafletjs.com/)
+- [Configure an Object at Runtime](https://metacpan.org/pod/Object%3A%3AConfigure)
+- [Test Dashboard](https://nigelhorne.github.io/HTML-OSM/coverage/)
 
 You can find documentation for this module with the perldoc command.
 

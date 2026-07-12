@@ -218,10 +218,6 @@ sub new
 		return bless { %{$class}, %{$params} }, ref($class);
 	}
 
-	if($params->{'coordinates'} && !ref($params->{'coordinates'})) {
-		Carp::croak(__PACKAGE__, ': coordinates must be a reference to an array');
-	}
-
 	$params = Object::Configure::configure($class, $params);
 
 	# Set up caching (default to an in-memory cache if none provided)
@@ -700,6 +696,10 @@ Nigel Horne, C<< <njh at nigelhorne.com> >>
 Much of the interface to C<HTML::OSM> mimicks this for compatibility.
 
 =item * L<https://leafletjs.com/>
+
+=item * L<Configure an Object at Runtime|Object::Configure>
+
+=item * L<Test Dashboard|https://nigelhorne.github.io/HTML-OSM/coverage/>
 
 =back
 
