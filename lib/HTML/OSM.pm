@@ -257,6 +257,16 @@ sub add_marker
 		$params = Params::Get::get_params(undef, \@_) || {};
 		# Single-element arrayref is a wrapped address string
 		$point  = $point->[0] if scalar(@{$point}) == 1;
+	} elsif(blessed($_[0]) && $_[0]->can('latitude')) {
+		# Geo object as first positional arg: extract before Params::Get sees it,
+		# otherwise Params::Get mistakes the blessed hashref for the params hash.
+		$point  = shift;
+		$params = Params::Get::get_params(undef, \@_) || {};
+	} elsif(defined($_[0]) && !ref($_[0]) && scalar(@_) % 2 != 0) {
+		# Plain string as first positional arg, optionally followed by key-value pairs.
+		# An odd total count signals a leading positional; even count means all key-value.
+		$point  = shift;
+		$params = Params::Get::get_params(undef, \@_) || {};
 	} else {
 		$params = Params::Get::get_params('point', @_);
 		$point  = $params->{'point'};
