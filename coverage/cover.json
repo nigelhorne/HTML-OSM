@@ -4,231 +4,231 @@
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818947.30867,
+         "finish" : 1783821036.69576,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "-e",
-         "start" : 1783818938.18937,
+         "start" : 1783821025.47382,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818938.30106,
+         "finish" : 1783821025.6157,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "-e",
-         "start" : 1783818938.30094,
+         "start" : 1783821025.61557,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818938.73536,
+         "finish" : 1783821026.15967,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/10-compile.t",
-         "start" : 1783818938.48636,
+         "start" : 1783821025.8482,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818939.11742,
+         "finish" : 1783821026.6525,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/20-new.t",
-         "start" : 1783818939.06076,
+         "start" : 1783821026.57859,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818939.55338,
+         "finish" : 1783821027.2141,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/30-basics.t",
-         "start" : 1783818939.55306,
+         "start" : 1783821027.2138,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818939.78065,
+         "finish" : 1783821027.49702,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/comment-spelling.t",
-         "start" : 1783818939.78038,
+         "start" : 1783821027.49672,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818939.96467,
+         "finish" : 1783821027.72796,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/cover.t",
-         "start" : 1783818939.96441,
+         "start" : 1783821027.7277,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818940.1454,
+         "finish" : 1783821027.95795,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/eof.t",
-         "start" : 1783818940.14513,
+         "start" : 1783821027.95767,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818940.32995,
+         "finish" : 1783821028.18698,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/eol.t",
-         "start" : 1783818940.32965,
+         "start" : 1783821028.18671,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818944.19259,
+         "finish" : 1783821033.0595,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/fuzz.t",
-         "start" : 1783818940.60773,
+         "start" : 1783821028.54484,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818944.11555,
+         "finish" : 1783821032.96458,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "/opt/hostedtoolcache/perl/5.40.4/x64/bin/fuzz-harness-generator",
-         "start" : 1783818940.82022,
+         "start" : 1783821028.8227,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818944.07603,
+         "finish" : 1783821032.916,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "/opt/hostedtoolcache/perl/5.40.4/x64/bin/prove",
-         "start" : 1783818940.98512,
+         "start" : 1783821029.02987,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818943.65868,
+         "finish" : 1783821032.40556,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
-         "run" : "/tmp/elpzcFnxUH",
-         "start" : 1783818941.32131,
+         "run" : "/tmp/OryOEW5Tl0",
+         "start" : 1783821029.44922,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818945.60026,
+         "finish" : 1783821034.57584,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/limiting.t",
-         "start" : 1783818944.54388,
+         "start" : 1783821033.50469,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818946.06536,
+         "finish" : 1783821035.15225,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/mock.t",
-         "start" : 1783818946.01201,
+         "start" : 1783821035.08607,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818946.34233,
+         "finish" : 1783821035.48857,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/pod-cm.t",
-         "start" : 1783818946.34204,
+         "start" : 1783821035.4883,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818946.52965,
+         "finish" : 1783821035.72131,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/pod-coverage.t",
-         "start" : 1783818946.52934,
+         "start" : 1783821035.72102,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818946.71817,
+         "finish" : 1783821035.95562,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/pod-snippets.t",
-         "start" : 1783818946.71787,
+         "start" : 1783821035.95532,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818946.9047,
+         "finish" : 1783821036.18886,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/pod-synopsis.t",
-         "start" : 1783818946.90439,
+         "start" : 1783821036.18859,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818947.09006,
+         "finish" : 1783821036.42085,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/pod.t",
-         "start" : 1783818947.08978,
+         "start" : 1783821036.42058,
          "version" : "0.09"
       },
       {
          "OS" : "linux",
          "abstract" : "Generate an interactive OpenStreetMap with customizable coordinates and zoom level",
          "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
-         "finish" : 1783818947.275,
+         "finish" : 1783821036.65493,
          "name" : "HTML-OSM",
          "perl" : "5.40.4",
          "run" : "t/vars.t",
-         "start" : 1783818947.27474,
+         "start" : 1783821036.65465,
          "version" : "0.09"
       }
    ],
@@ -294,7 +294,7 @@
             "uncoverable" : 0
          }
       },
-      "/tmp/elpzcFnxUH" : {
+      "/tmp/OryOEW5Tl0" : {
          "branch" : {
             "covered" : 97,
             "error" : 625,
@@ -331,24 +331,24 @@
       },
       "Total" : {
          "branch" : {
-            "covered" : 145,
-            "error" : 769,
-            "percentage" : 15.8643326039387,
-            "total" : 914,
+            "covered" : 144,
+            "error" : 768,
+            "percentage" : 15.7894736842105,
+            "total" : 912,
             "uncoverable" : 0
          },
          "condition" : {
-            "covered" : 93,
-            "error" : 317,
-            "percentage" : 22.6829268292683,
-            "total" : 410,
+            "covered" : 91,
+            "error" : 316,
+            "percentage" : 22.3587223587224,
+            "total" : 407,
             "uncoverable" : 0
          },
          "statement" : {
-            "covered" : 470,
-            "error" : 1106,
-            "percentage" : 29.8223350253807,
-            "total" : 1576
+            "covered" : 469,
+            "error" : 1105,
+            "percentage" : 29.7966963151207,
+            "total" : 1574
          },
          "subroutine" : {
             "covered" : 59,
@@ -357,33 +357,33 @@
             "total" : 95
          },
          "total" : {
-            "covered" : 767,
-            "error" : 2228,
-            "percentage" : 25.6093489148581,
-            "total" : 2995,
+            "covered" : 763,
+            "error" : 2225,
+            "percentage" : 25.5354752342704,
+            "total" : 2988,
             "uncoverable" : 0
          }
       },
       "blib/lib/HTML/OSM.pm" : {
          "branch" : {
-            "covered" : 35,
-            "error" : 73,
-            "percentage" : 32.4074074074074,
-            "total" : 108,
+            "covered" : 34,
+            "error" : 72,
+            "percentage" : 32.0754716981132,
+            "total" : 106,
             "uncoverable" : 0
          },
          "condition" : {
-            "covered" : 31,
-            "error" : 41,
-            "percentage" : 43.0555555555556,
-            "total" : 72,
+            "covered" : 29,
+            "error" : 40,
+            "percentage" : 42.0289855072464,
+            "total" : 69,
             "uncoverable" : 0
          },
          "statement" : {
-            "covered" : 106,
-            "error" : 97,
-            "percentage" : 52.2167487684729,
-            "total" : 203
+            "covered" : 105,
+            "error" : 96,
+            "percentage" : 52.2388059701493,
+            "total" : 201
          },
          "subroutine" : {
             "covered" : 16,
@@ -392,10 +392,10 @@
             "total" : 18
          },
          "total" : {
-            "covered" : 188,
-            "error" : 213,
-            "percentage" : 46.8827930174564,
-            "total" : 401,
+            "covered" : 184,
+            "error" : 210,
+            "percentage" : 46.7005076142132,
+            "total" : 394,
             "uncoverable" : 0
          }
       }
