@@ -118,6 +118,31 @@ Returns 1 on success, 0 if the point cannot be resolved or is out of range.
     |--------------------------------------|---------------------------------------------|
     | add_marker(): unknown point type     | Point is a ref type with no lat/lon methods |
 
+### EXAMPLES
+
+    # Coordinate array with a popup label
+    $map->add_marker([51.5074, -0.1278], html => 'London');
+
+    # String address geocoded via the injected geocoder or Nominatim
+    $map->add_marker('Paris, France', html => 'Paris');
+
+    # Custom icon URL with a popup
+    $map->add_marker(
+        [40.7128, -74.0060],
+        html => 'New York',
+        icon => 'https://example.com/pin.png',
+    );
+
+    # Geo::Coder result object that implements latitude()/longitude()
+    my $result = $geocoder->geocode('Berlin, Germany');
+    $map->add_marker($result, html => 'Berlin');
+
+    # Accumulate several markers, warn on geocode failure
+    for my $city (@cities) {
+        $map->add_marker($city->{coords}, html => $city->{name})
+            or warn "Could not place $city->{name}";
+    }
+
 ## add\_geojson
 
 Add a GeoJSON layer to the map.
@@ -144,6 +169,22 @@ Returns 1 on success.
     | Message              | Meaning / Resolution            |
     |----------------------|---------------------------------|
     | (JSON parse error)   | data string is not valid JSON   |
+
+### EXAMPLES
+
+    # Pre-parsed GeoJSON structure with style and popup property
+    $map->add_geojson(
+        { type => 'FeatureCollection', features => \@features },
+        style => { color => '#ff0000', weight => 2, fillOpacity => 0.4 },
+        popup => 'name',
+    );
+
+    # Raw JSON string — decoded automatically
+    $map->add_geojson('{"type":"FeatureCollection","features":[]}');
+
+    # Multiple GeoJSON layers with different styles on the same map
+    $map->add_geojson(\%country_borders, style => { color => '#333333', fillOpacity => 0 });
+    $map->add_geojson(\%river_data,      style => { color => '#0099ff', weight => 1    });
 
 ## add\_heatmap
 
@@ -173,6 +214,22 @@ Returns 1 on success.
     |--------------------------------------|-----------------------------------|
     | add_heatmap: points must be arrayref | First argument is not an arrayref |
 
+### EXAMPLES
+
+    # Basic heatmap — [lat, lon] per point
+    $map->add_heatmap([
+        [51.5074, -0.1278],
+        [51.6000, -0.2000],
+        [51.4000,  0.0000],
+    ]);
+
+    # With intensity values (0..1) and custom radius/blur
+    $map->add_heatmap(
+        [ [51.5, -0.1, 0.9], [51.6, -0.2, 0.5], [51.4, 0.0, 0.2] ],
+        radius => 30,
+        blur   => 20,
+    );
+
 ## add\_gpx
 
 Add a GPX track to the map from a URL.
@@ -198,6 +255,15 @@ Returns 1 on success.
     | Message              | Meaning / Resolution       |
     |----------------------|----------------------------|
     | add_gpx: url required | No URL argument supplied  |
+
+### EXAMPLES
+
+    # Add a GPX track from a public URL; the map auto-fits to its bounds
+    $map->add_gpx('https://example.com/route.gpx');
+
+    # Multiple tracks on the same map
+    $map->add_gpx('https://example.com/morning-run.gpx');
+    $map->add_gpx('https://example.com/evening-walk.gpx');
 
 ## add\_choropleth
 
@@ -234,6 +300,27 @@ Returns 1 on success.
     | add_choropleth: features must be arrayref | First argument is not an arrayref      |
     | add_choropleth: values must be hashref    | Second argument is not a hashref       |
 
+### EXAMPLES
+
+    # Default 5-step YlGnBu scale, key property "name"
+    $map->add_choropleth(
+        \@geojson_features,
+        { England => 100, Scotland => 80, Wales => 60 },
+    );
+
+    # Custom 3-step scale and a different GeoJSON property as the key
+    $map->add_choropleth(
+        \@geojson_features,
+        { England => 100, Scotland => 80, Wales => 60 },
+        key   => 'country',
+        scale => ['#f7fbff', '#6baed6', '#08519c'],
+    );
+
+    # choropleth-only map — center() must be called explicitly
+    $map->center([54.0, -2.0]);
+    $map->add_choropleth(\@uk_features, \%population_by_region);
+    my ($head, $body) = $map->onload_render();
+
 ## center
 
 Set the map centre to a given point.
@@ -262,6 +349,22 @@ Returns 1 on success, 0 if the point cannot be resolved.
     | center(): point must have latitude & longitude | Arrayref has != 2 elements               |
     | center(): unknown point type                   | Ref type has no lat/lon methods          |
 
+### EXAMPLES
+
+    # Coordinate array
+    $map->center([40.7128, -74.0060]);
+
+    # Object that implements latitude()/longitude() (e.g. a Geo::Coder result)
+    $map->center($geocoder->geocode('Berlin, Germany'));
+
+    # String address resolved via the injected geocoder or Nominatim
+    $map->center('Eiffel Tower, Paris, France');
+
+    # Required when rendering without point markers (GeoJSON-only, choropleth, etc.)
+    $map->center([54.0, -2.0]);
+    $map->add_geojson(\%uk_regions, popup => 'name');
+    my ($head, $body) = $map->onload_render();
+
 ## zoom
 
 Get or set the zoom level (0 = world, 19 = building).
@@ -284,6 +387,23 @@ Get or set the zoom level (0 = world, 19 = building).
     | Message                      | Meaning / Resolution                      |
     |------------------------------|-------------------------------------------|
     | (Params::Validate::Strict)   | zoom is not an integer or is out of range |
+
+### EXAMPLES
+
+    # Setter: store the zoom level
+    $map->zoom(14);
+
+    # Getter: retrieve the current level
+    my $level = $map->zoom();
+    print "Current zoom: $level\n";    # 14
+
+    # Setter return value equals the new level
+    my $confirmed = $map->zoom(10);
+    die 'unexpected' unless $confirmed == 10;
+
+    # Chain: set via new(), read back via zoom()
+    my $m = HTML::OSM->new(zoom => 6);
+    $m->zoom($m->zoom() + 2);   # nudge up by 2
 
 ## onload\_render
 
@@ -321,6 +441,28 @@ leaving static markers (added via `add_marker`) intact.
     |--------------------------------------------------|---------------------------------------------|
     | No map data provided                             | No markers, GeoJSON, heatmap, GPX, or choropleth added yet |
     | center() must be called when no point markers    | Non-marker-only render needs explicit centre |
+
+### EXAMPLES
+
+    # Minimal: one marker, embed in a CGI response
+    use HTML::OSM;
+    my $map = HTML::OSM->new(zoom => 12);
+    $map->add_marker([51.5074, -0.1278], html => 'London');
+    my ($head, $body) = $map->onload_render();
+    print "Content-Type: text/html\n\n";
+    print "<html><head>$head</head><body>$body</body></html>\n";
+
+    # Mixed layers: markers + GeoJSON, explicit center
+    $map->center([51.5, -0.1]);
+    $map->add_geojson(\%borough_data, popup => 'name', style => { color => '#333' });
+    $map->add_marker([51.5074, -0.1278], html => 'City of London');
+    my ($head_html, $body_html) = $map->onload_render();
+
+    # Template Toolkit integration
+    $tt->process('map.tt', {
+        map_head => scalar(($map->onload_render())[0]),
+        map_body => scalar(($map->onload_render())[1]),
+    });
 
 ### PSEUDOCODE
 
@@ -487,3 +629,11 @@ Copyright 2025-2026 Nigel Horne.
 This program is released under the following licence: GPL2
 If you use it,
 please let me know.
+
+# POD ERRORS
+
+Hey! **The above document had some coding errors, which are explained below:**
+
+- Around line 357:
+
+    Non-ASCII character seen before =encoding in '—'. Assuming UTF-8
