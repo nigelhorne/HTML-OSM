@@ -116,6 +116,26 @@ The file can be in any common format,
 including C<YAML>, C<XML>, and C<INI>.
 This allows the parameters to be set at run time.
 
+=item * C<cluster>
+
+Set to a true value to group nearby markers using the Leaflet.markercluster plugin.
+All point markers are added to a shared C<L.markerClusterGroup>.
+
+=item * C<cluster_js_url>
+
+URL for the Leaflet.markercluster JavaScript.
+Defaults to the unpkg CDN.
+
+=item * C<cluster_css_url>
+
+URL for the Leaflet.markercluster base CSS.
+Defaults to the unpkg CDN.
+
+=item * C<cluster_default_css_url>
+
+URL for the Leaflet.markercluster default-icon CSS.
+Defaults to the unpkg CDN.
+
 =item * C<css_url>
 
 Location of the CSS, default L<https://unpkg.com/leaflet@1.9.4/dist/leaflet.css>.
@@ -127,6 +147,16 @@ An optional geocoder object such as L<Geo::Coder::List> or L<Geo::Coder::Free>.
 =item * C<height>
 
 Height (in pixels or using your own unit), the default is 400px.
+
+=item * C<gpx_js_url>
+
+URL for the leaflet-gpx plugin JavaScript used by C<add_gpx>.
+Defaults to the cdnjs CDN.
+
+=item * C<heatmap_js_url>
+
+URL for the Leaflet.heat plugin JavaScript used by C<add_heatmap>.
+Defaults to the unpkg CDN.
 
 =item * C<js_url>
 
@@ -207,6 +237,24 @@ sub new
 			}, config_file => {
 				type => 'string',
 				optional => 1
+			}, cluster => {
+				type => 'boolean',
+				optional => 1
+			}, cluster_js_url => {
+				type => 'string',
+				optional => 1
+			}, cluster_css_url => {
+				type => 'string',
+				optional => 1
+			}, cluster_default_css_url => {
+				type => 'string',
+				optional => 1
+			}, heatmap_js_url => {
+				type => 'string',
+				optional => 1
+			}, gpx_js_url => {
+				type => 'string',
+				optional => 1
 			}
 		}
 	});
@@ -241,6 +289,11 @@ sub new
 		last_request => 0,	# Initialize last_request timestamp
 		css_url => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
 		js_url => 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+		cluster_js_url => 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js',
+		cluster_css_url => 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css',
+		cluster_default_css_url => 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css',
+		heatmap_js_url => 'https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js',
+		gpx_js_url => 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js',
 		%{$params}
 	}, $class;
 }
@@ -315,6 +368,161 @@ sub add_marker
 
 	push @{$self->{coordinates}}, [$lat, $lon, $params->{'html'}, $params->{'icon'}];
 
+	return 1;
+}
+
+=head2 add_geojson
+
+Add a GeoJSON layer to the map.
+
+    $map->add_geojson(\%geojson_data, style => { color => '#ff0000' }, popup => 'name');
+
+The first argument is a GeoJSON data structure (hashref or arrayref) or a JSON string.
+
+Optional arguments:
+
+=over 4
+
+=item * C<style>
+
+A hashref of Leaflet path style options (e.g. C<color>, C<weight>, C<fillColor>, C<fillOpacity>).
+
+=item * C<popup>
+
+A feature property name whose value is shown as the popup text when a feature is clicked.
+
+=back
+
+=cut
+
+sub add_geojson
+{
+	my $self = shift;
+	my $data = shift;
+	my $params = Params::Get::get_params(undef, \@_) || {};
+
+	if(!ref($data)) {
+		$data = decode_json($data);
+	}
+
+	push @{$self->{geojson}}, { data => $data, opts => $params };
+	return 1;
+}
+
+=head2 add_heatmap
+
+Add a heatmap layer to the map.
+
+    $map->add_heatmap([[51.5, -0.1, 0.8], [51.6, -0.2, 0.5]], radius => 25);
+
+The first argument is an arrayref of points.
+Each point is C<[$lat, $lon]> or C<[$lat, $lon, $intensity]> where intensity is 0–1.
+
+Optional arguments: C<radius> (default 25), C<blur> (default 15).
+
+Requires C<heatmap_js_url> (Leaflet.heat) to be reachable by the browser.
+
+=cut
+
+sub add_heatmap
+{
+	my $self = shift;
+	my $points = shift;
+	my $params = Params::Get::get_params(undef, \@_) || {};
+
+	Carp::croak('add_heatmap: points must be an arrayref') unless ref($points) eq 'ARRAY';
+
+	push @{$self->{heatmap_layers}}, { points => $points, opts => $params };
+	return 1;
+}
+
+=head2 add_gpx
+
+Add a GPX track to the map from a URL.
+
+    $map->add_gpx('https://example.com/track.gpx');
+
+The map view is fitted to the track bounds once the GPX is loaded.
+Requires C<gpx_js_url> (leaflet-gpx) to be reachable by the browser.
+
+=cut
+
+sub add_gpx
+{
+	my $self = shift;
+	my $params = Params::Get::get_params('url', \@_);
+	my $url = $params->{'url'};
+
+	Carp::croak('add_gpx: url is required') unless $url;
+
+	push @{$self->{gpx_tracks}}, $url;
+	return 1;
+}
+
+=head2 add_choropleth
+
+Add a choropleth (data-driven colour fill) layer to the map.
+
+    $map->add_choropleth(
+        \@geojson_features,
+        { England => 100, Scotland => 80, Wales => 60 },
+        key   => 'name',
+        scale => ['#ffffcc', '#a1dab4', '#41b6c4', '#2c7fb8', '#253494'],
+    );
+
+The first argument is an arrayref of GeoJSON Feature hashrefs.
+The second is a hashref mapping a feature property value to a numeric data value.
+
+Optional arguments:
+
+=over 4
+
+=item * C<key>
+
+The feature property used to look up values in the data hashref. Defaults to C<'name'>.
+
+=item * C<scale>
+
+Arrayref of hex colour strings ordered from lowest to highest value.
+Defaults to a 5-step yellow-to-blue palette.
+
+=back
+
+Colours are pre-computed in Perl and embedded in the rendered JavaScript.
+Builds on GeoJSON support; no additional plugin is required.
+
+=cut
+
+sub add_choropleth
+{
+	my $self = shift;
+	my $features = shift;
+	my $values   = shift;
+	my $params   = Params::Get::get_params(undef, \@_) || {};
+
+	Carp::croak('add_choropleth: features must be an arrayref') unless ref($features) eq 'ARRAY';
+	Carp::croak('add_choropleth: values must be a hashref')     unless ref($values)   eq 'HASH';
+
+	my $key   = $params->{key}   || 'name';
+	my $scale = $params->{scale} || ['#ffffcc', '#a1dab4', '#41b6c4', '#2c7fb8', '#253494'];
+
+	my @sorted_vals = sort { $a <=> $b } values %{$values};
+	my ($min, $max) = ($sorted_vals[0], $sorted_vals[-1]);
+	$max = $min + 1 if !defined($max) || $max == $min;
+
+	my %colors;
+	while(my ($k, $v) = each %{$values}) {
+		my $idx = int(($v - $min) / ($max - $min) * $#{$scale});
+		$idx = $#{$scale} if $idx > $#{$scale};
+		$colors{$k} = $scale->[$idx];
+	}
+
+	push @{$self->{choropleth_layers}}, {
+		features => $features,
+		values   => $values,
+		colors   => \%colors,
+		key      => $key,
+	};
 	return 1;
 }
 
@@ -509,73 +717,82 @@ sub onload_render
 {
 	my $self = shift;
 
-	# Default size if not provided
 	my $height = $self->{'height'} || '400px';
-	# my $width = $self->{'width'} || '100%';
-	my $width = $self->{'width'} || '600px';
+	my $width  = $self->{'width'}  || '600px';
 
-	my $coordinates = $self->{coordinates};
+	my $coordinates      = $self->{coordinates}       || [];
+	my $geojson_layers   = $self->{geojson}            || [];
+	my $heatmap_layers   = $self->{heatmap_layers}     || [];
+	my $gpx_tracks       = $self->{gpx_tracks}         || [];
+	my $choropleth_layers = $self->{choropleth_layers} || [];
 
-	unless(@$coordinates) {
+	unless(@$coordinates || @$geojson_layers || @$heatmap_layers || @$gpx_tracks || @$choropleth_layers) {
 		if(my $logger = $self->{'logger'}) {
-			$logger->error('No coordinates provided');
+			$logger->error('No map data provided');
 		}
-		Carp::croak('No coordinates provided');
-		return;
+		Carp::croak('No map data provided');
 	}
 
+	# Geocode and validate point markers
 	my @valid_coordinates;
-
 	foreach my $coord (@$coordinates) {
 		my ($lat, $lon, $label, $icon_url) = @$coord;
-
-		# If an address is provided instead of coordinates, fetch dynamically
-		if (!defined $lat || !defined $lon) {
+		if(!defined $lat || !defined $lon) {
 			($lat, $lon) = $self->_fetch_coordinates($label);
 		} else {
-			next if(!_validate($lat, $lon));
+			next if !_validate($lat, $lon);
 		}
-
 		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
 	}
 
-	# Ensure at least one valid coordinate exists
-	die 'Error: No valid coordinates provided' unless @valid_coordinates;
-
-	my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
-
-	foreach my $coord (@valid_coordinates) {
-		my ($lat, $lon) = @$coord;
-		$min_lat = $lat if $lat < $min_lat;
-		$max_lat = $lat if $lat > $max_lat;
-		$min_lon = $lon if $lon < $min_lon;
-		$max_lon = $lon if $lon > $max_lon;
-	}
-
-	my $center_lat;
-	my $center_lon;
-
+	# Determine map centre
+	my ($center_lat, $center_lon);
 	if($self->{'center'}) {
-		$center_lat = $self->{'center'}[0];
-		$center_lon = $self->{'center'}[1];
-	} else {
+		($center_lat, $center_lon) = @{$self->{'center'}};
+	} elsif(@valid_coordinates) {
+		my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+		foreach my $coord (@valid_coordinates) {
+			my ($lat, $lon) = @$coord;
+			$min_lat = $lat if $lat < $min_lat;
+			$max_lat = $lat if $lat > $max_lat;
+			$min_lon = $lon if $lon < $min_lon;
+			$max_lon = $lon if $lon > $max_lon;
+		}
 		$center_lat = ($min_lat + $max_lat) / 2;
 		$center_lon = ($min_lon + $max_lon) / 2;
+	} else {
+		Carp::croak('center() must be called when no point markers are provided');
 	}
 
-	my $css_url = $self->{'css_url'};
-	my $js_url = $self->{'js_url'};
-
+	# --- Head ---
 	my $head = qq{
-		<link rel="stylesheet" href="$css_url" />
-		<script src="$js_url"></script>
+		<link rel="stylesheet" href="$self->{css_url}" />
+		<script src="$self->{js_url}"></script>
+	};
+
+	if($self->{cluster}) {
+		$head .= qq{
+		<link rel="stylesheet" href="$self->{cluster_css_url}" />
+		<link rel="stylesheet" href="$self->{cluster_default_css_url}" />
+		<script src="$self->{cluster_js_url}"></script>
+		};
+	}
+	if(@$heatmap_layers) {
+		$head .= qq{\t\t<script src="$self->{heatmap_js_url}"></script>\n};
+	}
+	if(@$gpx_tracks) {
+		$head .= qq{\t\t<script src="$self->{gpx_js_url}"></script>\n};
+	}
+
+	$head .= qq{
 		<style>
 			#map { width: $width; height: $height; }
 			#search-box { margin: 10px; padding: 5px; }
-			#reset-button { margin: 10px; padding: 5px; cursor: pointer; }
+			#reset-button, #clear-search-button { margin: 10px; padding: 5px; cursor: pointer; }
 		</style>
 	};
 
+	# --- Body ---
 	my $body = qq{
 		<input type="text" id="search-box" placeholder="Enter location">
 		<button id="clear-search-button">Clear search markers</button>
@@ -590,73 +807,133 @@ sub onload_render
 			var searchMarkers = [];
 	};
 
-	my @js_markers;
-	foreach my $coord (@valid_coordinates) {
-		my ($lat, $lon, $label, $icon_url) = @$coord;
-		$label =~ s/'/\\'/g;	# Escape single quotes
-
-		# $icon_url ||= 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/$leaflet_version/images/marker-icon.png';
-		if ($icon_url) {
-			my $icon_js = qq{
-				const customIcon = L.icon({
-					iconUrl: '$icon_url',
-					// iconSize: [32, 32],
-					iconAnchor: [16, 32],
-					popupAnchor: [0, -32]
-				});
-			};
-
-			push @js_markers, qq{
-				$icon_js
-				L.marker([$lat, $lon], { icon: customIcon }).addTo(map).bindPopup('$label');
-			};
-		} else {
-			push @js_markers, "L.marker([$lat, $lon]).addTo(map).bindPopup('$label');";
+	# Point markers
+	if(@valid_coordinates) {
+		if($self->{cluster}) {
+			$body .= "\t\t\tvar clusterGroup = L.markerClusterGroup();\n";
+		}
+		foreach my $coord (@valid_coordinates) {
+			my ($lat, $lon, $label, $icon_url) = @$coord;
+			$label //= '';
+			$label =~ s/'/\\'/g;
+			if($icon_url) {
+				my $add = $self->{cluster}
+					? 'clusterGroup.addLayer(m);'
+					: 'm.addTo(map);';
+				$body .= qq{
+			(function() {
+				var icon = L.icon({ iconUrl: '$icon_url', iconAnchor: [16,32], popupAnchor: [0,-32] });
+				var m = L.marker([$lat, $lon], { icon: icon }).bindPopup('$label');
+				$add
+			})();
+				};
+			} elsif($self->{cluster}) {
+				$body .= "\t\t\tclusterGroup.addLayer(L.marker([$lat, $lon]).bindPopup('$label'));\n";
+			} else {
+				$body .= "\t\t\tL.marker([$lat, $lon]).addTo(map).bindPopup('$label');\n";
+			}
+		}
+		if($self->{cluster}) {
+			$body .= "\t\t\tmap.addLayer(clusterGroup);\n";
 		}
 	}
 
-	$body .= join("\n", @js_markers);
+	# GeoJSON layers
+	foreach my $layer (@$geojson_layers) {
+		my $json     = encode_json($layer->{data});
+		my $opts     = $layer->{opts} || {};
+		my $style_js = '';
+		if(my $style = $opts->{style}) {
+			my $style_json = encode_json($style);
+			$style_js = "style: $style_json,";
+		}
+		my $popup_js = '';
+		if(my $prop = $opts->{popup}) {
+			$prop =~ s/'/\\'/g;
+			$popup_js = qq{onEachFeature: function(f,l){ if(f.properties && f.properties['$prop']){ l.bindPopup(String(f.properties['$prop'])); } },};
+		}
+		$body .= "\t\t\tL.geoJSON($json, { $style_js $popup_js }).addTo(map);\n";
+	}
 
-	$body .= qq{
-		document.getElementById('reset-button').addEventListener('click', function() {
-			map.setView([$center_lat, $center_lon], $self->{zoom});
-		});
+	# Heatmap layers
+	foreach my $layer (@$heatmap_layers) {
+		my $pts    = encode_json($layer->{points});
+		my $opts   = $layer->{opts} || {};
+		my $radius = $opts->{radius} || 25;
+		my $blur   = $opts->{blur}   || 15;
+		$body .= "\t\t\tL.heatLayer($pts, { radius: $radius, blur: $blur }).addTo(map);\n";
+	}
 
-		document.getElementById('clear-search-button').addEventListener('click', function() {
-			searchMarkers.forEach(function(m) { map.removeLayer(m); });
-			searchMarkers = [];
-		});
+	# GPX tracks
+	foreach my $url (@$gpx_tracks) {
+		$url =~ s/'/\\'/g;
+		$body .= qq{\t\t\tnew L.GPX('$url', { async: true }).on('loaded', function(e){ map.fitBounds(e.target.getBounds()); }).addTo(map);\n};
+	}
 
-		document.getElementById('search-box').addEventListener('keyup', function(event) {
-			if (event.key === 'Enter') {
-				var query = event.target.value.trim();
-				if (!query) {
-					alert('Please enter a valid location.');
-					return;
-				}
-
-				fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${query}`, {
-					headers: { 'User-Agent': '__PACKAGE__' }
-				})
-				.then(response => response.json())
-				.then(data => {
-					if (data.length > 0) {
-						var lat = data[0].lat;
-						var lon = data[0].lon;
-						map.setView([lat, lon], 14);
-						var m = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
-						searchMarkers.push(m);
-					} else {
-						alert('No results found. Try a different location.');
+	# Choropleth layers
+	foreach my $layer (@$choropleth_layers) {
+		my $fc_json     = encode_json({ type => 'FeatureCollection', features => $layer->{features} });
+		my $colors_json = encode_json($layer->{colors});
+		my $values_json = encode_json($layer->{values});
+		my $key = $layer->{key};
+		$key =~ s/'/\\'/g;
+		$body .= qq{
+			(function() {
+				var choroplethColors = $colors_json;
+				var choroplethValues = $values_json;
+				L.geoJSON($fc_json, {
+					style: function(f) {
+						var k = f.properties && f.properties['$key'];
+						return { fillColor: choroplethColors[k] || '#cccccc', weight: 2, opacity: 1, color: 'white', dashArray: '3', fillOpacity: 0.7 };
+					},
+					onEachFeature: function(f, l) {
+						var k = f.properties && f.properties['$key'];
+						if(k && choroplethValues[k] !== undefined) { l.bindPopup(k + ': ' + choroplethValues[k]); }
 					}
-				})
-				.catch(error => {
-					console.error('Error fetching location:', error);
-					alert('Failed to fetch location. Please check your internet connection and try again.');
-				});
-			}
-		});
+				}).addTo(map);
+			})();
+		};
+	}
 
+	# Event handlers
+	$body .= qq{
+			document.getElementById('reset-button').addEventListener('click', function() {
+				map.setView([$center_lat, $center_lon], $self->{zoom});
+			});
+
+			document.getElementById('clear-search-button').addEventListener('click', function() {
+				searchMarkers.forEach(function(m) { map.removeLayer(m); });
+				searchMarkers = [];
+			});
+
+			document.getElementById('search-box').addEventListener('keyup', function(event) {
+				if(event.key === 'Enter') {
+					var query = event.target.value.trim();
+					if(!query) {
+						alert('Please enter a valid location.');
+						return;
+					}
+					fetch(`https://nominatim.openstreetmap.org/search?format=json&q=\${query}`, {
+						headers: { 'User-Agent': '__PACKAGE__' }
+					})
+					.then(response => response.json())
+					.then(data => {
+						if(data.length > 0) {
+							var lat = data[0].lat;
+							var lon = data[0].lon;
+							map.setView([lat, lon], 14);
+							var m = L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup();
+							searchMarkers.push(m);
+						} else {
+							alert('No results found. Try a different location.');
+						}
+					})
+					.catch(error => {
+						console.error('Error fetching location:', error);
+						alert('Failed to fetch location. Please check your internet connection and try again.');
+					});
+				}
+			});
 		</script>
 	};
 

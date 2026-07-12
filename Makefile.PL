@@ -17,7 +17,7 @@ WriteMakefile(
 	NAME => 'HTML::OSM',
 	VERSION_FROM => 'lib/HTML/OSM.pm', # finds $VERSION in the module
 	((defined($ExtUtils::MakeMaker::VERSION) && ($ExtUtils::MakeMaker::VERSION >= 6.3002))
-		? ('LICENSE'=> 'GPL')
+		? ('LICENSE'=> 'gpl_2')
 		: ()),
 	CONFIGURE_REQUIRES => {
 		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
@@ -45,6 +45,7 @@ WriteMakefile(
 		'Time::HiRes' => 0
 	}, TEST_REQUIRES => {
 		'File::Temp' => 0,
+		'IPC::System::Simple' => 0,
 		'Test::Compile' => 0,
 		'Test::DescribeMe' => 0,
 		'Test::HTML::Lint' => 0,

@@ -17,6 +17,7 @@ on 'configure' => sub {
 
 on 'test' => sub {
 	requires 'File::Temp';
+	requires 'IPC::System::Simple';
 	requires 'Test::Compile';
 	requires 'Test::DescribeMe';
 	requires 'Test::HTML::Lint';
