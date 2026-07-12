@@ -26,7 +26,6 @@ on 'test' => sub {
 	requires 'Test::HTTPStatus';
 	requires 'Test::JSON';
 	requires 'Test::Memory::Cycle';
-	requires 'Test::MockObject';
 	requires 'Test::Mockingbird';
 	requires 'Test::Most';
 	requires 'Test::Needs';
