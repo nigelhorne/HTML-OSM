@@ -53,6 +53,7 @@ WriteMakefile(
 		'Test::HTML::Lint' => 0,
 		'Test::HTTPStatus' => 0,
 		'Test::JSON' => 0,
+		'Test::Memory::Cycle' => 0,
 		'Test::MockObject' => 0,
 		'Test::Most' => 0,
 		'Test::Needs' => 0,

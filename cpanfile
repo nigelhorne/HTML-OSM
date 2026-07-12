@@ -8,8 +8,10 @@ requires 'LWP::UserAgent';
 requires 'Object::Configure', '0.15';
 requires 'Params::Get', '0.13';
 requires 'Params::Validate::Strict', '0.28';
+requires 'Readonly';
 requires 'Scalar::Util';
 requires 'Time::HiRes';
+requires 'URI::Escape';
 
 on 'configure' => sub {
 	requires 'ExtUtils::MakeMaker', '6.64';
@@ -23,6 +25,7 @@ on 'test' => sub {
 	requires 'Test::HTML::Lint';
 	requires 'Test::HTTPStatus';
 	requires 'Test::JSON';
+	requires 'Test::Memory::Cycle';
 	requires 'Test::MockObject';
 	requires 'Test::Most';
 	requires 'Test::Needs';
