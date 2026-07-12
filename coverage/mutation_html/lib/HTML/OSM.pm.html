@@ -245,7 +245,7 @@ pre details.mutant-details ul {
 </div><div class='summary'>
 <strong>Structural Coverage (Approximate)</strong><p>
 TER1 (Statement): 99.28%<br>
-TER2 (Branch): 90.30%<br>
+TER2 (Branch): 91.79%<br>
 TER3 (LCSAJ): 100.0% (20/20)<br>
 Approximate LCSAJ segments: 135<br>
 </div>
@@ -438,17 +438,17 @@ Approximate LCSAJ segments: 135<br>
 </span><span class="">  146: 	# Function-style call: HTML::OSM::new(key =&gt; val).
 </span><span class="">  147: 	# Perl places the first argument where the class name should be,
 </span><span class="">  148: 	# so we put it back and set the class explicitly.
-</span><span class="">  149: 	if(defined($class) &amp;&amp; !blessed($class) &amp;&amp; !UNIVERSAL::isa($class, __PACKAGE__)) {
-</span><span class="">  150: 		unshift @_, $class;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  149: 	if(defined($class) &amp;&amp; !blessed($class) &amp;&amp; !UNIVERSAL::isa($class, __PACKAGE__)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  150: 		unshift @_, $class;
 </span><span class="">  151: 		$class = __PACKAGE__;
 </span><span class="">  152: 	}
 </span><span class="">  153: 
 </span><span class="">  154: 	# Clone path: $obj-&gt;new(%overrides) &acirc;&#128;&#148; shallow-merge onto the existing
 </span><span class="">  155: 	# object without re-running schema validation so subclasses can extend.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">156 → 156 → 161</span></span>  156: 	if(blessed($class)) {
-</span><span class="">  157: 		my $extra = Params::Get::get_params(undef, \@_) || {};
-</span><span class="">  158: 		return bless { %{$class}, %{$extra} }, ref($class);
-</span><span class="">  159: 	}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">156 → 156 → 161</span></span>  156: 	if(blessed($class)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  157: 		my $extra = Params::Get::get_params(undef, \@_) || {};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  158: 		return bless { %{$class}, %{$extra} }, ref($class);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  159: 	}
 </span><span class="">  160: 
 </span><span class="">  161: 	$class //= __PACKAGE__;
 </span><span class="">  162: 
@@ -477,303 +477,214 @@ Approximate LCSAJ segments: 135<br>
 </span><span class="">  185: 		},
 </span><span class="">  186: 	});
 </span><span class="">  187: 
-</span><span class="">  188: 	# Config file values are merged after explicit params so the caller can
-</span><span class="">  189: 	# still override anything the file sets.
-</span><span class="">  190: 	$params = Object::Configure::configure($class, $params);
-</span><span class="">  191: 
-</span><span class="">  192: 	# Inject the resolved cache so the bless hash spreads it correctly.
-</span><span class="">  193: 	$params-&gt;{cache} //= CHI-&gt;new(
-</span><span class="">  194: 		driver     =&gt; &#39;Memory&#39;,
-</span><span class="">  195: 		global     =&gt; 1,
-</span><span class="">  196: 		expires_in =&gt; &#39;1 day&#39;,
-</span><span class="">  197: 	);
-</span><span class="">  198: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  199: 	return bless {
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  200: 		# Defaults &acirc;&#128;&#148; spread of %{$params} below overrides each one when supplied.
-</span><span class="">  201: 		coordinates             =&gt; [],
-</span><span class="">  202: 		height                  =&gt; &#39;400px&#39;,
-</span><span class="">  203: 		host                    =&gt; $NOMINATIM_HOST,
-</span><span class="">  204: 		width                   =&gt; &#39;600px&#39;,
-</span><span class="">  205: 		zoom                    =&gt; 12,
-</span><span class="">  206: 		min_interval            =&gt; 0,
-</span><span class="">  207: 		last_request            =&gt; 0,
-</span><span class="">  208: 		cluster                 =&gt; 0,
-</span><span class="">  209: 		css_url                 =&gt; $LEAFLET_CSS_URL,
-</span><span class="">  210: 		js_url                  =&gt; $LEAFLET_JS_URL,
-</span><span class="">  211: 		cluster_js_url          =&gt; $CLUSTER_JS_URL,
-</span><span class="">  212: 		cluster_css_url         =&gt; $CLUSTER_CSS_URL,
-</span><span class="">  213: 		cluster_default_css_url =&gt; $CLUSTER_DEFAULT_CSS_URL,
-</span><span class="">  214: 		heatmap_js_url          =&gt; $HEATMAP_JS_URL,
-</span><span class="">  215: 		gpx_js_url              =&gt; $GPX_JS_URL,
-</span><span class="">  216: 		%{$params},
-</span><span class="">  217: 	}, $class;
-</span><span class="">  218: }
-</span><span class="">  219: 
-</span><span class="">  220: =head2 add_marker
-</span><span class="">  221: 
-</span><span class="">  222: Add a point marker to the map.
-</span><span class="">  223: 
-</span><span class="">  224:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;London&#39;);
-</span><span class="">  225:     $map-&gt;add_marker(&#39;Paris, France&#39;,    html =&gt; &#39;Paris&#39;);
-</span><span class="">  226:     $map-&gt;add_marker($geo_coder_result);
-</span><span class="">  227: 
-</span><span class="">  228: Returns 1 on success, 0 if the point cannot be resolved or is out of range.
-</span><span class="">  229: 
-</span><span class="">  230: =head3 API SPECIFICATION
-</span><span class="">  231: 
-</span><span class="">  232: =head4 INPUT
-</span><span class="">  233: 
-</span><span class="">  234:   point : arrayref [lat, lon] | string address | object with latitude()/longitude()
-</span><span class="">  235:   html  : string   (optional popup label)
-</span><span class="">  236:   icon  : string   (optional icon URL)
-</span><span class="">  237: 
-</span><span class="">  238: =head4 OUTPUT
-</span><span class="">  239: 
-</span><span class="">  240:   { type =&gt; integer, enum =&gt; [0, 1] }
-</span><span class="">  241: 
-</span><span class="">  242: =head3 MESSAGES
-</span><span class="">  243: 
-</span><span class="">  244:   | Message                              | Meaning / Resolution                        |
-</span><span class="">  245:   |--------------------------------------|---------------------------------------------|
-</span><span class="">  246:   | add_marker(): unknown point type     | Point is a ref type with no lat/lon methods |
-</span><span class="">  247: 
-</span><span class="">  248: =cut
-</span><span class="">  249: 
-</span><span class="">  250: sub add_marker
-</span><span class="">  251: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">252 → 255 → 275</span></span>  252: 	my $self = shift;
-</span><span class="">  253: 	my ($params, $point);
+</span><span class="">  188: 	# Config file values override programmatic defaults (separation of config and code).
+</span><span class="">  189: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  190: 
+</span><span class="">  191: 	# Inject the resolved cache so the bless hash spreads it correctly.
+</span><span class="">  192: 	$params-&gt;{cache} //= CHI-&gt;new(
+</span><span class="">  193: 		driver     =&gt; &#39;Memory&#39;,
+</span><span class="">  194: 		global     =&gt; 1,
+</span><span class="">  195: 		expires_in =&gt; &#39;1 day&#39;,
+</span><span class="">  196: 	);
+</span><span class="">  197: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  198: 	return bless {
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  199: 		# Defaults &acirc;&#128;&#148; spread of %{$params} below overrides each one when supplied.
+</span><span class="">  200: 		coordinates             =&gt; [],
+</span><span class="">  201: 		height                  =&gt; &#39;400px&#39;,
+</span><span class="">  202: 		host                    =&gt; $NOMINATIM_HOST,
+</span><span class="">  203: 		width                   =&gt; &#39;600px&#39;,
+</span><span class="">  204: 		zoom                    =&gt; 12,
+</span><span class="">  205: 		min_interval            =&gt; 0,
+</span><span class="">  206: 		last_request            =&gt; 0,
+</span><span class="">  207: 		cluster                 =&gt; 0,
+</span><span class="">  208: 		css_url                 =&gt; $LEAFLET_CSS_URL,
+</span><span class="">  209: 		js_url                  =&gt; $LEAFLET_JS_URL,
+</span><span class="">  210: 		cluster_js_url          =&gt; $CLUSTER_JS_URL,
+</span><span class="">  211: 		cluster_css_url         =&gt; $CLUSTER_CSS_URL,
+</span><span class="">  212: 		cluster_default_css_url =&gt; $CLUSTER_DEFAULT_CSS_URL,
+</span><span class="">  213: 		heatmap_js_url          =&gt; $HEATMAP_JS_URL,
+</span><span class="">  214: 		gpx_js_url              =&gt; $GPX_JS_URL,
+</span><span class="">  215: 		%{$params},
+</span><span class="">  216: 	}, $class;
+</span><span class="">  217: }
+</span><span class="">  218: 
+</span><span class="">  219: =head2 add_marker
+</span><span class="">  220: 
+</span><span class="">  221: Add a point marker to the map.
+</span><span class="">  222: 
+</span><span class="">  223:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;London&#39;);
+</span><span class="">  224:     $map-&gt;add_marker(&#39;Paris, France&#39;,    html =&gt; &#39;Paris&#39;);
+</span><span class="">  225:     $map-&gt;add_marker($geo_coder_result);
+</span><span class="">  226: 
+</span><span class="">  227: Returns 1 on success, 0 if the point cannot be resolved or is out of range.
+</span><span class="">  228: 
+</span><span class="">  229: =head3 API SPECIFICATION
+</span><span class="">  230: 
+</span><span class="">  231: =head4 INPUT
+</span><span class="">  232: 
+</span><span class="">  233:   point : arrayref [lat, lon] | string address | object with latitude()/longitude()
+</span><span class="">  234:   html  : string   (optional popup label)
+</span><span class="">  235:   icon  : string   (optional icon URL)
+</span><span class="">  236: 
+</span><span class="">  237: =head4 OUTPUT
+</span><span class="">  238: 
+</span><span class="">  239:   { type =&gt; integer, enum =&gt; [0, 1] }
+</span><span class="">  240: 
+</span><span class="">  241: =head3 MESSAGES
+</span><span class="">  242: 
+</span><span class="">  243:   | Message                              | Meaning / Resolution                        |
+</span><span class="">  244:   |--------------------------------------|---------------------------------------------|
+</span><span class="">  245:   | add_marker(): unknown point type     | Point is a ref type with no lat/lon methods |
+</span><span class="">  246: 
+</span><span class="">  247: =head3 EXAMPLES
+</span><span class="">  248: 
+</span><span class="">  249:     # Coordinate array with a popup label
+</span><span class="">  250:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;London&#39;);
+</span><span class="">  251: 
+</span><span class="">  252:     # String address geocoded via the injected geocoder or Nominatim
+</span><span class="">  253:     $map-&gt;add_marker(&#39;Paris, France&#39;, html =&gt; &#39;Paris&#39;);
 </span><span class="">  254: 
-</span><span class="">  255: 	if(ref($_[0]) eq &#39;ARRAY&#39;) {
-</span><span class="">  256: 		$point  = shift;
-</span><span class="">  257: 		$params = Params::Get::get_params(undef, \@_) || {};
-</span><span class="">  258: 		# Single-element arrayref is a wrapped address string
-</span><span class="">  259: 		$point  = $point-&gt;[0] if scalar(@{$point}) == 1;
-</span><span class="">  260: 	} elsif(blessed($_[0]) &amp;&amp; $_[0]-&gt;can(&#39;latitude&#39;)) {
-</span><span class="">  261: 		# Geo object as first positional arg: extract before Params::Get sees it,
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  262: 		# otherwise Params::Get mistakes the blessed hashref for the params hash.
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  263: 		$point  = shift;
-</span><span class="">  264: 		$params = Params::Get::get_params(undef, \@_) || {};
-</span><span class="">  265: 	} elsif(defined($_[0]) &amp;&amp; !ref($_[0]) &amp;&amp; scalar(@_) % 2 != 0) {
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  266: 		# Plain string as first positional arg, optionally followed by key-value pairs.
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  267: 		# An odd total count signals a leading positional; even count means all key-value.
-</span><span class="">  268: 		$point  = shift;
-</span><span class="">  269: 		$params = Params::Get::get_params(undef, \@_) || {};
-</span><span class="">  270: 	} else {
-</span><span class="">  271: 		$params = Params::Get::get_params(&#39;point&#39;, @_);
-</span><span class="">  272: 		$point  = $params-&gt;{&#39;point&#39;};
-</span><span class="">  273: 	}
-</span><span class="">  274: 
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">275 → 277 → 290</span></span>  275: 	my ($lat, $lon);
-</span><span class="">  276: 
-</span><span class="">  277: 	if(ref($point) eq &#39;ARRAY&#39;) {
-</span><span class="">  278: 		return 0 if scalar(@{$point}) != 2;
-</span><span class="">  279: 		($lat, $lon) = @{$point};
-</span><span class="">  280: 	} elsif(!ref($point)) {
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  281: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  282: 	} elsif($point-&gt;can(&#39;latitude&#39;)) {
-</span><span class="">  283: 		($lat, $lon) = ($point-&gt;latitude(), $point-&gt;longitude());
-</span><span class="">  284: 	} else {
-</span><span class="">  285: 		my $msg = &#39;add_marker(): unknown point type: &#39; . ref($point);
-</span><span class="">  286: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
-</span><span class="">  287: 		croak $msg;
-</span><span class="">  288: 	}
-</span><span class="">  289: 
-</span><span class="">  290: 	return 0 unless defined($lat) &amp;&amp; defined($lon);
-</span><span class="">  291: 	return 0 unless _validate($lat, $lon);
-</span><span class="">  292: 
-</span><span class="">  293: 	push @{$self-&gt;{coordinates}}, [$lat, $lon, $params-&gt;{&#39;html&#39;}, $params-&gt;{&#39;icon&#39;}];
-</span><span class="">  294: 	return 1;
-</span><span class="">  295: }
-</span><span class="">  296: 
-</span><span class="">  297: =head2 add_geojson
+</span><span class="">  255:     # Custom icon URL with a popup
+</span><span class="">  256:     $map-&gt;add_marker(
+</span><span class="">  257:         [40.7128, -74.0060],
+</span><span class="">  258:         html =&gt; &#39;New York&#39;,
+</span><span class="">  259:         icon =&gt; &#39;https://example.com/pin.png&#39;,
+</span><span class="">  260:     );
+</span><span class="">  261: 
+</span><span class="">  262:     # Geo::Coder result object that implements latitude()/longitude()
+</span><span class="">  263:     my $result = $geocoder-&gt;geocode(&#39;Berlin, Germany&#39;);
+</span><span class="">  264:     $map-&gt;add_marker($result, html =&gt; &#39;Berlin&#39;);
+</span><span class="">  265: 
+</span><span class="">  266:     # Accumulate several markers, warn on geocode failure
+</span><span class="">  267:     for my $city (@cities) {
+</span><span class="">  268:         $map-&gt;add_marker($city-&gt;{coords}, html =&gt; $city-&gt;{name})
+</span><span class="">  269:             or warn &quot;Could not place $city-&gt;{name}&quot;;
+</span><span class="">  270:     }
+</span><span class="">  271: 
+</span><span class="">  272: =cut
+</span><span class="">  273: 
+</span><span class="">  274: sub add_marker
+</span><span class="">  275: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">276 → 279 → 299</span></span>  276: 	my $self = shift;
+</span><span class="">  277: 	my ($params, $point);
+</span><span class="">  278: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  279: 	if(ref($_[0]) eq &#39;ARRAY&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  280: 		$point  = shift;
+</span><span class="">  281: 		$params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  282: 		# Single-element arrayref is a wrapped address string
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  283: 		$point  = $point-&gt;[0] if scalar(@{$point}) == 1;
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  284: 	} elsif(blessed($_[0]) &amp;&amp; $_[0]-&gt;can(&#39;latitude&#39;)) {
+</span><span class="">  285: 		# Geo object as first positional arg: extract before Params::Get sees it,
+</span><span class="">  286: 		# otherwise Params::Get mistakes the blessed hashref for the params hash.
+</span><span class="">  287: 		$point  = shift;
+</span><span class="">  288: 		$params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  289: 	} elsif(defined($_[0]) &amp;&amp; !ref($_[0]) &amp;&amp; scalar(@_) % 2 != 0) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  290: 		# Plain string as first positional arg, optionally followed by key-value pairs.
+</span><span class="">  291: 		# An odd total count signals a leading positional; even count means all key-value.
+</span><span class="">  292: 		$point  = shift;
+</span><span class="">  293: 		$params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  294: 	} else {
+</span><span class="">  295: 		$params = Params::Get::get_params(&#39;point&#39;, @_);
+</span><span class="">  296: 		$point  = $params-&gt;{&#39;point&#39;};
+</span><span class="">  297: 	}
 </span><span class="">  298: 
-</span><span class="">  299: Add a GeoJSON layer to the map.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">299 → 301 → 314</span></span>  299: 	my ($lat, $lon);
 </span><span class="">  300: 
-</span><span class="">  301:     $map-&gt;add_geojson(\%data, style =&gt; { color =&gt; &#39;#ff0000&#39; }, popup =&gt; &#39;name&#39;);
-</span><span class="">  302: 
-</span><span class="">  303: The first argument may be a hashref/arrayref (GeoJSON structure) or a JSON string.
-</span><span class="">  304: Returns 1 on success.
-</span><span class="">  305: 
-</span><span class="">  306: =head3 API SPECIFICATION
-</span><span class="">  307: 
-</span><span class="">  308: =head4 INPUT
-</span><span class="">  309: 
-</span><span class="">  310:   data  : hashref | arrayref | string (JSON)
-</span><span class="">  311:   style : hashref   Leaflet path-style options (color, weight, fillColor, fillOpacity)
-</span><span class="">  312:   popup : string    Feature property name whose value becomes the popup text
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  301: 	if(ref($point) eq &#39;ARRAY&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  302: 		return 0 if scalar(@{$point}) != 2;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  303: 		($lat, $lon) = @{$point};
+</span><span class="">  304: 	} elsif(!ref($point)) {
+</span><span class="">  305: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
+</span><span class="">  306: 	} elsif($point-&gt;can(&#39;latitude&#39;)) {
+</span><span class="">  307: 		($lat, $lon) = ($point-&gt;latitude(), $point-&gt;longitude());
+</span><span class="">  308: 	} else {
+</span><span class="">  309: 		my $msg = &#39;add_marker(): unknown point type: &#39; . ref($point);
+</span><span class="">  310: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
+</span><span class="">  311: 		croak $msg;
+</span><span class="">  312: 	}
 </span><span class="">  313: 
-</span><span class="">  314: =head4 OUTPUT
-</span><span class="">  315: 
-</span><span class="">  316:   { type =&gt; integer, value =&gt; 1 }
-</span><span class="">  317: 
-</span><span class="">  318: =head3 MESSAGES
-</span><span class="">  319: 
-</span><span class="">  320:   | Message              | Meaning / Resolution            |
-</span><span class="">  321:   |----------------------|---------------------------------|
-</span><span class="">  322:   | (JSON parse error)   | data string is not valid JSON   |
-</span><span class="">  323: 
-</span><span class="">  324: =cut
-</span><span class="">  325: 
-</span><span class="">  326: sub add_geojson
-</span><span class="">  327: {
-</span><span class="">  328: 	my $self   = shift;
-</span><span class="">  329: 	my $data   = shift;
-</span><span class="">  330: 	my $params = Params::Get::get_params(undef, \@_) || {};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  331: 
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  332: 	# Accept either a pre-parsed structure or a raw JSON string
-</span><span class="">  333: 	$data = decode_json($data) if !ref($data);
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  334: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  335: 	push @{$self-&gt;{geojson}}, { data =&gt; $data, opts =&gt; $params };
-</span><span class="">  336: 	return 1;
-</span><span class="">  337: }
-</span><span class="">  338: 
-</span><span class="">  339: =head2 add_heatmap
-</span><span class="">  340: 
-</span><span class="">  341: Add a heatmap layer to the map.
-</span><span class="">  342: 
-</span><span class="">  343:     $map-&gt;add_heatmap([[51.5, -0.1, 0.8], [51.6, -0.2, 0.5]], radius =&gt; 25);
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  344: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_344_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  345: Each point is C&lt;[$lat, $lon]&gt; or C&lt;[$lat, $lon, $intensity]&gt; (intensity: 0-1).
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  346: Requires the Leaflet.heat plugin (C&lt;heatmap_js_url&gt;).
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_346_25_!=: Numeric boundary flip == to !=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>COND_INV_346_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  347: Returns 1 on success.
-</span><span class="">  348: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  349: =head3 API SPECIFICATION
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_349_5: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_349_5: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  350: 
-</span><span class="">  351: =head4 INPUT
-</span><span class="">  352: 
-</span><span class="">  353:   points : arrayref of ([lat, lon] | [lat, lon, intensity])
-</span><span class="">  354:   radius : integer  default 25
-</span><span class="">  355:   blur   : integer  default 15
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  314: 	return 0 unless defined($lat) &amp;&amp; defined($lon);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  315: 	return 0 unless _validate($lat, $lon);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  316: 
+</span><span class="">  317: 	push @{$self-&gt;{coordinates}}, [$lat, $lon, $params-&gt;{&#39;html&#39;}, $params-&gt;{&#39;icon&#39;}];
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  318: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  319: }
+</span><span class="">  320: 
+</span><span class="">  321: =head2 add_geojson
+</span><span class="">  322: 
+</span><span class="">  323: Add a GeoJSON layer to the map.
+</span><span class="">  324: 
+</span><span class="">  325:     $map-&gt;add_geojson(\%data, style =&gt; { color =&gt; &#39;#ff0000&#39; }, popup =&gt; &#39;name&#39;);
+</span><span class="">  326: 
+</span><span class="">  327: The first argument may be a hashref/arrayref (GeoJSON structure) or a JSON string.
+</span><span class="">  328: Returns 1 on success.
+</span><span class="">  329: 
+</span><span class="">  330: =head3 API SPECIFICATION
+</span><span class="">  331: 
+</span><span class="">  332: =head4 INPUT
+</span><span class="">  333: 
+</span><span class="">  334:   data  : hashref | arrayref | string (JSON)
+</span><span class="">  335:   style : hashref   Leaflet path-style options (color, weight, fillColor, fillOpacity)
+</span><span class="">  336:   popup : string    Feature property name whose value becomes the popup text
+</span><span class="">  337: 
+</span><span class="">  338: =head4 OUTPUT
+</span><span class="">  339: 
+</span><span class="">  340:   { type =&gt; integer, value =&gt; 1 }
+</span><span class="">  341: 
+</span><span class="">  342: =head3 MESSAGES
+</span><span class="">  343: 
+</span><span class="">  344:   | Message              | Meaning / Resolution            |
+</span><span class="">  345:   |----------------------|---------------------------------|
+</span><span class="">  346:   | (JSON parse error)   | data string is not valid JSON   |
+</span><span class="">  347: 
+</span><span class="">  348: =head3 EXAMPLES
+</span><span class="">  349: 
+</span><span class="">  350:     # Pre-parsed GeoJSON structure with style and popup property
+</span><span class="">  351:     $map-&gt;add_geojson(
+</span><span class="">  352:         { type =&gt; &#39;FeatureCollection&#39;, features =&gt; \@features },
+</span><span class="">  353:         style =&gt; { color =&gt; &#39;#ff0000&#39;, weight =&gt; 2, fillOpacity =&gt; 0.4 },
+</span><span class="">  354:         popup =&gt; &#39;name&#39;,
+</span><span class="">  355:     );
 </span><span class="">  356: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  357: =head4 OUTPUT
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_357_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  358: 
-</span><span class="">  359:   { type =&gt; integer, value =&gt; 1 }
-</span><span class="">  360: 
-</span><span class="">  361: =head3 MESSAGES
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  362: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  363:   | Message                              | Meaning / Resolution              |
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_363_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_363_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  364:   |--------------------------------------|-----------------------------------|
-</span><span class="">  365:   | add_heatmap: points must be arrayref | First argument is not an arrayref |
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  366: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_366_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_366_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  367: =cut
-</span><span class="">  368: 
-</span><span class="">  369: sub add_heatmap
-</span><span class="">  370: {
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  371: 	my $self   = shift;
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  372: 	my $points = shift;
-</span><span class="">  373: 	my $params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  357:     # Raw JSON string &acirc;&#128;&#148; decoded automatically
+</span><span class="">  358:     $map-&gt;add_geojson(&#39;{&quot;type&quot;:&quot;FeatureCollection&quot;,&quot;features&quot;:[]}&#39;);
+</span><span class="">  359: 
+</span><span class="">  360:     # Multiple GeoJSON layers with different styles on the same map
+</span><span class="">  361:     $map-&gt;add_geojson(\%country_borders, style =&gt; { color =&gt; &#39;#333333&#39;, fillOpacity =&gt; 0 });
+</span><span class="">  362:     $map-&gt;add_geojson(\%river_data,      style =&gt; { color =&gt; &#39;#0099ff&#39;, weight =&gt; 1    });
+</span><span class="">  363: 
+</span><span class="">  364: =cut
+</span><span class="">  365: 
+</span><span class="">  366: sub add_geojson
+</span><span class="">  367: {
+</span><span class="">  368: 	my $self   = shift;
+</span><span class="">  369: 	my $data   = shift;
+</span><span class="">  370: 	my $params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  371: 
+</span><span class="">  372: 	# Accept either a pre-parsed structure or a raw JSON string
+</span><span class="">  373: 	$data = decode_json($data) if !ref($data);
 </span><span class="">  374: 
-</span><span class="">  375: 	croak &#39;add_heatmap: points must be an arrayref&#39; unless ref($points) eq &#39;ARRAY&#39;;
-</span><span class="">  376: 
-</span><span class="">  377: 	push @{$self-&gt;{heatmap_layers}}, { points =&gt; $points, opts =&gt; $params };
-</span><span class="">  378: 	return 1;
-</span><span class="">  379: }
+</span><span class="">  375: 	push @{$self-&gt;{geojson}}, { data =&gt; $data, opts =&gt; $params };
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  376: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  377: }
+</span><span class="">  378: 
+</span><span class="">  379: =head2 add_heatmap
 </span><span class="">  380: 
-</span><span class="">  381: =head2 add_gpx
+</span><span class="">  381: Add a heatmap layer to the map.
 </span><span class="">  382: 
-</span><span class="">  383: Add a GPX track to the map from a URL.
+</span><span class="">  383:     $map-&gt;add_heatmap([[51.5, -0.1, 0.8], [51.6, -0.2, 0.5]], radius =&gt; 25);
 </span><span class="">  384: 
-</span><span class="">  385:     $map-&gt;add_gpx(&#39;https://example.com/track.gpx&#39;);
-</span><span class="">  386: 
-</span><span class="">  387: The map view is auto-fitted to the track bounds after loading.
-</span><span class="">  388: Requires the leaflet-gpx plugin (C&lt;gpx_js_url&gt;).
-</span><span class="">  389: Returns 1 on success.
+</span><span class="">  385: Each point is C&lt;[$lat, $lon]&gt; or C&lt;[$lat, $lon, $intensity]&gt; (intensity: 0-1).
+</span><span class="">  386: Requires the Leaflet.heat plugin (C&lt;heatmap_js_url&gt;).
+</span><span class="">  387: Returns 1 on success.
+</span><span class="">  388: 
+</span><span class="">  389: =head3 API SPECIFICATION
 </span><span class="">  390: 
-</span><span class="">  391: =head3 API SPECIFICATION
+</span><span class="">  391: =head4 INPUT
 </span><span class="">  392: 
-</span><span class="">  393: =head4 INPUT
-</span><span class="">  394: 
-</span><span class="">  395:   url : string  URL of the GPX file (required)
+</span><span class="">  393:   points : arrayref of ([lat, lon] | [lat, lon, intensity])
+</span><span class="">  394:   radius : integer  default 25
+</span><span class="">  395:   blur   : integer  default 15
 </span><span class="">  396: 
 </span><span class="">  397: =head4 OUTPUT
 </span><span class="">  398: 
@@ -781,1263 +692,896 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  400: 
 </span><span class="">  401: =head3 MESSAGES
 </span><span class="">  402: 
-</span><span class="">  403:   | Message              | Meaning / Resolution       |
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  404:   |----------------------|----------------------------|
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_404_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  405:   | add_gpx: url required | No URL argument supplied  |
+</span><span class="">  403:   | Message                              | Meaning / Resolution              |
+</span><span class="">  404:   |--------------------------------------|-----------------------------------|
+</span><span class="">  405:   | add_heatmap: points must be arrayref | First argument is not an arrayref |
 </span><span class="">  406: 
-</span><span class="">  407: =cut
+</span><span class="">  407: =head3 EXAMPLES
 </span><span class="">  408: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  409: sub add_gpx
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_409_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_409_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  410: {
-</span><span class="">  411: 	my $self   = shift;
-</span><span class="">  412: 	my $params = Params::Get::get_params(&#39;url&#39;, \@_);
-</span><span class="">  413: 	my $url    = $params-&gt;{&#39;url&#39;};
-</span><span class="">  414: 
-</span><span class="">  415: 	croak &#39;add_gpx: url is required&#39; unless $url;
-</span><span class="">  416: 
-</span><span class="">  417: 	push @{$self-&gt;{gpx_tracks}}, $url;
-</span><span class="">  418: 	return 1;
-</span><span class="">  419: }
-</span><span class="">  420: 
-</span><span class="">  421: =head2 add_choropleth
+</span><span class="">  409:     # Basic heatmap &acirc;&#128;&#148; [lat, lon] per point
+</span><span class="">  410:     $map-&gt;add_heatmap([
+</span><span class="">  411:         [51.5074, -0.1278],
+</span><span class="">  412:         [51.6000, -0.2000],
+</span><span class="">  413:         [51.4000,  0.0000],
+</span><span class="">  414:     ]);
+</span><span class="">  415: 
+</span><span class="">  416:     # With intensity values (0..1) and custom radius/blur
+</span><span class="">  417:     $map-&gt;add_heatmap(
+</span><span class="">  418:         [ [51.5, -0.1, 0.9], [51.6, -0.2, 0.5], [51.4, 0.0, 0.2] ],
+</span><span class="">  419:         radius =&gt; 30,
+</span><span class="">  420:         blur   =&gt; 20,
+</span><span class="">  421:     );
 </span><span class="">  422: 
-</span><span class="">  423: Add a choropleth (data-driven colour fill) layer to the map.
+</span><span class="">  423: =cut
 </span><span class="">  424: 
-</span><span class="">  425:     $map-&gt;add_choropleth(
-</span><span class="">  426:         \@geojson_features,
-</span><span class="">  427:         { England =&gt; 100, Scotland =&gt; 80, Wales =&gt; 60 },
-</span><span class="">  428:         key   =&gt; &#39;name&#39;,
-</span><span class="">  429:         scale =&gt; [&#39;#ffffcc&#39;, &#39;#a1dab4&#39;, &#39;#41b6c4&#39;, &#39;#2c7fb8&#39;, &#39;#253494&#39;],
-</span><span class="">  430:     );
-</span><span class="">  431: 
-</span><span class="">  432: Colours are pre-computed in Perl and baked into the emitted JavaScript.
-</span><span class="">  433: No extra browser plugin is required.
-</span><span class="">  434: Returns 1 on success.
-</span><span class="">  435: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  436: =head3 API SPECIFICATION
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_436_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_436_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  437: 
-</span><span class="">  438: =head4 INPUT
-</span><span class="">  439: 
-</span><span class="">  440:   features : arrayref of GeoJSON Feature hashrefs  (required)
-</span><span class="">  441:   values   : hashref  { feature_property_value =&gt; numeric_value }  (required)
-</span><span class="">  442:   key      : string   feature property to match against values  (default: &#39;name&#39;)
-</span><span class="">  443:   scale    : arrayref hex-colour strings low-to-high  (default: 5-step YlGnBu)
-</span><span class="">  444: 
-</span><span class="">  445: =head4 OUTPUT
+</span><span class="">  425: sub add_heatmap
+</span><span class="">  426: {
+</span><span class="">  427: 	my $self   = shift;
+</span><span class="">  428: 	my $points = shift;
+</span><span class="">  429: 	my $params = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  430: 
+</span><span class="">  431: 	croak &#39;add_heatmap: points must be an arrayref&#39; unless ref($points) eq &#39;ARRAY&#39;;
+</span><span class="">  432: 
+</span><span class="">  433: 	push @{$self-&gt;{heatmap_layers}}, { points =&gt; $points, opts =&gt; $params };
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  434: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  435: }
+</span><span class="">  436: 
+</span><span class="">  437: =head2 add_gpx
+</span><span class="">  438: 
+</span><span class="">  439: Add a GPX track to the map from a URL.
+</span><span class="">  440: 
+</span><span class="">  441:     $map-&gt;add_gpx(&#39;https://example.com/track.gpx&#39;);
+</span><span class="">  442: 
+</span><span class="">  443: The map view is auto-fitted to the track bounds after loading.
+</span><span class="">  444: Requires the leaflet-gpx plugin (C&lt;gpx_js_url&gt;).
+</span><span class="">  445: Returns 1 on success.
 </span><span class="">  446: 
-</span><span class="">  447:   { type =&gt; integer, value =&gt; 1 }
+</span><span class="">  447: =head3 API SPECIFICATION
 </span><span class="">  448: 
-</span><span class="">  449: =head3 MESSAGES
+</span><span class="">  449: =head4 INPUT
 </span><span class="">  450: 
-</span><span class="">  451:   | Message                                  | Meaning / Resolution                   |
-</span><span class="">  452:   |------------------------------------------|----------------------------------------|
-</span><span class="">  453:   | add_choropleth: features must be arrayref | First argument is not an arrayref      |
-</span><span class="">  454:   | add_choropleth: values must be hashref    | Second argument is not a hashref       |
-</span><span class="">  455: 
-</span><span class="">  456: =cut
-</span><span class="">  457: 
-</span><span class="">  458: sub add_choropleth
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  459: {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_459_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_459_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">460 → 478 → 484</span></span>  460: 	my $self     = shift;
-</span><span class="">  461: 	my $features = shift;
-</span><span class="">  462: 	my $values   = shift;
-</span><span class="">  463: 	my $params   = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  451:   url : string  URL of the GPX file (required)
+</span><span class="">  452: 
+</span><span class="">  453: =head4 OUTPUT
+</span><span class="">  454: 
+</span><span class="">  455:   { type =&gt; integer, value =&gt; 1 }
+</span><span class="">  456: 
+</span><span class="">  457: =head3 MESSAGES
+</span><span class="">  458: 
+</span><span class="">  459:   | Message              | Meaning / Resolution       |
+</span><span class="">  460:   |----------------------|----------------------------|
+</span><span class="">  461:   | add_gpx: url required | No URL argument supplied  |
+</span><span class="">  462: 
+</span><span class="">  463: =head3 EXAMPLES
 </span><span class="">  464: 
-</span><span class="">  465: 	croak &#39;add_choropleth: features must be an arrayref&#39; unless ref($features) eq &#39;ARRAY&#39;;
-</span><span class="">  466: 	croak &#39;add_choropleth: values must be a hashref&#39;     unless ref($values)   eq &#39;HASH&#39;;
+</span><span class="">  465:     # Add a GPX track from a public URL; the map auto-fits to its bounds
+</span><span class="">  466:     $map-&gt;add_gpx(&#39;https://example.com/route.gpx&#39;);
 </span><span class="">  467: 
-</span><span class="">  468: 	my $key   = $params-&gt;{key}   || &#39;name&#39;;
-</span><span class="">  469: 	my $scale = $params-&gt;{scale} || [&#39;#ffffcc&#39;, &#39;#a1dab4&#39;, &#39;#41b6c4&#39;, &#39;#2c7fb8&#39;, &#39;#253494&#39;];
-</span><span class="">  470: 
-</span><span class="">  471: 	# Compute colour index for each feature in Perl so the browser needs no
-</span><span class="">  472: 	# extra maths &acirc;&#128;&#148; the resulting lookup object is baked into the JS.
-</span><span class="">  473: 	my @sorted_vals = sort { $a &lt;=&gt; $b } values %{$values};
-</span><span class="">  474: 	my ($min, $max) = ($sorted_vals[0] // 0, $sorted_vals[-1] // 0);
-</span><span class="">  475: 	$max = $min + 1 if $max == $min;    # avoid division by zero for single-value sets
-</span><span class="">  476: 
-</span><span class="">  477: 	my %colors;
-</span><span class="">  478: 	while(my ($k, $v) = each %{$values}) {
-</span><span class="">  479: 		my $idx = int(($v - $min) / ($max - $min) * $#{$scale});
-</span><span class="">  480: 		$idx = $#{$scale} if $idx &gt; $#{$scale};
-</span><span class="">  481: 		$colors{$k} = $scale-&gt;[$idx];
-</span><span class="">  482: 	}
-</span><span class="">  483: 
-</span><span class="">  484: 	push @{$self-&gt;{choropleth_layers}}, {
-</span><span class="">  485: 		features =&gt; $features,
-</span><span class="">  486: 		values   =&gt; $values,
-</span><span class="">  487: 		colors   =&gt; \%colors,
-</span><span class="">  488: 		key      =&gt; $key,
-</span><span class="">  489: 	};
-</span><span class="">  490: 	return 1;
-</span><span class="">  491: }
-</span><span class="">  492: 
-</span><span class="">  493: =head2 center
-</span><span class="">  494: 
-</span><span class="">  495: Set the map centre to a given point.
+</span><span class="">  468:     # Multiple tracks on the same map
+</span><span class="">  469:     $map-&gt;add_gpx(&#39;https://example.com/morning-run.gpx&#39;);
+</span><span class="">  470:     $map-&gt;add_gpx(&#39;https://example.com/evening-walk.gpx&#39;);
+</span><span class="">  471: 
+</span><span class="">  472: =cut
+</span><span class="">  473: 
+</span><span class="">  474: sub add_gpx
+</span><span class="">  475: {
+</span><span class="">  476: 	my $self   = shift;
+</span><span class="">  477: 	my $params = Params::Get::get_params(&#39;url&#39;, \@_);
+</span><span class="">  478: 	my $url    = $params-&gt;{&#39;url&#39;};
+</span><span class="">  479: 
+</span><span class="">  480: 	croak &#39;add_gpx: url is required&#39; unless $url;
+</span><span class="">  481: 
+</span><span class="">  482: 	push @{$self-&gt;{gpx_tracks}}, $url;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  483: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  484: }
+</span><span class="">  485: 
+</span><span class="">  486: =head2 add_choropleth
+</span><span class="">  487: 
+</span><span class="">  488: Add a choropleth (data-driven colour fill) layer to the map.
+</span><span class="">  489: 
+</span><span class="">  490:     $map-&gt;add_choropleth(
+</span><span class="">  491:         \@geojson_features,
+</span><span class="">  492:         { England =&gt; 100, Scotland =&gt; 80, Wales =&gt; 60 },
+</span><span class="">  493:         key   =&gt; &#39;name&#39;,
+</span><span class="">  494:         scale =&gt; [&#39;#ffffcc&#39;, &#39;#a1dab4&#39;, &#39;#41b6c4&#39;, &#39;#2c7fb8&#39;, &#39;#253494&#39;],
+</span><span class="">  495:     );
 </span><span class="">  496: 
-</span><span class="">  497:     $map-&gt;center([40.7128, -74.0060]);
-</span><span class="">  498:     $map-&gt;center($geo_object);
-</span><span class="">  499:     $map-&gt;center(&#39;Berlin, Germany&#39;);
+</span><span class="">  497: Colours are pre-computed in Perl and baked into the emitted JavaScript.
+</span><span class="">  498: No extra browser plugin is required.
+</span><span class="">  499: Returns 1 on success.
 </span><span class="">  500: 
-</span><span class="">  501: Returns 1 on success, 0 if the point cannot be resolved.
+</span><span class="">  501: =head3 API SPECIFICATION
 </span><span class="">  502: 
-</span><span class="">  503: =head3 API SPECIFICATION
+</span><span class="">  503: =head4 INPUT
 </span><span class="">  504: 
-</span><span class="">  505: =head4 INPUT
-</span><span class="">  506: 
-</span><span class="">  507:   point : arrayref [lat, lon] | object with latitude()/longitude() | string address
-</span><span class="">  508: 
-</span><span class="">  509: =head4 OUTPUT
-</span><span class="">  510: 
-</span><span class="survived-1 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  511:   { type =&gt; integer, enum =&gt; [0, 1] }
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_511_44_!=: Numeric boundary flip == to !=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  512: 
-</span><span class="">  513: =head3 MESSAGES
-</span><span class="">  514: 
-</span><span class="">  515:   | Message                                        | Meaning / Resolution                     |
-</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  516:   |------------------------------------------------|------------------------------------------|
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 3, Killed: 0, Survived: 3)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_516_29_<: Numeric boundary flip > to <</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_516_29_>=: Numeric boundary flip > to >=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_516_29_<=: Numeric boundary flip > to <=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  517:   | center(): usage: point =&gt; [lat, lon]           | No point argument supplied               |
-</span><span class="">  518:   | center(): point must have latitude &amp; longitude | Arrayref has != 2 elements               |
-</span><span class="">  519:   | center(): unknown point type                   | Ref type has no lat/lon methods          |
+</span><span class="">  505:   features : arrayref of GeoJSON Feature hashrefs  (required)
+</span><span class="">  506:   values   : hashref  { feature_property_value =&gt; numeric_value }  (required)
+</span><span class="">  507:   key      : string   feature property to match against values  (default: &#39;name&#39;)
+</span><span class="">  508:   scale    : arrayref hex-colour strings low-to-high  (default: 5-step YlGnBu)
+</span><span class="">  509: 
+</span><span class="">  510: =head4 OUTPUT
+</span><span class="">  511: 
+</span><span class="">  512:   { type =&gt; integer, value =&gt; 1 }
+</span><span class="">  513: 
+</span><span class="">  514: =head3 MESSAGES
+</span><span class="">  515: 
+</span><span class="">  516:   | Message                                  | Meaning / Resolution                   |
+</span><span class="">  517:   |------------------------------------------|----------------------------------------|
+</span><span class="">  518:   | add_choropleth: features must be arrayref | First argument is not an arrayref      |
+</span><span class="">  519:   | add_choropleth: values must be hashref    | Second argument is not a hashref       |
 </span><span class="">  520: 
-</span><span class="">  521: =cut
+</span><span class="">  521: =head3 EXAMPLES
 </span><span class="">  522: 
-</span><span class="">  523: sub center
-</span><span class="">  524: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">525 → 533 → 547</span></span>  525: 	my $self   = shift;
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  526: 	my $params = Params::Get::get_params(&#39;point&#39;, \@_);
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_526_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_526_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  527: 	my $point  = $params-&gt;{&#39;point&#39;};
+</span><span class="">  523:     # Default 5-step YlGnBu scale, key property &quot;name&quot;
+</span><span class="">  524:     $map-&gt;add_choropleth(
+</span><span class="">  525:         \@geojson_features,
+</span><span class="">  526:         { England =&gt; 100, Scotland =&gt; 80, Wales =&gt; 60 },
+</span><span class="">  527:     );
 </span><span class="">  528: 
-</span><span class="">  529: 	croak &#39;center(): usage: point =&gt; [ latitude, longitude ]&#39; unless defined($point);
-</span><span class="">  530: 
-</span><span class="">  531: 	my ($lat, $lon);
-</span><span class="">  532: 
-</span><span class="">  533: 	if(ref($point) eq &#39;ARRAY&#39;) {
-</span><span class="">  534: 		croak &#39;center(): point must have latitude and longitude&#39;
-</span><span class="">  535: 			if scalar(@{$point}) != 2;
-</span><span class="">  536: 		($lat, $lon) = @{$point};
-</span><span class="">  537: 	} elsif(ref($point) &amp;&amp; $point-&gt;can(&#39;latitude&#39;)) {
-</span><span class="">  538: 		($lat, $lon) = ($point-&gt;latitude(), $point-&gt;longitude());
-</span><span class="">  539: 	} elsif(!ref($point)) {
-</span><span class="">  540: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
-</span><span class="">  541: 	} else {
-</span><span class="">  542: 		my $msg = &#39;center(): unknown point type: &#39; . ref($point);
-</span><span class="">  543: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
-</span><span class="">  544: 		croak $msg;
-</span><span class="">  545: 	}
-</span><span class="">  546: 
-</span><span class="">  547: 	return 0 unless defined($lat) &amp;&amp; defined($lon);
-</span><span class="">  548: 	return 0 unless _validate($lat, $lon);
-</span><span class="">  549: 
-</span><span class="">  550: 	$self-&gt;{&#39;center&#39;} = [$lat, $lon];
-</span><span class="">  551: 	return 1;
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  552: }
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_552_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  553: 
-</span><span class="">  554: =head2 zoom
-</span><span class="">  555: 
-</span><span class="">  556: Get or set the zoom level (0 = world, 19 = building).
-</span><span class="">  557: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  558:     $map-&gt;zoom(10);
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_558_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  559:     my $z = $map-&gt;zoom();
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_559_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-2 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch. Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  560: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_560_25_!=: Numeric boundary flip == to !=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>COND_INV_560_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  561: =head3 API SPECIFICATION
-</span><span class="">  562: 
-</span><span class="">  563: =head4 INPUT
-</span><span class="">  564: 
-</span><span class="">  565:   { zoom =&gt; { type =&gt; integer, min =&gt; 0, max =&gt; 19, optional =&gt; 1 } }
-</span><span class="">  566: 
-</span><span class="">  567: =head4 OUTPUT
-</span><span class="">  568: 
-</span><span class="">  569:   { type =&gt; integer, min =&gt; 0, max =&gt; 19 }
-</span><span class="">  570: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  571: =head3 MESSAGES
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_571_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  572: 
-</span><span class="">  573:   | Message                      | Meaning / Resolution                      |
-</span><span class="">  574:   |------------------------------|-------------------------------------------|
-</span><span class="">  575:   | (Params::Validate::Strict)   | zoom is not an integer or is out of range |
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  576: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_576_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_576_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  577: =cut
+</span><span class="">  529:     # Custom 3-step scale and a different GeoJSON property as the key
+</span><span class="">  530:     $map-&gt;add_choropleth(
+</span><span class="">  531:         \@geojson_features,
+</span><span class="">  532:         { England =&gt; 100, Scotland =&gt; 80, Wales =&gt; 60 },
+</span><span class="">  533:         key   =&gt; &#39;country&#39;,
+</span><span class="">  534:         scale =&gt; [&#39;#f7fbff&#39;, &#39;#6baed6&#39;, &#39;#08519c&#39;],
+</span><span class="">  535:     );
+</span><span class="">  536: 
+</span><span class="">  537:     # choropleth-only map &acirc;&#128;&#148; center() must be called explicitly
+</span><span class="">  538:     $map-&gt;center([54.0, -2.0]);
+</span><span class="">  539:     $map-&gt;add_choropleth(\@uk_features, \%population_by_region);
+</span><span class="">  540:     my ($head, $body) = $map-&gt;onload_render();
+</span><span class="">  541: 
+</span><span class="">  542: =cut
+</span><span class="">  543: 
+</span><span class="">  544: sub add_choropleth
+</span><span class="">  545: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">546 → 564 → 570</span></span>  546: 	my $self     = shift;
+</span><span class="">  547: 	my $features = shift;
+</span><span class="">  548: 	my $values   = shift;
+</span><span class="">  549: 	my $params   = Params::Get::get_params(undef, \@_) || {};
+</span><span class="">  550: 
+</span><span class="">  551: 	croak &#39;add_choropleth: features must be an arrayref&#39; unless ref($features) eq &#39;ARRAY&#39;;
+</span><span class="">  552: 	croak &#39;add_choropleth: values must be a hashref&#39;     unless ref($values)   eq &#39;HASH&#39;;
+</span><span class="">  553: 
+</span><span class="">  554: 	my $key   = $params-&gt;{key}   || &#39;name&#39;;
+</span><span class="">  555: 	my $scale = $params-&gt;{scale} || [&#39;#ffffcc&#39;, &#39;#a1dab4&#39;, &#39;#41b6c4&#39;, &#39;#2c7fb8&#39;, &#39;#253494&#39;];
+</span><span class="">  556: 
+</span><span class="">  557: 	# Compute colour index for each feature in Perl so the browser needs no
+</span><span class="">  558: 	# extra maths &acirc;&#128;&#148; the resulting lookup object is baked into the JS.
+</span><span class="">  559: 	my @sorted_vals = sort { $a &lt;=&gt; $b } values %{$values};
+</span><span class="">  560: 	my ($min, $max) = ($sorted_vals[0] // 0, $sorted_vals[-1] // 0);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  561: 	$max = $min + 1 if $max == $min;    # avoid division by zero for single-value sets
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  562: 
+</span><span class="">  563: 	my %colors;
+</span><span class="">  564: 	while(my ($k, $v) = each %{$values}) {
+</span><span class="">  565: 		my $idx = int(($v - $min) / ($max - $min) * $#{$scale});
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  566: 		$idx = $#{$scale} if $idx &gt; $#{$scale};
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  567: 		$colors{$k} = $scale-&gt;[$idx];
+</span><span class="">  568: 	}
+</span><span class="">  569: 
+</span><span class="">  570: 	push @{$self-&gt;{choropleth_layers}}, {
+</span><span class="">  571: 		features =&gt; $features,
+</span><span class="">  572: 		values   =&gt; $values,
+</span><span class="">  573: 		colors   =&gt; \%colors,
+</span><span class="">  574: 		key      =&gt; $key,
+</span><span class="">  575: 	};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  576: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  577: }
 </span><span class="">  578: 
-</span><span class="">  579: sub zoom
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  580: {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_580_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_580_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">581 → 583 → 593</span></span>  581: 	my $self = shift;
+</span><span class="">  579: =head2 center
+</span><span class="">  580: 
+</span><span class="">  581: Set the map centre to a given point.
 </span><span class="">  582: 
-</span><span class="">  583: 	if(scalar(@_)) {
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  584: 		my $params = Params::Validate::Strict::validate_strict({
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_584_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_584_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  585: 			args   =&gt; Params::Get::get_params(&#39;zoom&#39;, \@_),
-</span><span class="">  586: 			schema =&gt; {
-</span><span class="">  587: 				zoom =&gt; { optional =&gt; 1, type =&gt; &#39;integer&#39;, min =&gt; $ZOOM_MIN, max =&gt; $ZOOM_MAX },
-</span><span class="">  588: 			},
-</span><span class="">  589: 		});
-</span><span class="">  590: 		$self-&gt;{&#39;zoom&#39;} = $params-&gt;{&#39;zoom&#39;} if defined($params-&gt;{&#39;zoom&#39;});
-</span><span class="">  591: 	}
+</span><span class="">  583:     $map-&gt;center([40.7128, -74.0060]);
+</span><span class="">  584:     $map-&gt;center($geo_object);
+</span><span class="">  585:     $map-&gt;center(&#39;Berlin, Germany&#39;);
+</span><span class="">  586: 
+</span><span class="">  587: Returns 1 on success, 0 if the point cannot be resolved.
+</span><span class="">  588: 
+</span><span class="">  589: =head3 API SPECIFICATION
+</span><span class="">  590: 
+</span><span class="">  591: =head4 INPUT
 </span><span class="">  592: 
-</span><span class="">  593: 	return $self-&gt;{&#39;zoom&#39;};
-</span><span class="">  594: }
-</span><span class="">  595: 
-</span><span class="">  596: =head2 onload_render
-</span><span class="">  597: 
-</span><span class="">  598: Render the map and return a two-element list suitable for embedding in HTML.
-</span><span class="">  599: 
-</span><span class="">  600:     my ($head_html, $body_html) = $map-&gt;onload_render();
-</span><span class="">  601: 
-</span><span class="">  602: C&lt;$head_html&gt; contains the Leaflet CSS, JavaScript, and plugin assets.
-</span><span class="">  603: Place it inside C&lt;&lt; &lt;head&gt;...&lt;/head&gt; &gt;&gt;.
-</span><span class="">  604: 
-</span><span class="">  605: C&lt;$body_html&gt; contains the search box, control buttons, map C&lt;&lt; &lt;div&gt; &gt;&gt;,
-</span><span class="">  606: and the initialisation C&lt;&lt; &lt;script&gt; &gt;&gt;.
-</span><span class="">  607: Place it inside C&lt;&lt; &lt;body&gt;...&lt;/body&gt; &gt;&gt; where the map should appear.
+</span><span class="">  593:   point : arrayref [lat, lon] | object with latitude()/longitude() | string address
+</span><span class="">  594: 
+</span><span class="">  595: =head4 OUTPUT
+</span><span class="">  596: 
+</span><span class="">  597:   { type =&gt; integer, enum =&gt; [0, 1] }
+</span><span class="">  598: 
+</span><span class="">  599: =head3 MESSAGES
+</span><span class="">  600: 
+</span><span class="">  601:   | Message                                        | Meaning / Resolution                     |
+</span><span class="">  602:   |------------------------------------------------|------------------------------------------|
+</span><span class="">  603:   | center(): usage: point =&gt; [lat, lon]           | No point argument supplied               |
+</span><span class="">  604:   | center(): point must have latitude &amp; longitude | Arrayref has != 2 elements               |
+</span><span class="">  605:   | center(): unknown point type                   | Ref type has no lat/lon methods          |
+</span><span class="">  606: 
+</span><span class="">  607: =head3 EXAMPLES
 </span><span class="">  608: 
-</span><span class="">  609: The rendered page provides:
-</span><span class="">  610: 
-</span><span class="">  611: =over 4
-</span><span class="">  612: 
-</span><span class="">  613: =item * A Nominatim-powered search box that adds temporary markers.
+</span><span class="">  609:     # Coordinate array
+</span><span class="">  610:     $map-&gt;center([40.7128, -74.0060]);
+</span><span class="">  611: 
+</span><span class="">  612:     # Object that implements latitude()/longitude() (e.g. a Geo::Coder result)
+</span><span class="">  613:     $map-&gt;center($geocoder-&gt;geocode(&#39;Berlin, Germany&#39;));
 </span><span class="">  614: 
-</span><span class="">  615: =item * A &quot;Clear search markers&quot; button that removes those temporary markers,
-</span><span class="">  616: leaving static markers (added via C&lt;add_marker&gt;) intact.
+</span><span class="">  615:     # String address resolved via the injected geocoder or Nominatim
+</span><span class="">  616:     $map-&gt;center(&#39;Eiffel Tower, Paris, France&#39;);
 </span><span class="">  617: 
-</span><span class="">  618: =item * A &quot;Reset Map&quot; button that returns the view to the initial centre and zoom.
-</span><span class="">  619: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  620: =back
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  621: 
-</span><span class="">  622: =head3 API SPECIFICATION
-</span><span class="">  623: 
-</span><span class="">  624: =head4 INPUT
-</span><span class="">  625: 
-</span><span class="">  626:   (none - uses object state)
-</span><span class="">  627: 
-</span><span class="">  628: =head4 OUTPUT
-</span><span class="">  629: 
-</span><span class="">  630:   { type =&gt; list, elements =&gt; [string, string] }
-</span><span class="">  631: 
-</span><span class="">  632: =head3 MESSAGES
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  633: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_633_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  634:   | Message                                          | Meaning / Resolution                        |
-</span><span class="">  635:   |--------------------------------------------------|---------------------------------------------|
-</span><span class="">  636:   | No map data provided                             | No markers, GeoJSON, heatmap, GPX, or choropleth added yet |
-</span><span class="">  637:   | center() must be called when no point markers    | Non-marker-only render needs explicit centre |
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  638: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  639: =head3 PSEUDOCODE
-</span><span class="">  640: 
-</span><span class="">  641:   1. Gather all data layers; croak if none populated.
-</span><span class="">  642:   2. Geocode/validate each coordinate tuple; discard invalids with a warning.
-</span><span class="">  643:   3. Determine map centre: caller-supplied &gt; computed midpoint of marker bounds.
-</span><span class="">  644:      Croak if neither is available.
-</span><span class="">  645:   4. Build &lt;head&gt;: Leaflet CSS + JS; inject cluster/heatmap/GPX plugin assets
-</span><span class="">  646:      only when the corresponding layer type is present.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  647:   5. Build &lt;body&gt;: search box, clear-search button, reset button, map &lt;div&gt;.
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  648:   6. Initialise Leaflet map, tile layer, searchMarkers array.
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  649:   7. Emit JS for each marker (via clusterGroup when cluster is set).
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  650:   8. Emit JS for each GeoJSON, heatmap, GPX, and choropleth layer.
-</span><span class="">  651:   9. Attach event listeners: reset-view, clear-search-markers, search-on-Enter.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  652:   10. Return ($head, $body).
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  653: 
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  654: =cut
+</span><span class="">  618:     # Required when rendering without point markers (GeoJSON-only, choropleth, etc.)
+</span><span class="">  619:     $map-&gt;center([54.0, -2.0]);
+</span><span class="">  620:     $map-&gt;add_geojson(\%uk_regions, popup =&gt; &#39;name&#39;);
+</span><span class="">  621:     my ($head, $body) = $map-&gt;onload_render();
+</span><span class="">  622: 
+</span><span class="">  623: =cut
+</span><span class="">  624: 
+</span><span class="">  625: sub center
+</span><span class="">  626: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">627 → 635 → 649</span></span>  627: 	my $self   = shift;
+</span><span class="">  628: 	my $params = Params::Get::get_params(&#39;point&#39;, \@_);
+</span><span class="">  629: 	my $point  = $params-&gt;{&#39;point&#39;};
+</span><span class="">  630: 
+</span><span class="">  631: 	croak &#39;center(): usage: point =&gt; [ latitude, longitude ]&#39; unless defined($point);
+</span><span class="">  632: 
+</span><span class="">  633: 	my ($lat, $lon);
+</span><span class="">  634: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  635: 	if(ref($point) eq &#39;ARRAY&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  636: 		croak &#39;center(): point must have latitude and longitude&#39;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  637: 			if scalar(@{$point}) != 2;
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  638: 		($lat, $lon) = @{$point};
+</span><span class="">  639: 	} elsif(ref($point) &amp;&amp; $point-&gt;can(&#39;latitude&#39;)) {
+</span><span class="">  640: 		($lat, $lon) = ($point-&gt;latitude(), $point-&gt;longitude());
+</span><span class="">  641: 	} elsif(!ref($point)) {
+</span><span class="">  642: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
+</span><span class="">  643: 	} else {
+</span><span class="">  644: 		my $msg = &#39;center(): unknown point type: &#39; . ref($point);
+</span><span class="">  645: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
+</span><span class="">  646: 		croak $msg;
+</span><span class="">  647: 	}
+</span><span class="">  648: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  649: 	return 0 unless defined($lat) &amp;&amp; defined($lon);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  650: 	return 0 unless _validate($lat, $lon);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  651: 
+</span><span class="">  652: 	$self-&gt;{&#39;center&#39;} = [$lat, $lon];
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  653: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  654: }
 </span><span class="">  655: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  656: sub onload_render
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_656_5: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  657: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">658 → 668 → 675</span></span>  658: 	my $self = shift;
+</span><span class="">  656: =head2 zoom
+</span><span class="">  657: 
+</span><span class="">  658: Get or set the zoom level (0 = world, 19 = building).
 </span><span class="">  659: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  660: 	my $height            = $self-&gt;{&#39;height&#39;} || &#39;400px&#39;;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_660_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  661: 	my $width             = $self-&gt;{&#39;width&#39;}  || &#39;600px&#39;;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_661_5: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_661_5: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  662: 	my $coordinates       = $self-&gt;{coordinates}        || [];
-</span><span class="">  663: 	my $geojson_layers    = $self-&gt;{geojson}             || [];
-</span><span class="">  664: 	my $heatmap_layers    = $self-&gt;{heatmap_layers}      || [];
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  665: 	my $gpx_tracks        = $self-&gt;{gpx_tracks}          || [];
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  666: 	my $choropleth_layers = $self-&gt;{choropleth_layers}   || [];
-</span><span class="">  667: 
-</span><span class="">  668: 	unless(@$coordinates || @$geojson_layers || @$heatmap_layers
-</span><span class="">  669: 	                     || @$gpx_tracks     || @$choropleth_layers) {
-</span><span class="">  670: 		$self-&gt;{logger}-&gt;error(&#39;No map data provided&#39;) if $self-&gt;{logger};
-</span><span class="">  671: 		croak &#39;No map data provided&#39;;
-</span><span class="">  672: 	}
-</span><span class="">  673: 
-</span><span class="">  674: 	# Geocode address strings; validate and discard bad numeric pairs.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">675 → 676 → 688</span></span>  675: 	my @valid_coordinates;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  676: 	for my $coord (@$coordinates) {
-</span><span class="">  677: 		my ($lat, $lon, $label, $icon_url) = @$coord;
-</span><span class="">  678: 		if(!defined $lat || !defined $lon) {
-</span><span class="">  679: 			($lat, $lon) = $self-&gt;_fetch_coordinates($label);
-</span><span class="">  680: 		} else {
-</span><span class="">  681: 			next unless _validate($lat, $lon);
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  682: 		}
-</span><p> <b> Mutants (Total: 4, Killed: 4, Survived: 0)</b><p><span class="">  683: 		push @valid_coordinates, [$lat, $lon, $label, $icon_url]
-</span><span class="">  684: 			if defined($lat) &amp;&amp; defined($lon);
-</span><span class="">  685: 	}
-</span><span class="">  686: 
-</span><span class="">  687: 	# Determine map centre: caller-set wins; else compute from marker bounds.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">688 → 689 → 706</span></span>  688: 	my ($center_lat, $center_lon);
-</span><span class="">  689: 	if($self-&gt;{&#39;center&#39;}) {
-</span><span class="">  690: 		($center_lat, $center_lon) = @{$self-&gt;{&#39;center&#39;}};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  691: 	} elsif(@valid_coordinates) {
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  692: 		my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  693: 		for my $c (@valid_coordinates) {
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  694: 			$min_lat = $c-&gt;[0] if $c-&gt;[0] &lt; $min_lat;
-</span><span class="">  695: 			$max_lat = $c-&gt;[0] if $c-&gt;[0] &gt; $max_lat;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  696: 			$min_lon = $c-&gt;[1] if $c-&gt;[1] &lt; $min_lon;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  697: 			$max_lon = $c-&gt;[1] if $c-&gt;[1] &gt; $max_lon;
-</span><span class="">  698: 		}
-</span><span class="">  699: 		$center_lat = ($min_lat + $max_lat) / 2;
-</span><span class="">  700: 		$center_lon = ($min_lon + $max_lon) / 2;
-</span><span class="">  701: 	} else {
-</span><span class="">  702: 		croak &#39;center() must be called when no point markers are provided&#39;;
-</span><span class="">  703: 	}
-</span><span class="">  704: 
-</span><span class="">  705: 	# --- &lt;head&gt; ---
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">706 → 711 → 718</span></span>  706: 	my $head = qq{
-</span><span class="">  707: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{css_url}&quot; /&gt;
-</span><span class="">  708: 		&lt;script src=&quot;$self-&gt;{js_url}&quot;&gt;&lt;/script&gt;
-</span><span class="">  709: 	};
-</span><span class="">  710: 
-</span><span class="">  711: 	if($self-&gt;{cluster}) {
-</span><span class="">  712: 		$head .= qq{
-</span><span class="">  713: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{cluster_css_url}&quot; /&gt;
-</span><span class="">  714: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{cluster_default_css_url}&quot; /&gt;
-</span><span class="">  715: 		&lt;script src=&quot;$self-&gt;{cluster_js_url}&quot;&gt;&lt;/script&gt;
-</span><span class="">  716: 		};
-</span><span class="">  717: 	}
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">718 → 745 → 774</span></span>  718: 	$head .= qq{\t\t&lt;script src=&quot;$self-&gt;{heatmap_js_url}&quot;&gt;&lt;/script&gt;\n} if @$heatmap_layers;
-</span><span class="">  719: 	$head .= qq{\t\t&lt;script src=&quot;$self-&gt;{gpx_js_url}&quot;&gt;&lt;/script&gt;\n}     if @$gpx_tracks;
+</span><span class="">  660:     $map-&gt;zoom(10);
+</span><span class="">  661:     my $z = $map-&gt;zoom();
+</span><span class="">  662: 
+</span><span class="">  663: =head3 API SPECIFICATION
+</span><span class="">  664: 
+</span><span class="">  665: =head4 INPUT
+</span><span class="">  666: 
+</span><span class="">  667:   { zoom =&gt; { type =&gt; integer, min =&gt; 0, max =&gt; 19, optional =&gt; 1 } }
+</span><span class="">  668: 
+</span><span class="">  669: =head4 OUTPUT
+</span><span class="">  670: 
+</span><span class="">  671:   { type =&gt; integer, min =&gt; 0, max =&gt; 19 }
+</span><span class="">  672: 
+</span><span class="">  673: =head3 MESSAGES
+</span><span class="">  674: 
+</span><span class="">  675:   | Message                      | Meaning / Resolution                      |
+</span><span class="">  676:   |------------------------------|-------------------------------------------|
+</span><span class="">  677:   | (Params::Validate::Strict)   | zoom is not an integer or is out of range |
+</span><span class="">  678: 
+</span><span class="">  679: =head3 EXAMPLES
+</span><span class="">  680: 
+</span><span class="">  681:     # Setter: store the zoom level
+</span><span class="">  682:     $map-&gt;zoom(14);
+</span><span class="">  683: 
+</span><span class="">  684:     # Getter: retrieve the current level
+</span><span class="">  685:     my $level = $map-&gt;zoom();
+</span><span class="">  686:     print &quot;Current zoom: $level\n&quot;;    # 14
+</span><span class="">  687: 
+</span><span class="">  688:     # Setter return value equals the new level
+</span><span class="">  689:     my $confirmed = $map-&gt;zoom(10);
+</span><span class="">  690:     die &#39;unexpected&#39; unless $confirmed == 10;
+</span><span class="">  691: 
+</span><span class="">  692:     # Chain: set via new(), read back via zoom()
+</span><span class="">  693:     my $m = HTML::OSM-&gt;new(zoom =&gt; 6);
+</span><span class="">  694:     $m-&gt;zoom($m-&gt;zoom() + 2);   # nudge up by 2
+</span><span class="">  695: 
+</span><span class="">  696: =cut
+</span><span class="">  697: 
+</span><span class="">  698: sub zoom
+</span><span class="">  699: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">700 → 702 → 712</span></span>  700: 	my $self = shift;
+</span><span class="">  701: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  702: 	if(scalar(@_)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  703: 		my $params = Params::Validate::Strict::validate_strict({
+</span><span class="">  704: 			args   =&gt; Params::Get::get_params(&#39;zoom&#39;, \@_),
+</span><span class="">  705: 			schema =&gt; {
+</span><span class="">  706: 				zoom =&gt; { optional =&gt; 1, type =&gt; &#39;integer&#39;, min =&gt; $ZOOM_MIN, max =&gt; $ZOOM_MAX },
+</span><span class="">  707: 			},
+</span><span class="">  708: 		});
+</span><span class="">  709: 		$self-&gt;{&#39;zoom&#39;} = $params-&gt;{&#39;zoom&#39;} if defined($params-&gt;{&#39;zoom&#39;});
+</span><span class="">  710: 	}
+</span><span class="">  711: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  712: 	return $self-&gt;{&#39;zoom&#39;};
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  713: }
+</span><span class="">  714: 
+</span><span class="">  715: =head2 onload_render
+</span><span class="">  716: 
+</span><span class="">  717: Render the map and return a two-element list suitable for embedding in HTML.
+</span><span class="">  718: 
+</span><span class="">  719:     my ($head_html, $body_html) = $map-&gt;onload_render();
 </span><span class="">  720: 
-</span><span class="">  721: 	$head .= qq{
-</span><span class="">  722: 		&lt;style&gt;
-</span><span class="">  723: 			#map { width: $width; height: $height; }
-</span><span class="">  724: 			#search-box { margin: 10px; padding: 5px; }
-</span><span class="">  725: 			#reset-button, #clear-search-button { margin: 10px; padding: 5px; cursor: pointer; }
-</span><span class="">  726: 		&lt;/style&gt;
-</span><span class="">  727: 	};
-</span><span class="">  728: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  729: 	# --- &lt;body&gt; ---
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_729_2: Invert condition unless to if</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  730: 	my $body = qq{
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_730_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  731: 		&lt;input type=&quot;text&quot; id=&quot;search-box&quot; placeholder=&quot;Enter location&quot;&gt;
-</span><span class="">  732: 		&lt;button id=&quot;clear-search-button&quot;&gt;Clear search markers&lt;/button&gt;
-</span><span class="">  733: 		&lt;button id=&quot;reset-button&quot;&gt;Reset Map&lt;/button&gt;
-</span><span class="">  734: 		&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
-</span><span class="">  735: 		&lt;script&gt;
-</span><span class="">  736: 			var map = L.map(&#39;map&#39;).setView([$center_lat, $center_lon], $self-&gt;{zoom});
-</span><span class="">  737: 			L.tileLayer(&#39;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#39;, {
-</span><span class="">  738: 				attribution: &#39;&amp;copy; OpenStreetMap contributors&#39;
-</span><span class="">  739: 			}).addTo(map);
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  740: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_740_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  741: 			var searchMarkers = [];
-</span><span class="">  742: 	};
-</span><span class="">  743: 
-</span><span class="">  744: 	# Point markers &acirc;&#128;&#148; optionally grouped into a cluster layer.
-</span><span class="">  745: 	if(@valid_coordinates) {
-</span><span class="">  746: 		$body .= &quot;\t\t\tvar clusterGroup = L.markerClusterGroup();\n&quot; if $self-&gt;{cluster};
-</span><span class="">  747: 
-</span><span class="">  748: 		for my $coord (@valid_coordinates) {
-</span><span class="">  749: 			my ($lat, $lon, $label, $icon_url) = @$coord;
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  750: 			my $js_label = _js_string($label);
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_750_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  751: 			if($icon_url) {
-</span><span class="">  752: 				my $js_icon = _js_string($icon_url);
-</span><span class="">  753: 				my $add_cmd = $self-&gt;{cluster}
-</span><span class="">  754: 					? &#39;clusterGroup.addLayer(m);&#39;
-</span><span class="">  755: 					: &#39;m.addTo(map);&#39;;
-</span><span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  756: 				$body .= qq{
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 3, Killed: 0, Survived: 3)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_756_28_>: Numeric boundary flip < to ></b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_756_28_<=: Numeric boundary flip < to <=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_756_28_>=: Numeric boundary flip < to >=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  757: 			(function() {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 3, Killed: 0, Survived: 3)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_757_28_<: Numeric boundary flip > to <</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_757_28_>=: Numeric boundary flip > to >=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_757_28_<=: Numeric boundary flip > to <=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  758: 				var icon = L.icon({ iconUrl: &#39;$js_icon&#39;, iconAnchor: [16,32], popupAnchor: [0,-32] });
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 3, Killed: 0, Survived: 3)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_758_28_>: Numeric boundary flip < to ></b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_758_28_<=: Numeric boundary flip < to <=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_758_28_>=: Numeric boundary flip < to >=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="survived-3 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  759: 				var m = L.marker([$lat, $lon], { icon: icon }).bindPopup(&#39;$js_label&#39;);
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 3, Killed: 0, Survived: 3)</summary>
-					<ul>
-				<li><b>NUM_BOUNDARY_759_28_<: Numeric boundary flip > to <</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_759_28_>=: Numeric boundary flip > to >=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>NUM_BOUNDARY_759_28_<=: Numeric boundary flip > to <=</b><br>HIGH: Likely missing edge-case test (boundary value)
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boundary test suggestion
-is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  760: 				$add_cmd
-</span><span class="">  761: 			})();
-</span><span class="">  762: 				};
-</span><span class="">  763: 			} elsif($self-&gt;{cluster}) {
-</span><span class="">  764: 				$body .= &quot;\t\t\tclusterGroup.addLayer(L.marker([$lat, $lon]).bindPopup(&#39;$js_label&#39;));\n&quot;;
-</span><span class="">  765: 			} else {
-</span><span class="">  766: 				$body .= &quot;\t\t\tL.marker([$lat, $lon]).addTo(map).bindPopup(&#39;$js_label&#39;);\n&quot;;
-</span><span class="">  767: 			}
-</span><span class="">  768: 		}
-</span><span class="">  769: 
-</span><span class="">  770: 		$body .= &quot;\t\t\tmap.addLayer(clusterGroup);\n&quot; if $self-&gt;{cluster};
-</span><span class="">  771: 	}
-</span><span class="">  772: 
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  773: 	# GeoJSON layers.
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_773_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">774 → 774 → 790</span></span>  774: 	for my $layer (@$geojson_layers) {
-</span><span class="">  775: 		my $json     = encode_json($layer-&gt;{data});
-</span><span class="">  776: 		my $opts     = $layer-&gt;{opts} || {};
-</span><span class="">  777: 		my $style_js = &#39;&#39;;
-</span><span class="">  778: 		my $popup_js = &#39;&#39;;
-</span><span class="">  779: 		if(my $style = $opts-&gt;{style}) {
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  780: 			$style_js = &#39;style: &#39; . encode_json($style) . &#39;,&#39;;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_780_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  781: 		}
-</span><span class="">  782: 		if(my $prop = $opts-&gt;{popup}) {
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  783: 			my $js_prop = _js_string($prop);
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_783_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  784: 			$popup_js = &quot;onEachFeature: function(f,l){ if(f.properties &amp;&amp; f.properties[&#39;$js_prop&#39;]){ l.bindPopup(String(f.properties[&#39;$js_prop&#39;])); } },&quot;;
-</span><span class="">  785: 		}
-</span><span class="">  786: 		$body .= &quot;\t\t\tL.geoJSON($json, { $style_js $popup_js }).addTo(map);\n&quot;;
-</span><span class="">  787: 	}
-</span><span class="">  788: 
-</span><span class="">  789: 	# Heatmap layers.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">790 → 790 → 799</span></span>  790: 	for my $layer (@$heatmap_layers) {
-</span><span class="">  791: 		my $pts    = encode_json($layer-&gt;{points});
-</span><span class="">  792: 		my $opts   = $layer-&gt;{opts} || {};
-</span><span class="">  793: 		my $radius = $opts-&gt;{radius} || 25;
-</span><span class="">  794: 		my $blur   = $opts-&gt;{blur}   || 15;
-</span><span class="">  795: 		$body .= &quot;\t\t\tL.heatLayer($pts, { radius: $radius, blur: $blur }).addTo(map);\n&quot;;
-</span><span class="">  796: 	}
-</span><span class="">  797: 
-</span><span class="">  798: 	# GPX tracks &acirc;&#128;&#148; browser fetches the file; fitBounds called on load.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">799 → 799 → 805</span></span>  799: 	for my $url (@$gpx_tracks) {
-</span><span class="">  800: 		my $js_url = _js_string($url);
-</span><span class="">  801: 		$body .= &quot;\t\t\tnew L.GPX(&#39;$js_url&#39;, { async: true }).on(&#39;loaded&#39;, function(e){ map.fitBounds(e.target.getBounds()); }).addTo(map);\n&quot;;
-</span><span class="">  802: 	}
-</span><span class="">  803: 
-</span><span class="">  804: 	# Choropleth layers &acirc;&#128;&#148; colours are pre-baked; no browser-side scale maths.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">805 → 805 → 833</span></span>  805: 	for my $layer (@$choropleth_layers) {
-</span><span class="">  806: 		my $fc_json     = encode_json({ type =&gt; &#39;FeatureCollection&#39;, features =&gt; $layer-&gt;{features} });
-</span><span class="">  807: 		my $colors_json = encode_json($layer-&gt;{colors});
-</span><span class="">  808: 		my $values_json = encode_json($layer-&gt;{values});
-</span><span class="">  809: 		my $js_key      = _js_string($layer-&gt;{key});
-</span><span class="">  810: 		$body .= qq{
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  811: 			(function() {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_811_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  812: 				var choroplethColors = $colors_json;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_812_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  813: 				var choroplethValues = $values_json;
-</span><span class="">  814: 				L.geoJSON($fc_json, {
-</span><span class="">  815: 					style: function(f) {
-</span><span class="">  816: 						var k = f.properties &amp;&amp; f.properties[&#39;$js_key&#39;];
-</span><span class="">  817: 						return { fillColor: choroplethColors[k] || &#39;#cccccc&#39;,
-</span><span class="">  818: 						         weight: 2, opacity: 1, color: &#39;white&#39;,
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  819: 						         dashArray: &#39;3&#39;, fillOpacity: 0.7 };
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_819_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  820: 					},
-</span><span class="">  821: 					onEachFeature: function(f, l) {
-</span><span class="">  822: 						var k = f.properties &amp;&amp; f.properties[&#39;$js_key&#39;];
-</span><span class="">  823: 						if(k &amp;&amp; choroplethValues[k] !== undefined) {
-</span><span class="">  824: 							l.bindPopup(k + &#39;: &#39; + choroplethValues[k]);
-</span><span class="">  825: 						}
-</span><span class="">  826: 					}
-</span><span class="">  827: 				}).addTo(map);
-</span><span class="">  828: 			})();
-</span><span class="">  829: 		};
-</span><span class="">  830: 	}
-</span><span class="">  831: 
-</span><span class="">  832: 	# Event handlers.
-</span><span class="">  833: 	$body .= qq{
-</span><span class="">  834: 			document.getElementById(&#39;reset-button&#39;).addEventListener(&#39;click&#39;, function() {
-</span><span class="">  835: 				map.setView([$center_lat, $center_lon], $self-&gt;{zoom});
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  836: 			});
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_836_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  837: 
-</span><span class="">  838: 			document.getElementById(&#39;clear-search-button&#39;).addEventListener(&#39;click&#39;, function() {
-</span><span class="">  839: 				searchMarkers.forEach(function(m) { map.removeLayer(m); });
-</span><span class="">  840: 				searchMarkers = [];
-</span><span class="">  841: 			});
-</span><span class="">  842: 
-</span><span class="">  843: 			document.getElementById(&#39;search-box&#39;).addEventListener(&#39;keyup&#39;, function(event) {
-</span><span class="">  844: 				if(event.key === &#39;Enter&#39;) {
-</span><span class="">  845: 					var query = event.target.value.trim();
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  846: 					if(!query) { alert(&#39;Please enter a valid location.&#39;); return; }
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_846_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  847: 					fetch(&#39;https://nominatim.openstreetmap.org/search?format=json&amp;q=&#39; + encodeURIComponent(query))
-</span><span class="">  848: 					.then(function(r) { return r.json(); })
-</span><span class="">  849: 					.then(function(data) {
-</span><span class="">  850: 						if(data.length &gt; 0) {
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  851: 							var lat = data[0].lat, lon = data[0].lon;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_851_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  852: 							map.setView([lat, lon], 14);
-</span><span class="">  853: 							searchMarkers.push(L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup());
-</span><span class="">  854: 						} else {
-</span><span class="">  855: 							alert(&#39;No results found. Try a different location.&#39;);
-</span><span class="">  856: 						}
-</span><span class="">  857: 					})
-</span><span class="">  858: 					.catch(function(err) {
-</span><span class="">  859: 						console.error(&#39;Search error:&#39;, err);
-</span><span class="">  860: 						alert(&#39;Failed to fetch location. Please check your internet connection.&#39;);
-</span><span class="">  861: 					});
-</span><span class="">  862: 				}
-</span><span class="">  863: 			});
-</span><span class="">  864: 		&lt;/script&gt;
-</span><span class="">  865: 	};
-</span><span class="">  866: 
-</span><span class="">  867: 	return ($head, $body);
-</span><span class="">  868: }
+</span><span class="">  721: C&lt;$head_html&gt; contains the Leaflet CSS, JavaScript, and plugin assets.
+</span><span class="">  722: Place it inside C&lt;&lt; &lt;head&gt;...&lt;/head&gt; &gt;&gt;.
+</span><span class="">  723: 
+</span><span class="">  724: C&lt;$body_html&gt; contains the search box, control buttons, map C&lt;&lt; &lt;div&gt; &gt;&gt;,
+</span><span class="">  725: and the initialisation C&lt;&lt; &lt;script&gt; &gt;&gt;.
+</span><span class="">  726: Place it inside C&lt;&lt; &lt;body&gt;...&lt;/body&gt; &gt;&gt; where the map should appear.
+</span><span class="">  727: 
+</span><span class="">  728: The rendered page provides:
+</span><span class="">  729: 
+</span><span class="">  730: =over 4
+</span><span class="">  731: 
+</span><span class="">  732: =item * A Nominatim-powered search box that adds temporary markers.
+</span><span class="">  733: 
+</span><span class="">  734: =item * A &quot;Clear search markers&quot; button that removes those temporary markers,
+</span><span class="">  735: leaving static markers (added via C&lt;add_marker&gt;) intact.
+</span><span class="">  736: 
+</span><span class="">  737: =item * A &quot;Reset Map&quot; button that returns the view to the initial centre and zoom.
+</span><span class="">  738: 
+</span><span class="">  739: =back
+</span><span class="">  740: 
+</span><span class="">  741: =head3 API SPECIFICATION
+</span><span class="">  742: 
+</span><span class="">  743: =head4 INPUT
+</span><span class="">  744: 
+</span><span class="">  745:   (none - uses object state)
+</span><span class="">  746: 
+</span><span class="">  747: =head4 OUTPUT
+</span><span class="">  748: 
+</span><span class="">  749:   { type =&gt; list, elements =&gt; [string, string] }
+</span><span class="">  750: 
+</span><span class="">  751: =head3 MESSAGES
+</span><span class="">  752: 
+</span><span class="">  753:   | Message                                          | Meaning / Resolution                        |
+</span><span class="">  754:   |--------------------------------------------------|---------------------------------------------|
+</span><span class="">  755:   | No map data provided                             | No markers, GeoJSON, heatmap, GPX, or choropleth added yet |
+</span><span class="">  756:   | center() must be called when no point markers    | Non-marker-only render needs explicit centre |
+</span><span class="">  757: 
+</span><span class="">  758: =head3 EXAMPLES
+</span><span class="">  759: 
+</span><span class="">  760:     # Minimal: one marker, embed in a CGI response
+</span><span class="">  761:     use HTML::OSM;
+</span><span class="">  762:     my $map = HTML::OSM-&gt;new(zoom =&gt; 12);
+</span><span class="">  763:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;London&#39;);
+</span><span class="">  764:     my ($head, $body) = $map-&gt;onload_render();
+</span><span class="">  765:     print &quot;Content-Type: text/html\n\n&quot;;
+</span><span class="">  766:     print &quot;&lt;html&gt;&lt;head&gt;$head&lt;/head&gt;&lt;body&gt;$body&lt;/body&gt;&lt;/html&gt;\n&quot;;
+</span><span class="">  767: 
+</span><span class="">  768:     # Mixed layers: markers + GeoJSON, explicit center
+</span><span class="">  769:     $map-&gt;center([51.5, -0.1]);
+</span><span class="">  770:     $map-&gt;add_geojson(\%borough_data, popup =&gt; &#39;name&#39;, style =&gt; { color =&gt; &#39;#333&#39; });
+</span><span class="">  771:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;City of London&#39;);
+</span><span class="">  772:     my ($head_html, $body_html) = $map-&gt;onload_render();
+</span><span class="">  773: 
+</span><span class="">  774:     # Template Toolkit integration
+</span><span class="">  775:     $tt-&gt;process(&#39;map.tt&#39;, {
+</span><span class="">  776:         map_head =&gt; scalar(($map-&gt;onload_render())[0]),
+</span><span class="">  777:         map_body =&gt; scalar(($map-&gt;onload_render())[1]),
+</span><span class="">  778:     });
+</span><span class="">  779: 
+</span><span class="">  780: =head3 PSEUDOCODE
+</span><span class="">  781: 
+</span><span class="">  782:   1. Gather all data layers; croak if none populated.
+</span><span class="">  783:   2. Geocode/validate each coordinate tuple; discard invalids with a warning.
+</span><span class="">  784:   3. Determine map centre: caller-supplied &gt; computed midpoint of marker bounds.
+</span><span class="">  785:      Croak if neither is available.
+</span><span class="">  786:   4. Build &lt;head&gt;: Leaflet CSS + JS; inject cluster/heatmap/GPX plugin assets
+</span><span class="">  787:      only when the corresponding layer type is present.
+</span><span class="">  788:   5. Build &lt;body&gt;: search box, clear-search button, reset button, map &lt;div&gt;.
+</span><span class="">  789:   6. Initialise Leaflet map, tile layer, searchMarkers array.
+</span><span class="">  790:   7. Emit JS for each marker (via clusterGroup when cluster is set).
+</span><span class="">  791:   8. Emit JS for each GeoJSON, heatmap, GPX, and choropleth layer.
+</span><span class="">  792:   9. Attach event listeners: reset-view, clear-search-markers, search-on-Enter.
+</span><span class="">  793:   10. Return ($head, $body).
+</span><span class="">  794: 
+</span><span class="">  795: =cut
+</span><span class="">  796: 
+</span><span class="">  797: sub onload_render
+</span><span class="">  798: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">799 → 809 → 816</span></span>  799: 	my $self = shift;
+</span><span class="">  800: 
+</span><span class="">  801: 	my $height            = $self-&gt;{&#39;height&#39;} || &#39;400px&#39;;
+</span><span class="">  802: 	my $width             = $self-&gt;{&#39;width&#39;}  || &#39;600px&#39;;
+</span><span class="">  803: 	my $coordinates       = $self-&gt;{coordinates}        || [];
+</span><span class="">  804: 	my $geojson_layers    = $self-&gt;{geojson}             || [];
+</span><span class="">  805: 	my $heatmap_layers    = $self-&gt;{heatmap_layers}      || [];
+</span><span class="">  806: 	my $gpx_tracks        = $self-&gt;{gpx_tracks}          || [];
+</span><span class="">  807: 	my $choropleth_layers = $self-&gt;{choropleth_layers}   || [];
+</span><span class="">  808: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  809: 	unless(@$coordinates || @$geojson_layers || @$heatmap_layers
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  810: 	                     || @$gpx_tracks     || @$choropleth_layers) {
+</span><span class="">  811: 		$self-&gt;{logger}-&gt;error(&#39;No map data provided&#39;) if $self-&gt;{logger};
+</span><span class="">  812: 		croak &#39;No map data provided&#39;;
+</span><span class="">  813: 	}
+</span><span class="">  814: 
+</span><span class="">  815: 	# Geocode address strings; validate and discard bad numeric pairs.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">816 → 817 → 829</span></span>  816: 	my @valid_coordinates;
+</span><span class="">  817: 	for my $coord (@$coordinates) {
+</span><span class="">  818: 		my ($lat, $lon, $label, $icon_url) = @$coord;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  819: 		if(!defined $lat || !defined $lon) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  820: 			($lat, $lon) = $self-&gt;_fetch_coordinates($label);
+</span><span class="">  821: 		} else {
+</span><span class="">  822: 			next unless _validate($lat, $lon);
+</span><span class="">  823: 		}
+</span><span class="">  824: 		push @valid_coordinates, [$lat, $lon, $label, $icon_url]
+</span><span class="">  825: 			if defined($lat) &amp;&amp; defined($lon);
+</span><span class="">  826: 	}
+</span><span class="">  827: 
+</span><span class="">  828: 	# Determine map centre: caller-set wins; else compute from marker bounds.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">829 → 830 → 847</span></span>  829: 	my ($center_lat, $center_lon);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  830: 	if($self-&gt;{&#39;center&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  831: 		($center_lat, $center_lon) = @{$self-&gt;{&#39;center&#39;}};
+</span><span class="">  832: 	} elsif(@valid_coordinates) {
+</span><span class="">  833: 		my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+</span><span class="">  834: 		for my $c (@valid_coordinates) {
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  835: 			$min_lat = $c-&gt;[0] if $c-&gt;[0] &lt; $min_lat;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  836: 			$max_lat = $c-&gt;[0] if $c-&gt;[0] &gt; $max_lat;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  837: 			$min_lon = $c-&gt;[1] if $c-&gt;[1] &lt; $min_lon;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  838: 			$max_lon = $c-&gt;[1] if $c-&gt;[1] &gt; $max_lon;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  839: 		}
+</span><span class="">  840: 		$center_lat = ($min_lat + $max_lat) / 2;
+</span><span class="">  841: 		$center_lon = ($min_lon + $max_lon) / 2;
+</span><span class="">  842: 	} else {
+</span><span class="">  843: 		croak &#39;center() must be called when no point markers are provided&#39;;
+</span><span class="">  844: 	}
+</span><span class="">  845: 
+</span><span class="">  846: 	# --- &lt;head&gt; ---
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">847 → 852 → 859</span></span>  847: 	my $head = qq{
+</span><span class="">  848: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{css_url}&quot; /&gt;
+</span><span class="">  849: 		&lt;script src=&quot;$self-&gt;{js_url}&quot;&gt;&lt;/script&gt;
+</span><span class="">  850: 	};
+</span><span class="">  851: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  852: 	if($self-&gt;{cluster}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  853: 		$head .= qq{
+</span><span class="">  854: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{cluster_css_url}&quot; /&gt;
+</span><span class="">  855: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{cluster_default_css_url}&quot; /&gt;
+</span><span class="">  856: 		&lt;script src=&quot;$self-&gt;{cluster_js_url}&quot;&gt;&lt;/script&gt;
+</span><span class="">  857: 		};
+</span><span class="">  858: 	}
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">859 → 886 → 915</span></span>  859: 	$head .= qq{\t\t&lt;script src=&quot;$self-&gt;{heatmap_js_url}&quot;&gt;&lt;/script&gt;\n} if @$heatmap_layers;
+</span><span class="">  860: 	$head .= qq{\t\t&lt;script src=&quot;$self-&gt;{gpx_js_url}&quot;&gt;&lt;/script&gt;\n}     if @$gpx_tracks;
+</span><span class="">  861: 
+</span><span class="">  862: 	$head .= qq{
+</span><span class="">  863: 		&lt;style&gt;
+</span><span class="">  864: 			#map { width: $width; height: $height; }
+</span><span class="">  865: 			#search-box { margin: 10px; padding: 5px; }
+</span><span class="">  866: 			#reset-button, #clear-search-button { margin: 10px; padding: 5px; cursor: pointer; }
+</span><span class="">  867: 		&lt;/style&gt;
+</span><span class="">  868: 	};
 </span><span class="">  869: 
-</span><span class="">  870: # _fetch_coordinates: Resolve a place-name string to a (lat, lon) pair.
-</span><span class="">  871: # Purpose: Centralise all geocoding logic &acirc;&#128;&#148; try the injected geocoder first,
-</span><span class="">  872: #          fall back to a direct Nominatim HTTP call with caching and rate-limiting.
-</span><span class="">  873: # Entry:   $self, $location (non-empty string).
-</span><span class="">  874: # Exit:    ($lat, $lon) strings on success; (undef, undef) on failure.
-</span><span class="">  875: # Side Effects: May sleep to honour min_interval; writes to $self-&gt;{cache}.
-</span><span class="">  876: sub _fetch_coordinates
-</span><span class="">  877: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">878 → 883 → 905</span></span>  878: 	my ($self, $location) = @_;
-</span><span class="">  879: 
-</span><span class="">  880: 	croak &#39;address not given to _fetch_coordinates&#39; unless $location;
+</span><span class="">  870: 	# --- &lt;body&gt; ---
+</span><span class="">  871: 	my $body = qq{
+</span><span class="">  872: 		&lt;input type=&quot;text&quot; id=&quot;search-box&quot; placeholder=&quot;Enter location&quot;&gt;
+</span><span class="">  873: 		&lt;button id=&quot;clear-search-button&quot;&gt;Clear search markers&lt;/button&gt;
+</span><span class="">  874: 		&lt;button id=&quot;reset-button&quot;&gt;Reset Map&lt;/button&gt;
+</span><span class="">  875: 		&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
+</span><span class="">  876: 		&lt;script&gt;
+</span><span class="">  877: 			var map = L.map(&#39;map&#39;).setView([$center_lat, $center_lon], $self-&gt;{zoom});
+</span><span class="">  878: 			L.tileLayer(&#39;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#39;, {
+</span><span class="">  879: 				attribution: &#39;&amp;copy; OpenStreetMap contributors&#39;
+</span><span class="">  880: 			}).addTo(map);
 </span><span class="">  881: 
-</span><span class="">  882: 	# Prefer an injected geocoder (e.g. Geo::Coder::List) to avoid HTTP.
-</span><span class="">  883: 	if(my $geocoder = $self-&gt;{&#39;geocoder&#39;}) {
-</span><span class="">  884: 		my $rc = $geocoder-&gt;geocode($location);
-</span><span class="">  885: 		return (undef, undef) unless defined $rc;
-</span><span class="">  886: 
-</span><span class="">  887: 		if(blessed($rc) &amp;&amp; $rc-&gt;can(&#39;latitude&#39;)) {
-</span><span class="">  888: 			return ($rc-&gt;latitude(), $rc-&gt;longitude());
-</span><span class="">  889: 		}
-</span><span class="">  890: 		if(ref($rc) eq &#39;HASH&#39;) {
-</span><span class="">  891: 			return ($rc-&gt;{lat}, $rc-&gt;{lon})
-</span><span class="">  892: 				if defined($rc-&gt;{lat}) &amp;&amp; defined($rc-&gt;{lon});
-</span><span class="">  893: 			return ($rc-&gt;{geometry}{location}{lat}, $rc-&gt;{geometry}{location}{lng})
-</span><span class="">  894: 				if defined($rc-&gt;{geometry}{location}{lat});
-</span><span class="">  895: 		}
-</span><span class="">  896: 		# Some geocoders return a flat [lat, lon] arrayref
-</span><span class="">  897: 		return @{$rc} if ref($rc) eq &#39;ARRAY&#39;;
-</span><span class="">  898: 
-</span><span class="">  899: 		# Unrecognised return type &acirc;&#128;&#148; treat as failure
-</span><span class="">  900: 		carp &#39;_fetch_coordinates: unrecognised geocoder result type: &#39; . ref($rc);
-</span><span class="">  901: 		return (undef, undef);
-</span><span class="">  902: 	}
-</span><span class="">  903: 
-</span><span class="">  904: 	# Direct Nominatim path: apply caching and rate-limiting.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">905 → 906 → 911</span></span>  905: 	my $cache_key = &#39;osm:&#39; . uri_escape_utf8($location);
-</span><span class="">  906: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
-</span><span class="">  907: 		return ($cached-&gt;{lat}, $cached-&gt;{lon});
-</span><span class="">  908: 	}
-</span><span class="">  909: 
-</span><span class="">  910: 	# Honour the minimum interval between outbound requests.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">911 → 912 → 916</span></span>  911: 	my $elapsed = time() - $self-&gt;{last_request};
-</span><span class="">  912: 	if($elapsed &lt; $self-&gt;{min_interval}) {
-</span><span class="">  913: 		Time::HiRes::sleep($self-&gt;{min_interval} - $elapsed);
-</span><span class="">  914: 	}
-</span><span class="">  915: 
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">916 → 925 → 934</span></span>  916: 	my $ua = $self-&gt;{&#39;ua&#39;}
-</span><span class="">  917: 		|| LWP::UserAgent-&gt;new(agent =&gt; __PACKAGE__ . &quot;/$VERSION&quot;);
-</span><span class="">  918: 	$ua-&gt;default_header(accept_encoding =&gt; &#39;gzip,deflate&#39;);
-</span><span class="">  919: 	$ua-&gt;env_proxy(1);
-</span><span class="">  920: 
-</span><span class="">  921: 	my $url      = &#39;https://&#39; . $self-&gt;{&#39;host&#39;} . &#39;?format=json&amp;q=&#39; . uri_escape_utf8($location);
-</span><span class="">  922: 	my $response = $ua-&gt;get($url);
-</span><span class="">  923: 	$self-&gt;{&#39;last_request&#39;} = time();
-</span><span class="">  924: 
-</span><span class="">  925: 	if($response-&gt;is_success()) {
-</span><span class="">  926: 		my $data = decode_json($response-&gt;decoded_content());
-</span><span class="">  927: 		$data = $data-&gt;[0] if ref($data) eq &#39;ARRAY&#39;;
-</span><span class="">  928: 		if(ref($data) eq &#39;HASH&#39; &amp;&amp; defined($data-&gt;{lat})) {
-</span><span class="">  929: 			$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $data);
-</span><span class="">  930: 			return ($data-&gt;{lat}, $data-&gt;{lon});
-</span><span class="">  931: 		}
-</span><span class="">  932: 	}
-</span><span class="">  933: 
-</span><span class="">  934: 	return (undef, undef);
-</span><span class="">  935: }
-</span><span class="">  936: 
-</span><span class="">  937: # _validate: Check that a (lat, lon) pair is numeric and within WGS-84 bounds.
-</span><span class="">  938: # Purpose: Single guard point for all coordinate ingestion; emits a carp when
-</span><span class="">  939: #          both values are defined but wrong so the caller can log without dying.
-</span><span class="">  940: # Entry:   ($lat, $lon) &acirc;&#128;&#148; any scalar, including undef.
-</span><span class="">  941: # Exit:    1 if valid, 0 if not.
-</span><span class="">  942: # Side Effects: carp when coordinates are defined but out-of-range/non-numeric.
-</span><span class="">  943: sub _validate
-</span><span class="">  944: {
-</span><span class="">  945: 	my ($lat, $lon) = @_;
-</span><span class="">  946: 
-</span><span class="">  947: 	# Require at least one digit (rejects empty string &acirc;&#128;&#148; unlike \d* which matches &#39;&#39;).
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  948: 	# Leading-decimal notation (e.g. -.5167) is valid per Changes 0.05.
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  949: 	my $numeric = qr/^-?(?:\d+(?:\.\d+)?|\.\d+)$/;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  950: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_950_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_950_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  951: 	my $ok = defined($lat) &amp;&amp; defined($lon)
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  952: 	      &amp;&amp; $lat =~ $numeric &amp;&amp; $lon =~ $numeric
-</span><p> <b> Mutants (Total: 7, Killed: 7, Survived: 0)</b><p><span class="">  953: 	      &amp;&amp; $lat &gt;= $LAT_MIN &amp;&amp; $lat &lt;= $LAT_MAX
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  954: 	      &amp;&amp; $lon &gt;= $LON_MIN &amp;&amp; $lon &lt;= $LON_MAX;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_954_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_954_3: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  955: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  956: 	carp(sprintf &#39;Skipping invalid coordinate: (%s, %s)&#39;,
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  957: 	     $lat // &#39;undef&#39;, $lon // &#39;undef&#39;)
-</span><span class="">  958: 		if !$ok &amp;&amp; defined($lat) &amp;&amp; defined($lon);
-</span><span class="">  959: 
-</span><span class="">  960: 	return $ok ? 1 : 0;
-</span><span class="">  961: }
-</span><span class="">  962: 
-</span><span class="">  963: # _js_string: Escape a Perl string for safe embedding in a JS single-quoted literal.
-</span><span class="">  964: # Purpose: Prevent JS injection via user-supplied labels, URLs, or property names.
-</span><span class="">  965: # Entry:   Any scalar (undef becomes &#39;&#39;).
-</span><span class="">  966: # Exit:    Escaped string safe for insertion between JS single quotes.
-</span><span class="">  967: # Side Effects: None.
-</span><span class="">  968: sub _js_string
-</span><span class="">  969: {
-</span><span class="">  970: 	my $s = shift // &#39;&#39;;
-</span><span class="">  971: 	$s =~ s/\\/\\\\/g;    # escape backslash first to avoid double-escaping
-</span><span class="">  972: 	$s =~ s/&#39;/\\&#39;/g;      # escape our JS string delimiter
-</span><span class="">  973: 	$s =~ s/\r?\n/\\n/g;  # newlines would break the JS string
-</span><span class="">  974: 	$s =~ s|&lt;/|&lt;\\/|g;    # prevent &lt;/script&gt; injection
-</span><span class="">  975: 	return $s;
-</span><span class="">  976: }
-</span><span class="">  977: 
-</span><span class="">  978: =head1 LIMITATIONS
-</span><span class="">  979: 
-</span><span class="">  980: =over 4
-</span><span class="">  981: 
-</span><span class="">  982: =item * B&lt;Per-marker removal&gt;: Markers added via C&lt;add_marker()&gt; cannot yet be
-</span><span class="">  983: removed individually by clicking them.  The &quot;Clear search markers&quot; button only
-</span><span class="">  984: removes markers added by the in-page Nominatim search box.
-</span><span class="">  985: 
-</span><span class="">  986: =item * B&lt;Clone validation&gt;: The clone path (C&lt;&lt; $obj-&gt;new(%overrides) &gt;&gt;)
-</span><span class="">  987: bypasses the Params::Validate::Strict schema so subclasses and internal callers
-</span><span class="">  988: can merge arbitrary state.  Callers are responsible for passing valid overrides.
-</span><span class="">  989: 
-</span><span class="">  990: =item * B&lt;Config-file params unvalidated&gt;: Keys injected by
-</span><span class="">  991: L&lt;Object::Configure&gt; from a config file are not re-run through the schema, so
-</span><span class="">  992: a malformed config file can introduce invalid types at runtime.
-</span><span class="">  993: 
-</span><span class="">  994: =item * B&lt;Private-method encapsulation&gt;: C&lt;_fetch_coordinates&gt;, C&lt;_validate&gt;,
-</span><span class="">  995: and C&lt;_js_string&gt; are named with a leading underscore by convention only.
-</span><span class="">  996: Using L&lt;Sub::Private&gt; in C&lt;enforce&gt; mode would make the contract explicit, but
-</span><span class="">  997: that module is not yet listed as a dependency to avoid breaking white-box tests
-</span><span class="">  998: in C&lt;t/mock.t&gt;.
-</span><span class="">  999: 
-</span><span class=""> 1000: =item * B&lt;Routing&gt;: Turn-by-turn routing (Leaflet Routing Machine / OSRM) is
-</span><span class=""> 1001: explicitly out of scope for this module and will not be added here.
-</span><span class=""> 1002: 
-</span><span class=""> 1003: =back
-</span><span class=""> 1004: 
-</span><span class=""> 1005: =head1 AUTHOR
-</span><span class=""> 1006: 
-</span><span class=""> 1007: Nigel Horne, C&lt;&lt; &lt;njh at nigelhorne.com&gt; &gt;&gt;
-</span><span class=""> 1008: 
-</span><span class=""> 1009: =head1 BUGS
+</span><span class="">  882: 			var searchMarkers = [];
+</span><span class="">  883: 	};
+</span><span class="">  884: 
+</span><span class="">  885: 	# Point markers &acirc;&#128;&#148; optionally grouped into a cluster layer.
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  886: 	if(@valid_coordinates) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  887: 		$body .= &quot;\t\t\tvar clusterGroup = L.markerClusterGroup();\n&quot; if $self-&gt;{cluster};
+</span><span class="">  888: 
+</span><span class="">  889: 		for my $coord (@valid_coordinates) {
+</span><span class="">  890: 			my ($lat, $lon, $label, $icon_url) = @$coord;
+</span><span class="">  891: 			my $js_label = _js_string($label);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  892: 			if($icon_url) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  893: 				my $js_icon = _js_string($icon_url);
+</span><span class="">  894: 				my $add_cmd = $self-&gt;{cluster}
+</span><span class="">  895: 					? &#39;clusterGroup.addLayer(m);&#39;
+</span><span class="">  896: 					: &#39;m.addTo(map);&#39;;
+</span><span class="">  897: 				$body .= qq{
+</span><span class="">  898: 			(function() {
+</span><span class="">  899: 				var icon = L.icon({ iconUrl: &#39;$js_icon&#39;, iconAnchor: [16,32], popupAnchor: [0,-32] });
+</span><span class="">  900: 				var m = L.marker([$lat, $lon], { icon: icon }).bindPopup(&#39;$js_label&#39;);
+</span><span class="">  901: 				$add_cmd
+</span><span class="">  902: 			})();
+</span><span class="">  903: 				};
+</span><span class="">  904: 			} elsif($self-&gt;{cluster}) {
+</span><span class="">  905: 				$body .= &quot;\t\t\tclusterGroup.addLayer(L.marker([$lat, $lon]).bindPopup(&#39;$js_label&#39;));\n&quot;;
+</span><span class="">  906: 			} else {
+</span><span class="">  907: 				$body .= &quot;\t\t\tL.marker([$lat, $lon]).addTo(map).bindPopup(&#39;$js_label&#39;);\n&quot;;
+</span><span class="">  908: 			}
+</span><span class="">  909: 		}
+</span><span class="">  910: 
+</span><span class="">  911: 		$body .= &quot;\t\t\tmap.addLayer(clusterGroup);\n&quot; if $self-&gt;{cluster};
+</span><span class="">  912: 	}
+</span><span class="">  913: 
+</span><span class="">  914: 	# GeoJSON layers.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">915 → 915 → 931</span></span>  915: 	for my $layer (@$geojson_layers) {
+</span><span class="">  916: 		my $json     = encode_json($layer-&gt;{data});
+</span><span class="">  917: 		my $opts     = $layer-&gt;{opts} || {};
+</span><span class="">  918: 		my $style_js = &#39;&#39;;
+</span><span class="">  919: 		my $popup_js = &#39;&#39;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  920: 		if(my $style = $opts-&gt;{style}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  921: 			$style_js = &#39;style: &#39; . encode_json($style) . &#39;,&#39;;
+</span><span class="">  922: 		}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  923: 		if(my $prop = $opts-&gt;{popup}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  924: 			my $js_prop = _js_string($prop);
+</span><span class="">  925: 			$popup_js = &quot;onEachFeature: function(f,l){ if(f.properties &amp;&amp; f.properties[&#39;$js_prop&#39;]){ l.bindPopup(String(f.properties[&#39;$js_prop&#39;])); } },&quot;;
+</span><span class="">  926: 		}
+</span><span class="">  927: 		$body .= &quot;\t\t\tL.geoJSON($json, { $style_js $popup_js }).addTo(map);\n&quot;;
+</span><span class="">  928: 	}
+</span><span class="">  929: 
+</span><span class="">  930: 	# Heatmap layers.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">931 → 931 → 940</span></span>  931: 	for my $layer (@$heatmap_layers) {
+</span><span class="">  932: 		my $pts    = encode_json($layer-&gt;{points});
+</span><span class="">  933: 		my $opts   = $layer-&gt;{opts} || {};
+</span><span class="">  934: 		my $radius = $opts-&gt;{radius} || 25;
+</span><span class="">  935: 		my $blur   = $opts-&gt;{blur}   || 15;
+</span><span class="">  936: 		$body .= &quot;\t\t\tL.heatLayer($pts, { radius: $radius, blur: $blur }).addTo(map);\n&quot;;
+</span><span class="">  937: 	}
+</span><span class="">  938: 
+</span><span class="">  939: 	# GPX tracks &acirc;&#128;&#148; browser fetches the file; fitBounds called on load.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">940 → 940 → 946</span></span>  940: 	for my $url (@$gpx_tracks) {
+</span><span class="">  941: 		my $js_url = _js_string($url);
+</span><span class="">  942: 		$body .= &quot;\t\t\tnew L.GPX(&#39;$js_url&#39;, { async: true }).on(&#39;loaded&#39;, function(e){ map.fitBounds(e.target.getBounds()); }).addTo(map);\n&quot;;
+</span><span class="">  943: 	}
+</span><span class="">  944: 
+</span><span class="">  945: 	# Choropleth layers &acirc;&#128;&#148; colours are pre-baked; no browser-side scale maths.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">946 → 946 → 974</span></span>  946: 	for my $layer (@$choropleth_layers) {
+</span><span class="">  947: 		my $fc_json     = encode_json({ type =&gt; &#39;FeatureCollection&#39;, features =&gt; $layer-&gt;{features} });
+</span><span class="">  948: 		my $colors_json = encode_json($layer-&gt;{colors});
+</span><span class="">  949: 		my $values_json = encode_json($layer-&gt;{values});
+</span><span class="">  950: 		my $js_key      = _js_string($layer-&gt;{key});
+</span><span class="">  951: 		$body .= qq{
+</span><span class="">  952: 			(function() {
+</span><span class="">  953: 				var choroplethColors = $colors_json;
+</span><span class="">  954: 				var choroplethValues = $values_json;
+</span><span class="">  955: 				L.geoJSON($fc_json, {
+</span><span class="">  956: 					style: function(f) {
+</span><span class="">  957: 						var k = f.properties &amp;&amp; f.properties[&#39;$js_key&#39;];
+</span><span class="">  958: 						return { fillColor: choroplethColors[k] || &#39;#cccccc&#39;,
+</span><span class="">  959: 						         weight: 2, opacity: 1, color: &#39;white&#39;,
+</span><span class="">  960: 						         dashArray: &#39;3&#39;, fillOpacity: 0.7 };
+</span><span class="">  961: 					},
+</span><span class="">  962: 					onEachFeature: function(f, l) {
+</span><span class="">  963: 						var k = f.properties &amp;&amp; f.properties[&#39;$js_key&#39;];
+</span><span class="">  964: 						if(k &amp;&amp; choroplethValues[k] !== undefined) {
+</span><span class="">  965: 							l.bindPopup(k + &#39;: &#39; + choroplethValues[k]);
+</span><span class="">  966: 						}
+</span><span class="">  967: 					}
+</span><span class="">  968: 				}).addTo(map);
+</span><span class="">  969: 			})();
+</span><span class="">  970: 		};
+</span><span class="">  971: 	}
+</span><span class="">  972: 
+</span><span class="">  973: 	# Event handlers.
+</span><span class="">  974: 	$body .= qq{
+</span><span class="">  975: 			document.getElementById(&#39;reset-button&#39;).addEventListener(&#39;click&#39;, function() {
+</span><span class="">  976: 				map.setView([$center_lat, $center_lon], $self-&gt;{zoom});
+</span><span class="">  977: 			});
+</span><span class="">  978: 
+</span><span class="">  979: 			document.getElementById(&#39;clear-search-button&#39;).addEventListener(&#39;click&#39;, function() {
+</span><span class="">  980: 				searchMarkers.forEach(function(m) { map.removeLayer(m); });
+</span><span class="">  981: 				searchMarkers = [];
+</span><span class="">  982: 			});
+</span><span class="">  983: 
+</span><span class="">  984: 			document.getElementById(&#39;search-box&#39;).addEventListener(&#39;keyup&#39;, function(event) {
+</span><span class="">  985: 				if(event.key === &#39;Enter&#39;) {
+</span><span class="">  986: 					var query = event.target.value.trim();
+</span><span class="">  987: 					if(!query) { alert(&#39;Please enter a valid location.&#39;); return; }
+</span><span class="">  988: 					fetch(&#39;https://nominatim.openstreetmap.org/search?format=json&amp;q=&#39; + encodeURIComponent(query))
+</span><span class="">  989: 					.then(function(r) { return r.json(); })
+</span><span class="">  990: 					.then(function(data) {
+</span><span class="">  991: 						if(data.length &gt; 0) {
+</span><span class="">  992: 							var lat = data[0].lat, lon = data[0].lon;
+</span><span class="">  993: 							map.setView([lat, lon], 14);
+</span><span class="">  994: 							searchMarkers.push(L.marker([lat, lon]).addTo(map).bindPopup(query).openPopup());
+</span><span class="">  995: 						} else {
+</span><span class="">  996: 							alert(&#39;No results found. Try a different location.&#39;);
+</span><span class="">  997: 						}
+</span><span class="">  998: 					})
+</span><span class="">  999: 					.catch(function(err) {
+</span><span class=""> 1000: 						console.error(&#39;Search error:&#39;, err);
+</span><span class=""> 1001: 						alert(&#39;Failed to fetch location. Please check your internet connection.&#39;);
+</span><span class=""> 1002: 					});
+</span><span class=""> 1003: 				}
+</span><span class=""> 1004: 			});
+</span><span class=""> 1005: 		&lt;/script&gt;
+</span><span class=""> 1006: 	};
+</span><span class=""> 1007: 
+</span><span class=""> 1008: 	return ($head, $body);
+</span><span class=""> 1009: }
 </span><span class=""> 1010: 
-</span><span class=""> 1011: Please report bugs at L&lt;https://github.com/nigelhorne/HTML-OSM/issues&gt;.
-</span><span class=""> 1012: 
-</span><span class=""> 1013: =head1 SEE ALSO
-</span><span class=""> 1014: 
-</span><span class=""> 1015: =over 4
-</span><span class=""> 1016: 
-</span><span class=""> 1017: =item * L&lt;https://wiki.openstreetmap.org/wiki/API&gt;
-</span><span class=""> 1018: 
-</span><span class=""> 1019: =item * L&lt;HTML::GoogleMaps::V3&gt; - the interface this module mirrors for compatibility.
+</span><span class=""> 1011: # _fetch_coordinates: Resolve a place-name string to a (lat, lon) pair.
+</span><span class=""> 1012: # Purpose: Centralise all geocoding logic &acirc;&#128;&#148; try the injected geocoder first,
+</span><span class=""> 1013: #          fall back to a direct Nominatim HTTP call with caching and rate-limiting.
+</span><span class=""> 1014: # Entry:   $self, $location (non-empty string).
+</span><span class=""> 1015: # Exit:    ($lat, $lon) strings on success; (undef, undef) on failure.
+</span><span class=""> 1016: # Side Effects: May sleep to honour min_interval; writes to $self-&gt;{cache}.
+</span><span class=""> 1017: sub _fetch_coordinates
+</span><span class=""> 1018: {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1019 → 1024 → 1046</span></span> 1019: 	my ($self, $location) = @_;
 </span><span class=""> 1020: 
-</span><span class=""> 1021: =item * L&lt;https://leafletjs.com/&gt;
+</span><span class=""> 1021: 	croak &#39;address not given to _fetch_coordinates&#39; unless $location;
 </span><span class=""> 1022: 
-</span><span class=""> 1023: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
-</span><span class=""> 1024: 
-</span><span class=""> 1025: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/HTML-OSM/coverage/&gt;
-</span><span class=""> 1026: 
-</span><span class=""> 1027: =back
-</span><span class=""> 1028: 
-</span><span class=""> 1029: =head1 SUPPORT
-</span><span class=""> 1030: 
-</span><span class=""> 1031: This module is provided as-is without any warranty.
-</span><span class=""> 1032: 
-</span><span class=""> 1033: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM&gt;
-</span><span class=""> 1034: 
-</span><span class=""> 1035: =head2 TODO
-</span><span class=""> 1036: 
-</span><span class=""> 1037: Allow per-marker removal via clicking on a marker.
-</span><span class=""> 1038: 
-</span><span class=""> 1039: =encoding utf-8
-</span><span class=""> 1040: 
-</span><span class=""> 1041: =head1 FORMAL SPECIFICATION
-</span><span class=""> 1042: 
-</span><span class=""> 1043: =head2 new
+</span><span class=""> 1023: 	# Prefer an injected geocoder (e.g. Geo::Coder::List) to avoid HTTP.
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1024: 	if(my $geocoder = $self-&gt;{&#39;geocoder&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1025: 		my $rc = $geocoder-&gt;geocode($location);
+</span><span class=""> 1026: 		return (undef, undef) unless defined $rc;
+</span><span class=""> 1027: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1028: 		if(blessed($rc) &amp;&amp; $rc-&gt;can(&#39;latitude&#39;)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1029: 			return ($rc-&gt;latitude(), $rc-&gt;longitude());
+</span><span class=""> 1030: 		}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1031: 		if(ref($rc) eq &#39;HASH&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1032: 			return ($rc-&gt;{lat}, $rc-&gt;{lon})
+</span><span class=""> 1033: 				if defined($rc-&gt;{lat}) &amp;&amp; defined($rc-&gt;{lon});
+</span><span class=""> 1034: 			return ($rc-&gt;{geometry}{location}{lat}, $rc-&gt;{geometry}{location}{lng})
+</span><span class=""> 1035: 				if defined($rc-&gt;{geometry}{location}{lat});
+</span><span class=""> 1036: 		}
+</span><span class=""> 1037: 		# Some geocoders return a flat [lat, lon] arrayref
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1038: 		return @{$rc} if ref($rc) eq &#39;ARRAY&#39;;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1039: 
+</span><span class=""> 1040: 		# Unrecognised return type &acirc;&#128;&#148; treat as failure
+</span><span class=""> 1041: 		carp &#39;_fetch_coordinates: unrecognised geocoder result type: &#39; . ref($rc);
+</span><span class=""> 1042: 		return (undef, undef);
+</span><span class=""> 1043: 	}
 </span><span class=""> 1044: 
-</span><span class=""> 1045:   HTML_OSM
-</span><span class=""> 1046:     coordinates     : iseq (&acirc;&#132;&#157; x &acirc;&#132;&#157; x S x S)
-</span><span class=""> 1047:     zoom            : Z
-</span><span class=""> 1048:     cluster         : B
-</span><span class=""> 1049:   ----------------------------------------
-</span><span class=""> 1050:     ZOOM_MIN &lt;= zoom &lt;= ZOOM_MAX
-</span><span class=""> 1051: 
-</span><span class=""> 1052:   new &acirc;&#137;&#153;
-</span><span class=""> 1053:     params? : Params
-</span><span class=""> 1054:     osm!    : HTML_OSM
-</span><span class=""> 1055:   ----------------------------------------
-</span><span class=""> 1056:     osm!.zoom     = params?.zoom     &acirc;&#136;&uml; 12
-</span><span class=""> 1057:     osm!.cluster  = params?.cluster  &acirc;&#136;&uml; false
-</span><span class=""> 1058: 
-</span><span class=""> 1059: =head2 add_marker
-</span><span class=""> 1060: 
-</span><span class=""> 1061:   AddMarker
-</span><span class=""> 1062:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1063:     point? : (&acirc;&#132;&#157; x &acirc;&#132;&#157;) &acirc;&#136;&ordf; S &acirc;&#136;&ordf; GeoObject
-</span><span class=""> 1064:     result! : {0, 1}
-</span><span class=""> 1065:   -----------------------------------------
-</span><span class=""> 1066:     result! = 1 &acirc;&#159;&ordm; point? resolves to (lat, lon) &acirc;&#136;&#136; ValidCoord
-</span><span class=""> 1067:     result! = 1 &acirc;&#159;&sup1; coordinates&#39; = coordinates &acirc;&#140;&cent; &acirc;&#159;&uml;(lat, lon, label, icon)&acirc;&#159;&copy;
-</span><span class=""> 1068: 
-</span><span class=""> 1069: =head2 add_geojson
-</span><span class=""> 1070: 
-</span><span class=""> 1071:   AddGeoJSON
-</span><span class=""> 1072:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1073:     data?  : GeoJSONStruct &acirc;&#136;&ordf; S
-</span><span class=""> 1074:     style? : StyleMap &acirc;&#136;&ordf; {&acirc;&#136;&#133;}
-</span><span class=""> 1075:     popup? : S &acirc;&#136;&ordf; {&acirc;&#136;&#133;}
-</span><span class=""> 1076:   -----------------------------------------
-</span><span class=""> 1077:     geojson&#39; = geojson &acirc;&#140;&cent; &acirc;&#159;&uml;{data, style, popup}&acirc;&#159;&copy;
-</span><span class=""> 1078: 
-</span><span class=""> 1079: =head2 add_heatmap
-</span><span class=""> 1080: 
-</span><span class=""> 1081:   AddHeatmap
-</span><span class=""> 1082:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1083:     points? : iseq (&acirc;&#132;&#157; x &acirc;&#132;&#157; x [0,1])
-</span><span class=""> 1084:   -----------------------------------------
-</span><span class=""> 1085:     heatmap_layers&#39; = heatmap_layers &acirc;&#140;&cent; &acirc;&#159;&uml;{points, radius, blur}&acirc;&#159;&copy;
-</span><span class=""> 1086: 
-</span><span class=""> 1087: =head2 add_gpx
-</span><span class=""> 1088: 
-</span><span class=""> 1089:   AddGPX
-</span><span class=""> 1090:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1091:     url? : S | url? &acirc;&#137;&nbsp; &#39;&#39;
-</span><span class=""> 1092:   -----------------------------------------
-</span><span class=""> 1093:     gpx_tracks&#39; = gpx_tracks &acirc;&#140;&cent; &acirc;&#159;&uml;url?&acirc;&#159;&copy;
-</span><span class=""> 1094: 
-</span><span class=""> 1095: =head2 add_chropleth
-</span><span class=""> 1096: 
-</span><span class=""> 1097:   AddChoropleth
-</span><span class=""> 1098:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1099:     features? : iseq GeoFeature
-</span><span class=""> 1100:     values?   : S --&gt; &acirc;&#132;&#157;
-</span><span class=""> 1101:     key?      : S
-</span><span class=""> 1102:     scale?    : iseq S
-</span><span class=""> 1103:   -----------------------------------------
-</span><span class=""> 1104:     Let min = min(ran values?), max = max(ran values?) &acirc;&#136;&ordf; {min+1}
-</span><span class=""> 1105:     &acirc;&#136;&#128; k &acirc;&#136;&#136; dom values? &acirc;&#128;&cent;
-</span><span class=""> 1106:       color(k) = scale?[floor((values?(k)-min)/(max-min) * (#scale?-1))]
-</span><span class=""> 1107:     choropleth_layers&#39; = choropleth_layers &acirc;&#140;&cent; &acirc;&#159;&uml;{features, values, colors, key}&acirc;&#159;&copy;
-</span><span class=""> 1108: 
-</span><span class=""> 1109: =head2 center
-</span><span class=""> 1110: 
-</span><span class=""> 1111:   Center
-</span><span class=""> 1112:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1113:     point? : (&acirc;&#132;&#157; x &acirc;&#132;&#157;) &acirc;&#136;&ordf; S &acirc;&#136;&ordf; GeoObject
-</span><span class=""> 1114:     result! : {0, 1}
-</span><span class=""> 1115:   -----------------------------------------
-</span><span class=""> 1116:     result! = 1 &acirc;&#159;&ordm; point? resolves to (lat, lon) &acirc;&#136;&#136; ValidCoord
-</span><span class=""> 1117:     result! = 1 &acirc;&#159;&sup1; center&#39; = (lat, lon)
+</span><span class=""> 1045: 	# Direct Nominatim path: apply caching and rate-limiting.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1046 → 1047 → 1052</span></span> 1046: 	my $cache_key = &#39;osm:&#39; . uri_escape_utf8($location);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1047: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1048: 		return ($cached-&gt;{lat}, $cached-&gt;{lon});
+</span><span class=""> 1049: 	}
+</span><span class=""> 1050: 
+</span><span class=""> 1051: 	# Honour the minimum interval between outbound requests.
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1052 → 1053 → 1057</span></span> 1052: 	my $elapsed = time() - $self-&gt;{last_request};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1053: 	if($elapsed &lt; $self-&gt;{min_interval}) {
+</span><p> <b> Mutants (Total: 4, Killed: 4, Survived: 0)</b><p><span class=""> 1054: 		Time::HiRes::sleep($self-&gt;{min_interval} - $elapsed);
+</span><span class=""> 1055: 	}
+</span><span class=""> 1056: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1057 → 1066 → 1075</span></span> 1057: 	my $ua = $self-&gt;{&#39;ua&#39;}
+</span><span class=""> 1058: 		|| LWP::UserAgent-&gt;new(agent =&gt; __PACKAGE__ . &quot;/$VERSION&quot;);
+</span><span class=""> 1059: 	$ua-&gt;default_header(accept_encoding =&gt; &#39;gzip,deflate&#39;);
+</span><span class=""> 1060: 	$ua-&gt;env_proxy(1);
+</span><span class=""> 1061: 
+</span><span class=""> 1062: 	my $url      = &#39;https://&#39; . $self-&gt;{&#39;host&#39;} . &#39;?format=json&amp;q=&#39; . uri_escape_utf8($location);
+</span><span class=""> 1063: 	my $response = $ua-&gt;get($url);
+</span><span class=""> 1064: 	$self-&gt;{&#39;last_request&#39;} = time();
+</span><span class=""> 1065: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1066: 	if($response-&gt;is_success()) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1067: 		my $data = decode_json($response-&gt;decoded_content());
+</span><span class=""> 1068: 		$data = $data-&gt;[0] if ref($data) eq &#39;ARRAY&#39;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1069: 		if(ref($data) eq &#39;HASH&#39; &amp;&amp; defined($data-&gt;{lat})) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1070: 			$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $data);
+</span><span class=""> 1071: 			return ($data-&gt;{lat}, $data-&gt;{lon});
+</span><span class=""> 1072: 		}
+</span><span class=""> 1073: 	}
+</span><span class=""> 1074: 
+</span><span class=""> 1075: 	return (undef, undef);
+</span><span class=""> 1076: }
+</span><span class=""> 1077: 
+</span><span class=""> 1078: # _validate: Check that a (lat, lon) pair is numeric and within WGS-84 bounds.
+</span><span class=""> 1079: # Purpose: Single guard point for all coordinate ingestion; emits a carp when
+</span><span class=""> 1080: #          both values are defined but wrong so the caller can log without dying.
+</span><span class=""> 1081: # Entry:   ($lat, $lon) &acirc;&#128;&#148; any scalar, including undef.
+</span><span class=""> 1082: # Exit:    1 if valid, 0 if not.
+</span><span class=""> 1083: # Side Effects: carp when coordinates are defined but out-of-range/non-numeric.
+</span><span class=""> 1084: sub _validate
+</span><span class=""> 1085: {
+</span><span class=""> 1086: 	my ($lat, $lon) = @_;
+</span><span class=""> 1087: 
+</span><span class=""> 1088: 	# Require at least one digit (rejects empty string &acirc;&#128;&#148; unlike \d* which matches &#39;&#39;).
+</span><span class=""> 1089: 	# Leading-decimal notation (e.g. -.5167) is valid per Changes 0.05.
+</span><span class=""> 1090: 	my $numeric = qr/^-?(?:\d+(?:\.\d+)?|\.\d+)$/;
+</span><span class=""> 1091: 
+</span><span class=""> 1092: 	my $ok = defined($lat) &amp;&amp; defined($lon)
+</span><span class=""> 1093: 	      &amp;&amp; $lat =~ $numeric &amp;&amp; $lon =~ $numeric
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1094: 	      &amp;&amp; $lat &gt;= $LAT_MIN &amp;&amp; $lat &lt;= $LAT_MAX
+</span><p> <b> Mutants (Total: 6, Killed: 6, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1095: 	      &amp;&amp; $lon &gt;= $LON_MIN &amp;&amp; $lon &lt;= $LON_MAX;
+</span><p> <b> Mutants (Total: 6, Killed: 6, Survived: 0)</b><p><span class=""> 1096: 
+</span><span class=""> 1097: 	carp(sprintf &#39;Skipping invalid coordinate: (%s, %s)&#39;,
+</span><span class=""> 1098: 	     $lat // &#39;undef&#39;, $lon // &#39;undef&#39;)
+</span><span class=""> 1099: 		if !$ok &amp;&amp; defined($lat) &amp;&amp; defined($lon);
+</span><span class=""> 1100: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1101: 	return $ok ? 1 : 0;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1102: }
+</span><span class=""> 1103: 
+</span><span class=""> 1104: # _js_string: Escape a Perl string for safe embedding in a JS single-quoted literal.
+</span><span class=""> 1105: # Purpose: Prevent JS injection via user-supplied labels, URLs, or property names.
+</span><span class=""> 1106: # Entry:   Any scalar (undef becomes &#39;&#39;).
+</span><span class=""> 1107: # Exit:    Escaped string safe for insertion between JS single quotes.
+</span><span class=""> 1108: # Side Effects: None.
+</span><span class=""> 1109: sub _js_string
+</span><span class=""> 1110: {
+</span><span class=""> 1111: 	my $s = shift // &#39;&#39;;
+</span><span class=""> 1112: 	$s =~ s/\\/\\\\/g;    # escape backslash first to avoid double-escaping
+</span><span class=""> 1113: 	$s =~ s/&#39;/\\&#39;/g;      # escape our JS string delimiter
+</span><span class=""> 1114: 	$s =~ s/\r?\n/\\n/g;  # newlines would break the JS string
+</span><span class=""> 1115: 	$s =~ s|&lt;/|&lt;\\/|g;    # prevent &lt;/script&gt; injection
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1116: 	return $s;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1117: }
 </span><span class=""> 1118: 
-</span><span class=""> 1119: =head2 zoom
+</span><span class=""> 1119: =head1 LIMITATIONS
 </span><span class=""> 1120: 
-</span><span class=""> 1121:   Zoom
-</span><span class=""> 1122:     &Icirc;&#148;HTML_OSM
-</span><span class=""> 1123:     zoom? : Z &acirc;&#136;&ordf; {&acirc;&#136;&#133;}
-</span><span class=""> 1124:     zoom! : Z
-</span><span class=""> 1125:   -----------------------------------------
-</span><span class=""> 1126:     zoom? &acirc;&#137;&nbsp; &acirc;&#136;&#133; &acirc;&#159;&sup1; ZOOM_MIN &lt;= zoom? &lt;= ZOOM_MAX
-</span><span class=""> 1127:     zoom! = (zoom? &acirc;&#137;&nbsp; &acirc;&#136;&#133; &acirc;&#136;&sect; zoom&#39; = zoom?) &acirc;&#136;&uml; zoom
-</span><span class=""> 1128: 
-</span><span class=""> 1129: =head2 onload_render
+</span><span class=""> 1121: =over 4
+</span><span class=""> 1122: 
+</span><span class=""> 1123: =item * B&lt;Per-marker removal&gt;: Markers added via C&lt;add_marker()&gt; cannot yet be
+</span><span class=""> 1124: removed individually by clicking them.  The &quot;Clear search markers&quot; button only
+</span><span class=""> 1125: removes markers added by the in-page Nominatim search box.
+</span><span class=""> 1126: 
+</span><span class=""> 1127: =item * B&lt;Clone validation&gt;: The clone path (C&lt;&lt; $obj-&gt;new(%overrides) &gt;&gt;)
+</span><span class=""> 1128: bypasses the Params::Validate::Strict schema so subclasses and internal callers
+</span><span class=""> 1129: can merge arbitrary state.  Callers are responsible for passing valid overrides.
 </span><span class=""> 1130: 
-</span><span class=""> 1131:   OnloadRender
-</span><span class=""> 1132:     HTML_OSM
-</span><span class=""> 1133:     head! : S
-</span><span class=""> 1134:     body! : S
-</span><span class=""> 1135:   -----------------------------------------
-</span><span class=""> 1136:     (#coordinates + #geojson + #heatmap_layers + #gpx_tracks + #choropleth_layers) &gt; 0
-</span><span class=""> 1137:     center &acirc;&#137;&nbsp; &acirc;&#136;&#133;  &acirc;&#136;&uml;  &acirc;&#136;&#131; valid &acirc;&#136;&#136; coordinates &acirc;&#128;&cent; valid &acirc;&#136;&#136; ValidCoord
-</span><span class=""> 1138: 
-</span><span class=""> 1139: =head1 LICENSE AND COPYRIGHT
+</span><span class=""> 1131: =item * B&lt;Config-file params unvalidated&gt;: Keys injected by
+</span><span class=""> 1132: L&lt;Object::Configure&gt; from a config file are not re-run through the schema, so
+</span><span class=""> 1133: a malformed config file can introduce invalid types at runtime.
+</span><span class=""> 1134: 
+</span><span class=""> 1135: =item * B&lt;Private-method encapsulation&gt;: C&lt;_fetch_coordinates&gt;, C&lt;_validate&gt;,
+</span><span class=""> 1136: and C&lt;_js_string&gt; are named with a leading underscore by convention only.
+</span><span class=""> 1137: Using L&lt;Sub::Private&gt; in C&lt;enforce&gt; mode would make the contract explicit, but
+</span><span class=""> 1138: that module is not yet listed as a dependency to avoid breaking white-box tests
+</span><span class=""> 1139: in C&lt;t/mock.t&gt;.
 </span><span class=""> 1140: 
-</span><span class=""> 1141: Copyright 2025-2026 Nigel Horne.
-</span><span class=""> 1142: 
-</span><span class=""> 1143: This program is released under the following licence: GPL2
-</span><span class=""> 1144: If you use it,
-</span><span class=""> 1145: please let me know.
-</span><span class=""> 1146: 
-</span><span class=""> 1147: =cut
-</span><span class=""> 1148: 
-</span><span class=""> 1149: 1;
-</span><span class=""> 1150: 
-</span><span class=""> 1151: __END__
+</span><span class=""> 1141: =item * B&lt;Routing&gt;: Turn-by-turn routing (Leaflet Routing Machine / OSRM) is
+</span><span class=""> 1142: explicitly out of scope for this module and will not be added here.
+</span><span class=""> 1143: 
+</span><span class=""> 1144: =back
+</span><span class=""> 1145: 
+</span><span class=""> 1146: =head1 AUTHOR
+</span><span class=""> 1147: 
+</span><span class=""> 1148: Nigel Horne, C&lt;&lt; &lt;njh at nigelhorne.com&gt; &gt;&gt;
+</span><span class=""> 1149: 
+</span><span class=""> 1150: =head1 BUGS
+</span><span class=""> 1151: 
+</span><span class=""> 1152: Please report bugs at L&lt;https://github.com/nigelhorne/HTML-OSM/issues&gt;.
+</span><span class=""> 1153: 
+</span><span class=""> 1154: =head1 SEE ALSO
+</span><span class=""> 1155: 
+</span><span class=""> 1156: =over 4
+</span><span class=""> 1157: 
+</span><span class=""> 1158: =item * L&lt;https://wiki.openstreetmap.org/wiki/API&gt;
+</span><span class=""> 1159: 
+</span><span class=""> 1160: =item * L&lt;HTML::GoogleMaps::V3&gt; - the interface this module mirrors for compatibility.
+</span><span class=""> 1161: 
+</span><span class=""> 1162: =item * L&lt;https://leafletjs.com/&gt;
+</span><span class=""> 1163: 
+</span><span class=""> 1164: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
+</span><span class=""> 1165: 
+</span><span class=""> 1166: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/HTML-OSM/coverage/&gt;
+</span><span class=""> 1167: 
+</span><span class=""> 1168: =back
+</span><span class=""> 1169: 
+</span><span class=""> 1170: =head1 SUPPORT
+</span><span class=""> 1171: 
+</span><span class=""> 1172: This module is provided as-is without any warranty.
+</span><span class=""> 1173: 
+</span><span class=""> 1174: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM&gt;
+</span><span class=""> 1175: 
+</span><span class=""> 1176: =head2 TODO
+</span><span class=""> 1177: 
+</span><span class=""> 1178: Allow per-marker removal via clicking on a marker.
+</span><span class=""> 1179: 
+</span><span class=""> 1180: =encoding utf-8
+</span><span class=""> 1181: 
+</span><span class=""> 1182: =head1 FORMAL SPECIFICATION
+</span><span class=""> 1183: 
+</span><span class=""> 1184: =head2 new
+</span><span class=""> 1185: 
+</span><span class=""> 1186:   HTML_OSM
+</span><span class=""> 1187:     coordinates     : iseq (&acirc;&#132;&#157; x &acirc;&#132;&#157; x S x S)
+</span><span class=""> 1188:     zoom            : Z
+</span><span class=""> 1189:     cluster         : B
+</span><span class=""> 1190:   ----------------------------------------
+</span><span class=""> 1191:     ZOOM_MIN &lt;= zoom &lt;= ZOOM_MAX
+</span><span class=""> 1192: 
+</span><span class=""> 1193:   new &acirc;&#137;&#153;
+</span><span class=""> 1194:     params? : Params
+</span><span class=""> 1195:     osm!    : HTML_OSM
+</span><span class=""> 1196:   ----------------------------------------
+</span><span class=""> 1197:     osm!.zoom     = params?.zoom     &acirc;&#136;&uml; 12
+</span><span class=""> 1198:     osm!.cluster  = params?.cluster  &acirc;&#136;&uml; false
+</span><span class=""> 1199: 
+</span><span class=""> 1200: =head2 add_marker
+</span><span class=""> 1201: 
+</span><span class=""> 1202:   AddMarker
+</span><span class=""> 1203:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1204:     point? : (&acirc;&#132;&#157; x &acirc;&#132;&#157;) &acirc;&#136;&ordf; S &acirc;&#136;&ordf; GeoObject
+</span><span class=""> 1205:     result! : {0, 1}
+</span><span class=""> 1206:   -----------------------------------------
+</span><span class=""> 1207:     result! = 1 &acirc;&#159;&ordm; point? resolves to (lat, lon) &acirc;&#136;&#136; ValidCoord
+</span><span class=""> 1208:     result! = 1 &acirc;&#159;&sup1; coordinates&#39; = coordinates &acirc;&#140;&cent; &acirc;&#159;&uml;(lat, lon, label, icon)&acirc;&#159;&copy;
+</span><span class=""> 1209: 
+</span><span class=""> 1210: =head2 add_geojson
+</span><span class=""> 1211: 
+</span><span class=""> 1212:   AddGeoJSON
+</span><span class=""> 1213:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1214:     data?  : GeoJSONStruct &acirc;&#136;&ordf; S
+</span><span class=""> 1215:     style? : StyleMap &acirc;&#136;&ordf; {&acirc;&#136;&#133;}
+</span><span class=""> 1216:     popup? : S &acirc;&#136;&ordf; {&acirc;&#136;&#133;}
+</span><span class=""> 1217:   -----------------------------------------
+</span><span class=""> 1218:     geojson&#39; = geojson &acirc;&#140;&cent; &acirc;&#159;&uml;{data, style, popup}&acirc;&#159;&copy;
+</span><span class=""> 1219: 
+</span><span class=""> 1220: =head2 add_heatmap
+</span><span class=""> 1221: 
+</span><span class=""> 1222:   AddHeatmap
+</span><span class=""> 1223:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1224:     points? : iseq (&acirc;&#132;&#157; x &acirc;&#132;&#157; x [0,1])
+</span><span class=""> 1225:   -----------------------------------------
+</span><span class=""> 1226:     heatmap_layers&#39; = heatmap_layers &acirc;&#140;&cent; &acirc;&#159;&uml;{points, radius, blur}&acirc;&#159;&copy;
+</span><span class=""> 1227: 
+</span><span class=""> 1228: =head2 add_gpx
+</span><span class=""> 1229: 
+</span><span class=""> 1230:   AddGPX
+</span><span class=""> 1231:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1232:     url? : S | url? &acirc;&#137;&nbsp; &#39;&#39;
+</span><span class=""> 1233:   -----------------------------------------
+</span><span class=""> 1234:     gpx_tracks&#39; = gpx_tracks &acirc;&#140;&cent; &acirc;&#159;&uml;url?&acirc;&#159;&copy;
+</span><span class=""> 1235: 
+</span><span class=""> 1236: =head2 add_chropleth
+</span><span class=""> 1237: 
+</span><span class=""> 1238:   AddChoropleth
+</span><span class=""> 1239:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1240:     features? : iseq GeoFeature
+</span><span class=""> 1241:     values?   : S --&gt; &acirc;&#132;&#157;
+</span><span class=""> 1242:     key?      : S
+</span><span class=""> 1243:     scale?    : iseq S
+</span><span class=""> 1244:   -----------------------------------------
+</span><span class=""> 1245:     Let min = min(ran values?), max = max(ran values?) &acirc;&#136;&ordf; {min+1}
+</span><span class=""> 1246:     &acirc;&#136;&#128; k &acirc;&#136;&#136; dom values? &acirc;&#128;&cent;
+</span><span class=""> 1247:       color(k) = scale?[floor((values?(k)-min)/(max-min) * (#scale?-1))]
+</span><span class=""> 1248:     choropleth_layers&#39; = choropleth_layers &acirc;&#140;&cent; &acirc;&#159;&uml;{features, values, colors, key}&acirc;&#159;&copy;
+</span><span class=""> 1249: 
+</span><span class=""> 1250: =head2 center
+</span><span class=""> 1251: 
+</span><span class=""> 1252:   Center
+</span><span class=""> 1253:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1254:     point? : (&acirc;&#132;&#157; x &acirc;&#132;&#157;) &acirc;&#136;&ordf; S &acirc;&#136;&ordf; GeoObject
+</span><span class=""> 1255:     result! : {0, 1}
+</span><span class=""> 1256:   -----------------------------------------
+</span><span class=""> 1257:     result! = 1 &acirc;&#159;&ordm; point? resolves to (lat, lon) &acirc;&#136;&#136; ValidCoord
+</span><span class=""> 1258:     result! = 1 &acirc;&#159;&sup1; center&#39; = (lat, lon)
+</span><span class=""> 1259: 
+</span><span class=""> 1260: =head2 zoom
+</span><span class=""> 1261: 
+</span><span class=""> 1262:   Zoom
+</span><span class=""> 1263:     &Icirc;&#148;HTML_OSM
+</span><span class=""> 1264:     zoom? : Z &acirc;&#136;&ordf; {&acirc;&#136;&#133;}
+</span><span class=""> 1265:     zoom! : Z
+</span><span class=""> 1266:   -----------------------------------------
+</span><span class=""> 1267:     zoom? &acirc;&#137;&nbsp; &acirc;&#136;&#133; &acirc;&#159;&sup1; ZOOM_MIN &lt;= zoom? &lt;= ZOOM_MAX
+</span><span class=""> 1268:     zoom! = (zoom? &acirc;&#137;&nbsp; &acirc;&#136;&#133; &acirc;&#136;&sect; zoom&#39; = zoom?) &acirc;&#136;&uml; zoom
+</span><span class=""> 1269: 
+</span><span class=""> 1270: =head2 onload_render
+</span><span class=""> 1271: 
+</span><span class=""> 1272:   OnloadRender
+</span><span class=""> 1273:     HTML_OSM
+</span><span class=""> 1274:     head! : S
+</span><span class=""> 1275:     body! : S
+</span><span class=""> 1276:   -----------------------------------------
+</span><span class=""> 1277:     (#coordinates + #geojson + #heatmap_layers + #gpx_tracks + #choropleth_layers) &gt; 0
+</span><span class=""> 1278:     center &acirc;&#137;&nbsp; &acirc;&#136;&#133;  &acirc;&#136;&uml;  &acirc;&#136;&#131; valid &acirc;&#136;&#136; coordinates &acirc;&#128;&cent; valid &acirc;&#136;&#136; ValidCoord
+</span><span class=""> 1279: 
+</span><span class=""> 1280: =head1 LICENSE AND COPYRIGHT
+</span><span class=""> 1281: 
+</span><span class=""> 1282: Copyright 2025-2026 Nigel Horne.
+</span><span class=""> 1283: 
+</span><span class=""> 1284: This program is released under the following licence: GPL2
+</span><span class=""> 1285: If you use it,
+</span><span class=""> 1286: please let me know.
+</span><span class=""> 1287: 
+</span><span class=""> 1288: =cut
+</span><span class=""> 1289: 
+</span><span class=""> 1290: 1;
+</span><span class=""> 1291: 
+</span><span class=""> 1292: __END__
 </span></pre>
 
 <script>
