@@ -244,9 +244,9 @@ pre details.mutant-details ul {
 <div class="nav"><a href="../../../index.html">Index</a>
 </div><div class='summary'>
 <strong>Structural Coverage (Approximate)</strong><p>
-TER1 (Statement): 36.33%<br>
-TER2 (Branch): 24.29%<br>
-TER3 (LCSAJ): 42.3% (11/26)<br>
+TER1 (Statement): 87.54%<br>
+TER2 (Branch): 62.86%<br>
+TER3 (LCSAJ): 100.0% (26/26)<br>
 Approximate LCSAJ segments: 141<br>
 </div>
 
@@ -699,7 +699,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  360: 			die &#39;add_marker(): what is the type of point?&#39;
 </span><span class="">  361: 		}
 </span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  362: 		return 0 unless(defined($lat) &amp;&amp; defined($lon));
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  363: 		return 0 if(!_validate($lat, $lon));
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  363: 		return 0 if(!_validate($lat, $lon));
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -723,7 +723,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 							</li></ul></details>
 <span class="">  364: 	} else {
 </span><span class="">  365: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  366: 		return 0 unless(defined($lat) &amp;&amp; defined($lon));
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  366: 		return 0 unless(defined($lat) &amp;&amp; defined($lon));
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -778,7 +778,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  397: 
 </span><span class="">  398: sub add_geojson
 </span><span class="">  399: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 400 → 404 → 408</span></span>  400: 	my $self = shift;
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">400 → 404 → 408</span></span>  400: 	my $self = shift;
 </span><span class="">  401: 	my $data = shift;
 </span><span class="">  402: 	my $params = Params::Get::get_params(undef, \@_) || {};
 </span><span class="">  403: 
@@ -945,7 +945,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  495: 
 </span><span class="">  496: sub add_choropleth
 </span><span class="">  497: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 498 → 514 → 520</span></span>  498: 	my $self = shift;
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">498 → 514 → 520</span></span>  498: 	my $self = shift;
 </span><span class="">  499: 	my $features = shift;
 </span><span class="">  500: 	my $values   = shift;
 </span><span class="">  501: 	my $params   = Params::Get::get_params(undef, \@_) || {};
@@ -1058,7 +1058,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  545: 
 </span><span class="">  546: sub center
 </span><span class="">  547: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 548 → 552 → 556</span></span>  548: 	my $self = shift;
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">548 → 552 → 556</span></span>  548: 	my $self = shift;
 </span><span class="">  549: 	my $params = Params::Get::get_params(&#39;point&#39;, \@_);
 </span><span class="">  550: 	my $point = $params-&gt;{&#39;point&#39;};
 </span><span class="">  551: 
@@ -1072,7 +1072,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 <span class="">  553: 		croak(__PACKAGE__, &#39;::center: usage(point =&gt; [ latitude, longitude ])&#39;);
 </span><span class="">  554: 	}
 </span><span class="">  555: 
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 556 → 558 → 580</span></span>  556: 	my ($lat, $lon);
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">556 → 558 → 580</span></span>  556: 	my ($lat, $lon);
 </span><span class="">  557: 
 </span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  558: 	if(ref($params)) {
 </span>
@@ -1088,7 +1088,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 					<ul>
 				<li><b>COND_INV_559_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
 </li></ul></details>
-<span class="survived-2 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch. Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one).">  560: 			if(scalar(@{$point}) == 2) {
+<span class="survived-2 tooltip" data-tooltip="Boundary mutation survived. Add tests around edge values (e.g. min, max, off-by-one). Mutation survived. Add targeted tests to validate this branch.">  560: 			if(scalar(@{$point}) == 2) {
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -1290,7 +1290,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 					<ul>
 				<li><b>COND_INV_660_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
 </li></ul></details>
-<span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  661: 				return $rc;
+<span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  661: 				return $rc;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -1368,7 +1368,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  715: 
 </span><span class="">  716: sub onload_render
 </span><span class="">  717: {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 718 → 729 → 737</span></span>  718: 	my $self = shift;
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">718 → 729 → 737</span></span>  718: 	my $self = shift;
 </span><span class="">  719: 
 </span><span class="">  720: 	my $height = $self-&gt;{&#39;height&#39;} || &#39;400px&#39;;
 </span><span class="">  721: 	my $width  = $self-&gt;{&#39;width&#39;}  || &#39;600px&#39;;
@@ -1399,7 +1399,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  734: 	}
 </span><span class="">  735: 
 </span><span class="">  736: 	# Geocode and validate point markers
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 737 → 738 → 749</span></span>  737: 	my @valid_coordinates;
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">737 → 738 → 749</span></span>  737: 	my @valid_coordinates;
 </span><span class="">  738: 	foreach my $coord (@$coordinates) {
 </span><span class="">  739: 		my ($lat, $lon, $label, $icon_url) = @$coord;
 </span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  740: 		if(!defined $lat || !defined $lon) {
@@ -1417,7 +1417,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  746: 	}
 </span><span class="">  747: 
 </span><span class="">  748: 	# Determine map centre
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 749 → 750 → 768</span></span>  749: 	my ($center_lat, $center_lon);
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">749 → 750 → 768</span></span>  749: 	my ($center_lat, $center_lon);
 </span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  750: 	if($self-&gt;{&#39;center&#39;}) {
 </span>
 					<details class="mutant-details">
@@ -1558,7 +1558,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  765: 	}
 </span><span class="">  766: 
 </span><span class="">  767: 	# --- Head ---
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 768 → 773 → 780</span></span>  768: 	my $head = qq{
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">768 → 773 → 780</span></span>  768: 	my $head = qq{
 </span><span class="">  769: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$self-&gt;{css_url}&quot; /&gt;
 </span><span class="">  770: 		&lt;script src=&quot;$self-&gt;{js_url}&quot;&gt;&lt;/script&gt;
 </span><span class="">  771: 	};
@@ -1576,7 +1576,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  777: 		&lt;script src=&quot;$self-&gt;{cluster_js_url}&quot;&gt;&lt;/script&gt;
 </span><span class="">  778: 		};
 </span><span class="">  779: 	}
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 780 → 780 → 783</span></span>  780: 	if(@$heatmap_layers) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">780 → 780 → 783</span></span>  780: 	if(@$heatmap_layers) {
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
@@ -1585,7 +1585,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </li></ul></details>
 <span class="">  781: 		$head .= qq{\t\t&lt;script src=&quot;$self-&gt;{heatmap_js_url}&quot;&gt;&lt;/script&gt;\n};
 </span><span class="">  782: 	}
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 783 → 783 → 787</span></span>  783: 	if(@$gpx_tracks) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">783 → 783 → 787</span></span>  783: 	if(@$gpx_tracks) {
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
@@ -1595,7 +1595,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 <span class="">  784: 		$head .= qq{\t\t&lt;script src=&quot;$self-&gt;{gpx_js_url}&quot;&gt;&lt;/script&gt;\n};
 </span><span class="">  785: 	}
 </span><span class="">  786: 
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 787 → 811 → 842</span></span>  787: 	$head .= qq{
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">787 → 811 → 842</span></span>  787: 	$head .= qq{
 </span><span class="">  788: 		&lt;style&gt;
 </span><span class="">  789: 			#map { width: $width; height: $height; }
 </span><span class="">  790: 			#search-box { margin: 10px; padding: 5px; }
@@ -1674,7 +1674,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  839: 	}
 </span><span class="">  840: 
 </span><span class="">  841: 	# GeoJSON layers
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 842 → 842 → 859</span></span>  842: 	foreach my $layer (@$geojson_layers) {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">842 → 842 → 859</span></span>  842: 	foreach my $layer (@$geojson_layers) {
 </span><span class="">  843: 		my $json     = encode_json($layer-&gt;{data});
 </span><span class="">  844: 		my $opts     = $layer-&gt;{opts} || {};
 </span><span class="">  845: 		my $style_js = &#39;&#39;;
@@ -1703,7 +1703,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  856: 	}
 </span><span class="">  857: 
 </span><span class="">  858: 	# Heatmap layers
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 859 → 859 → 868</span></span>  859: 	foreach my $layer (@$heatmap_layers) {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">859 → 859 → 868</span></span>  859: 	foreach my $layer (@$heatmap_layers) {
 </span><span class="">  860: 		my $pts    = encode_json($layer-&gt;{points});
 </span><span class="">  861: 		my $opts   = $layer-&gt;{opts} || {};
 </span><span class="">  862: 		my $radius = $opts-&gt;{radius} || 25;
@@ -1712,13 +1712,13 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  865: 	}
 </span><span class="">  866: 
 </span><span class="">  867: 	# GPX tracks
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 868 → 868 → 874</span></span>  868: 	foreach my $url (@$gpx_tracks) {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">868 → 868 → 874</span></span>  868: 	foreach my $url (@$gpx_tracks) {
 </span><span class="">  869: 		$url =~ s/&#39;/\\&#39;/g;
 </span><span class="">  870: 		$body .= qq{\t\t\tnew L.GPX(&#39;$url&#39;, { async: true }).on(&#39;loaded&#39;, function(e){ map.fitBounds(e.target.getBounds()); }).addTo(map);\n};
 </span><span class="">  871: 	}
 </span><span class="">  872: 
 </span><span class="">  873: 	# Choropleth layers
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot-uncovered">●</span><span class="lcsaj-tip-text">[NOT COVERED] 874 → 874 → 899</span></span>  874: 	foreach my $layer (@$choropleth_layers) {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">874 → 874 → 899</span></span>  874: 	foreach my $layer (@$choropleth_layers) {
 </span><span class="">  875: 		my $fc_json     = encode_json({ type =&gt; &#39;FeatureCollection&#39;, features =&gt; $layer-&gt;{features} });
 </span><span class="">  876: 		my $colors_json = encode_json($layer-&gt;{colors});
 </span><span class="">  877: 		my $values_json = encode_json($layer-&gt;{values});
@@ -1794,7 +1794,7 @@ is( func(VALUE_AT_BOUNDARY), EXPECTED, &#39;Test boundary behaviour&#39; );
 </span><span class="">  947: 	# Validate Latitude and Longitude
 </span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  948: 	if(!defined $lat || !defined $lon || $lat !~ /^-?\d*(\.\d+)?$/ || $lon !~ /^-?\d*(\.\d+)?$/) {
 </span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  949: 		Carp::carp(&quot;Skipping invalid coordinate: ($lat, $lon)&quot;) if(defined($lat) &amp;&amp; defined($lon));
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  950: 		return 0;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  950: 		return 0;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
