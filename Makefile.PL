@@ -21,17 +21,6 @@ WriteMakefile(
 		: ()),
 	CONFIGURE_REQUIRES => {
 		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
-	}, PREREQ_PM => {
-		'Carp' => 0,
-		'CHI' => 0,
-		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
-		'LWP::UserAgent' => 0,
-		'JSON::MaybeXS' => 0,
-		'Object::Configure' => 0.15,
-		'Params::Get' => 0.13,
-		'Params::Validate::Strict' => 0.28,
-		'Scalar::Util' => 0,
-		'Time::HiRes' => 0
 	}, META_MERGE => {
 		resources => {
 			repository => {
@@ -43,8 +32,18 @@ WriteMakefile(
 				web => 'https://github.com/nigelhorne/HTML-OSM/issues',
 			},
 		},
-	},
-	TEST_REQUIRES => {
+	}, PREREQ_PM => {
+		'Carp' => 0,
+		'CHI' => 0,
+		'ExtUtils::MakeMaker' => 6.64,	# Minimum version for TEST_REQUIRES
+		'LWP::UserAgent' => 0,
+		'JSON::MaybeXS' => 0,
+		'Object::Configure' => 0.15,
+		'Params::Get' => 0.13,
+		'Params::Validate::Strict' => 0.28,
+		'Scalar::Util' => 0,
+		'Time::HiRes' => 0
+	}, TEST_REQUIRES => {
 		'File::Temp' => 0,
 		'Test::Compile' => 0,
 		'Test::DescribeMe' => 0,
@@ -55,7 +54,8 @@ WriteMakefile(
 		'Test::Most' => 0,
 		'Test::Needs' => 0,
 		'Test::RequiresInternet' => 0,
-		'Test::Warnings' => 0
+		'Test::Warnings' => 0,
+		'Test::Which', => 0,
 	}, dist => $dist,
 	clean => { FILES => 'HTML-OSM-*' },	# Clean up distribution files
 );
