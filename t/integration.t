@@ -695,7 +695,7 @@ subtest 'Test::Without::Module: add_geojson works with JSON::PP fallback' => sub
 	# HTML::OSM uses JSON::MaybeXS, so this tests the pure-Perl JSON path.
 	Test::Without::Module->import(qw(Cpanel::JSON::XS JSON::XS));
 
-	my $m = HTML::OSM->new();
+	my $m = new_ok('HTML::OSM');
 	$m->center([$C{LAT_LONDON}, $C{LON_LONDON}]);
 
 	# add_geojson with a JSON string exercises the decode path.

@@ -1065,7 +1065,14 @@ sub _fetch_coordinates
 	$self->{'last_request'} = time();
 
 	if($response->is_success()) {
-		my $data = decode_json($response->decoded_content());
+		# eval guard: Nominatim normally returns valid JSON, but a maintenance
+		# page or rate-limit response could return HTML with a 200 OK.  Dying
+		# inside _fetch_coordinates would bubble uncaught to add_marker / onload_render.
+		my $data = eval { decode_json($response->decoded_content()) };
+		if($@) {
+			carp "_fetch_coordinates: failed to decode Nominatim response: $@";
+			return (undef, undef);
+		}
 		$data = $data->[0] if ref($data) eq 'ARRAY';
 		if(ref($data) eq 'HASH' && defined($data->{lat})) {
 			$self->{'cache'}->set($cache_key, $data);
@@ -1088,7 +1095,9 @@ sub _validate
 
 	# Require at least one digit (rejects empty string — unlike \d* which matches '').
 	# Leading-decimal notation (e.g. -.5167) is valid per Changes 0.05.
-	my $numeric = qr/^-?(?:\d+(?:\.\d+)?|\.\d+)$/;
+	# \z (not $) prevents a trailing \n from sneaking through: $ matches before
+	# a final newline, which would make "0\n" valid and embed a newline in JS.
+	my $numeric = qr/^-?(?:\d+(?:\.\d+)?|\.\d+)\z/;
 
 	my $ok = defined($lat) && defined($lon)
 	      && $lat =~ $numeric && $lon =~ $numeric
@@ -1108,7 +1117,6 @@ sub _validate
 # Escaping every '</' as '<\/' prevents this without altering the decoded value.
 # Entry:   Any Perl data structure accepted by encode_json.
 # Exit:    JSON string safe for direct insertion inside a <script> block.
-# Side Effects: None.
 sub _html_json
 {
 	my $j = encode_json(shift);
@@ -1120,7 +1128,6 @@ sub _html_json
 # Purpose: Prevent JS injection via user-supplied labels, URLs, or property names.
 # Entry:   Any scalar (undef becomes '').
 # Exit:    Escaped string safe for insertion between JS single quotes.
-# Side Effects: None.
 sub _js_string
 {
 	my $s = shift // '';

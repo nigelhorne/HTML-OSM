@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use CHI;
 use Readonly;
 use Scalar::Util qw(blessed refaddr);
 use Test::Memory::Cycle;
@@ -957,6 +958,43 @@ subtest '_fetch_coordinates: HTTP failure returns (undef, undef)' => sub {
 	ok(!defined $lat, 'lat undef on HTTP failure');
 	ok(!defined $lon, 'lon undef on HTTP failure');
 
+};
+
+subtest '_fetch_coordinates: HTTP 200 with non-JSON body returns (undef, undef) — regression for eval guard' => sub {
+	# Bug fixed: decode_json previously died uncaught when Nominatim returned an
+	# HTML maintenance page with a 200 OK.  The eval guard now catches parse errors
+	# and returns (undef, undef) instead of propagating a die to the caller.
+	# Use an isolated cache (global => 0) and a unique location to prevent a cache
+	# hit from a previous subtest masking the HTTP path entirely.
+	my $m = HTML::OSM->new();
+	$m->{cache} = CHI->new(driver => 'Memory', global => 0);
+
+	my $resp = bless {}, 'BadJSONHTTPResp';
+	mock 'BadJSONHTTPResp::is_success'      => sub { 1 };
+	mock 'BadJSONHTTPResp::decoded_content' => sub { '<html>Service Unavailable</html>' };
+	my $ua = bless {}, 'BadJSONHTTPUA';
+	mock 'BadJSONHTTPUA::default_header' => sub { };
+	mock 'BadJSONHTTPUA::env_proxy'      => sub { };
+	mock 'BadJSONHTTPUA::get'            => sub { $resp };
+	$m->{ua} = $ua;
+
+	my ($lat, $lon);
+	warning_like {
+		($lat, $lon) = $m->_fetch_coordinates('NonexistentBadJSONPlace');
+	} qr/failed to decode Nominatim response/,
+	  'carp emitted when HTTP body is not valid JSON';
+	ok(!defined $lat, 'lat undef after JSON parse failure');
+	ok(!defined $lon, 'lon undef after JSON parse failure');
+
+};
+
+subtest '_validate: trailing newline in coord string is now rejected — regression for \\z anchor' => sub {
+	# Bug fixed: _validate used $ (which allows a trailing \n in Perl regex).
+	# "0\n" would pass validation and could embed a newline into JS output,
+	# causing a syntax error.  Switching to \z anchors at the true string end.
+	local $SIG{__WARN__} = $SILENCE;
+	is(HTML::OSM::_validate('51.5',  "0\n"),  0, 'trailing \\n in lon now rejected');
+	is(HTML::OSM::_validate("51.5\n", '0'),   0, 'trailing \\n in lat now rejected');
 };
 
 restore_all();
