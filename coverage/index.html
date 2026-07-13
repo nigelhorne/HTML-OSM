@@ -134,7 +134,7 @@
 	<a href="https://github.com/nigelhorne/HTML-OSM">
 		<img src="https://img.shields.io/github/stars/nigelhorne/HTML-OSM?style=social" alt="GitHub stars">
 	</a>
-	<img src="https://img.shields.io/badge/coverage-95%25-brightgreen" alt="Coverage badge">
+	<img src="https://img.shields.io/badge/coverage-96%25-brightgreen" alt="Coverage badge">
 </div>
 <h1>HTML::OSM</h1><h2>Coverage Report</h2>
 <table data-sort-col="0" data-sort-order="asc">
@@ -153,9 +153,9 @@
 
 <tbody>
 
-<tr class="high"><td><a href="blib-lib-HTML-OSM-pm.html" title="View coverage line by line" target="_blank">lib/HTML/OSM.pm</a> <a href="https://github.com/nigelhorne/HTML-OSM/blob/ffc502d5f6c8bc27d23aae2d0bbe7e2073809287/lib/HTML/OSM.pm" class="icon-link" title="View source on GitHub">&#128269;</a><canvas class="sparkline" width="80" height="20" data-points="46.7,76.8,93.2,93.0,32.6,46.9,93.7,80.6"></canvas></td><td>100.0</td><td>95.5</td><td>84.6</td><td>100.0</td><td><span class="coverage-badge badge-good" title="Excellent coverage">95.6%</span></td><td class="negative" title="Previous (sparkline): 93.7%">&#9660; 13.1%</td></tr>
-<tr class="summary-row nosort"><td colspan="2"><strong>Summary</strong></td><td colspan="2">1 files</td><td colspan="3">Avg: 95%, Low: 0</td></tr>
-<tr class="high nosort"><td><strong>Total</strong></td><td>100.0</td><td>95.5</td><td>84.6</td><td>100.0</td><td colspan="2"><strong>95.6</strong></td></tr>
+<tr class="high"><td><a href="blib-lib-HTML-OSM-pm.html" title="View coverage line by line" target="_blank">lib/HTML/OSM.pm</a> <a href="https://github.com/nigelhorne/HTML-OSM/blob/998fac09b6f419991dba77f796a792aa1e6579fe/lib/HTML/OSM.pm" class="icon-link" title="View source on GitHub">&#128269;</a><canvas class="sparkline" width="80" height="20" data-points="46.7,76.8,93.2,93.0,32.6,46.9,93.7,80.6,95.6"></canvas></td><td>100.0</td><td>97.0</td><td>87.8</td><td>100.0</td><td><span class="coverage-badge badge-good" title="Excellent coverage">96.7%</span></td><td class="positive" title="Previous (sparkline): 80.6%">&#9650; 15.0%</td></tr>
+<tr class="summary-row nosort"><td colspan="2"><strong>Summary</strong></td><td colspan="2">1 files</td><td colspan="3">Avg: 96%, Low: 0</td></tr>
+<tr class="high nosort"><td><strong>Total</strong></td><td>100.0</td><td>97.0</td><td>87.8</td><td>100.0</td><td colspan="2"><strong>96.7</strong></td></tr>
 </tbody></table>
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1em;">
 	<div>
@@ -209,7 +209,8 @@ const dataPoints = [ { x: "2026-07-11T21:14:03-04:00", y: 46.8827930174564, delt
 { x: "2026-07-12T10:38:37-04:00", y: 80.633147113594, delta: 3.8, url: "https://github.com/nigelhorne/HTML-OSM/commit/df83c28f62fb1e5e0cf4dc9ae16f05ba72b482fc", label: "2026-07-12T10:38:37-04:00", pointBackgroundColor: "green", comment: "Fix GitHub Actions" },
 { x: "2026-07-12T16:12:42-04:00", y: 93.010752688172, delta: 12.4, url: "https://github.com/nigelhorne/HTML-OSM/commit/4bca2247f51534a15aa697e2b0277f5668e837f2", label: "2026-07-12T16:12:42-04:00", pointBackgroundColor: "green", comment: "Test_req Test::Memory::Cycle" },
 { x: "2026-07-12T16:56:10-04:00", y: 93.1899641577061, delta: 0.2, url: "https://github.com/nigelhorne/HTML-OSM/commit/3b00515afa83b6cbc29875170239f4b1207eec4f", label: "2026-07-12T16:56:10-04:00", pointBackgroundColor: "green", comment: "Added unit testing" },
-{ x: "2026-07-12T18:17:45-04:00", y: 93.7275985663082, delta: 0.5, url: "https://github.com/nigelhorne/HTML-OSM/commit/9205b318cd7f8a17b71a8ee172589e8bb011cb16", label: "2026-07-12T18:17:45-04:00", pointBackgroundColor: "green", comment: "Added integration testing" } ];
+{ x: "2026-07-12T18:17:45-04:00", y: 93.7275985663082, delta: 0.5, url: "https://github.com/nigelhorne/HTML-OSM/commit/9205b318cd7f8a17b71a8ee172589e8bb011cb16", label: "2026-07-12T18:17:45-04:00", pointBackgroundColor: "green", comment: "Added integration testing" },
+{ x: "2026-07-12T19:52:07-04:00", y: 95.5595026642984, delta: 1.8, url: "https://github.com/nigelhorne/HTML-OSM/commit/ffc502d5f6c8bc27d23aae2d0bbe7e2073809287", label: "2026-07-12T19:52:07-04:00", pointBackgroundColor: "green", comment: "Upgrade from Test::MockObject to Test::Mockingbird" } ];
 const regressionPoints = linearRegression(dataPoints);
 // Try to register the zoom plugin (handles different UMD builds)
 (function registerZoomPlugin(){
@@ -461,14 +462,15 @@ function refresh(){
 
 <p><center>Use mouse wheel or pinch to zoom; drag to pan</center></p>
 <p>No issues active on <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=HTML-OSM">RT</a></p>
-<p>No <A HREF="https://fast2-matrix.cpantesters.org/?dist=HTML-OSM+0.09">CPAN Testers</A> failures reported for HTML-OSM 0.09</p>
+<p><a href="https://api.cpantesters.org/v3/summary/HTML-OSM">https://api.cpantesters.org/v3/summary/HTML-OSM</a>: 599 Internal Exception</p>
+<p><em>CPAN Testers data unavailable: CPAN Testers API temporarily unreachable. Check <a href="https://api.cpantesters.org/v3/summary/HTML-OSM">https://api.cpantesters.org/v3/summary/HTML-OSM</a> manually.</em></p>
 <h2>Mutation Report</h2>
 <h3>Mutation Summary</h3>
 <ul>
 <li><b>Score</b>: 100.00%</li>
-<li><b>Total</b>: 90</li>
+<li><b>Total</b>: 93</li>
 <li><b>Killed</b>: 
-90
+93
 </li>
 <li><b>Survived</b>: 
 0
@@ -480,13 +482,13 @@ function refresh(){
 
 <tr><th>File</th><th>Total</th><th>Killed</th><th>Survivors</th><th>Skipped</th><th>Score%</th><th>Complexity</th><th title="TER1=Statement, TER2=Branch, TER3=LCSAJ Path">TER1 / TER2 / TER3</th></tr>
 
-<tr class="high"><td><a href="mutation_html/lib/HTML/OSM.pm.html" title="View mutation line by line" target="_blank">lib/HTML/OSM.pm</a> <a href="https://github.com/nigelhorne/HTML-OSM/blob/ffc502d5f6c8bc27d23aae2d0bbe7e2073809287/lib/HTML/OSM.pm" class="icon-link" title="View source on GitHub">&#128269;</a></td><td>90</td><td>90</td><td>0</td><td>0</td><td><span class="coverage-badge badge-good" title="Excellent">100.0%</span></td><td><span class="coverage-badge badge-bad" title="Needs improvement">124</span></td><td><span class="coverage-badge badge-good" title="Excellent">100.0%</span> / <span class="coverage-badge badge-good" title="Excellent">95.5%</span> / <span class="coverage-badge badge-good" title="Excellent">100.0%</span></td></tr>
+<tr class="high"><td><a href="mutation_html/lib/HTML/OSM.pm.html" title="View mutation line by line" target="_blank">lib/HTML/OSM.pm</a> <a href="https://github.com/nigelhorne/HTML-OSM/blob/998fac09b6f419991dba77f796a792aa1e6579fe/lib/HTML/OSM.pm" class="icon-link" title="View source on GitHub">&#128269;</a></td><td>93</td><td>93</td><td>0</td><td>0</td><td><span class="coverage-badge badge-good" title="Excellent">100.0%</span></td><td><span class="coverage-badge badge-bad" title="Needs improvement">125</span></td><td><span class="coverage-badge badge-good" title="Excellent">100.0%</span> / <span class="coverage-badge badge-good" title="Excellent">97.0%</span> / <span class="coverage-badge badge-good" title="Excellent">100.0%</span></td></tr>
 </table>
 
 <h2>Structural Coverage (Approximate)</h2>
 <div class='summary'>
-Statement Coverage: 100.00% (281 / 281)<br>
-Branch Coverage: 95.45% (126 / 132)<br>
+Statement Coverage: 100.00% (285 / 285)<br>
+Branch Coverage: 97.01% (130 / 134)<br>
 <em>Approximate LCSAJ derived from branch and statement coverage.</em>
 </div>
 <h2>Executive Summary</h2>
@@ -495,7 +497,7 @@ Tests execute 100.00% of the code and detect 100.00% of injected faults.
 </div>
 <footer>
 	<p>Project: <a href="https://github.com/nigelhorne/HTML-OSM">HTML-OSM</a></p>
-	<p><em>Last updated: 2026-07-13 00:01:04 - <a href="https://github.com/nigelhorne/HTML-OSM/commit/ffc502d5f6c8bc27d23aae2d0bbe7e2073809287">commit <code>ffc502d</code></a></em></p>
+	<p><em>Last updated: 2026-07-13 01:33:37 - <a href="https://github.com/nigelhorne/HTML-OSM/commit/998fac09b6f419991dba77f796a792aa1e6579fe">commit <code>998fac0</code></a></em></p>
 	<p style="float: right; font-size: 0.85em; color: #999;">Powered by <a href="https://metacpan.org/dist/App-Test-Generator">App::Test::Generator 0.43</a></p>
 </footer>
 </body>

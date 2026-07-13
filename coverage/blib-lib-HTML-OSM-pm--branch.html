@@ -20,7 +20,7 @@ https://pjcj.net
 <h1>Branch Coverage</h1>
 <table>
 <tr><td class="h" align="right">File:</td><td align="left">blib/lib/HTML/OSM.pm</td></tr>
-<tr><td class="h" align="right">Coverage:</td><td align="left" class="c2">95.5%</td></tr>
+<tr><td class="h" align="right">Coverage:</td><td align="left" class="c2">97.0%</td></tr>
 </table>
 <div><br/></div>
 <table>
@@ -82,15 +82,16 @@ https://pjcj.net
 <tr><td class="h"><a id="L1029">1029</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (&amp;blessed($rc) and $rc-&gt;can(&quot;latitude&quot;))</td></tr>
 <tr><td class="h"><a id="L1032">1032</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $rc eq &quot;HASH&quot;)</td></tr>
 <tr><td class="h"><a id="L1034">1034</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $rc-&gt;{&#39;lat&#39;} and defined $rc-&gt;{&#39;lon&#39;}</td></tr>
-<tr><td class="h"><a id="L1036">1036</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if defined $rc-&gt;{&#39;geometry&#39;}{&#39;location&#39;}{&#39;lat&#39;}</td></tr>
+<tr><td class="h"><a id="L1036">1036</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if defined $rc-&gt;{&#39;geometry&#39;}{&#39;location&#39;}{&#39;lat&#39;}</td></tr>
 <tr><td class="h"><a id="L1039">1039</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ref $rc eq &quot;ARRAY&quot;</td></tr>
 <tr><td class="h"><a id="L1048">1048</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (my $cached = $self-&gt;{&#39;cache&#39;}-&gt;get($cache_key))</td></tr>
 <tr><td class="h"><a id="L1054">1054</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($elapsed &lt; $self-&gt;{&#39;min_interval&#39;})</td></tr>
 <tr><td class="h"><a id="L1067">1067</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($response-&gt;is_success)</td></tr>
-<tr><td class="h"><a id="L1069">1069</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ref $data eq &quot;ARRAY&quot;</td></tr>
-<tr><td class="h"><a id="L1070">1070</a></td><td class="c0">50</td><td class="c3">T</td><td class="c0">F</td><td class="s">if (ref $data eq &quot;HASH&quot; and defined $data-&gt;{&#39;lat&#39;})</td></tr>
-<tr><td class="h"><a id="L1098">1098</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if not $ok and defined $lat and defined $lon</td></tr>
-<tr><td class="h"><a id="L1102">1102</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$ok ? :</td></tr>
+<tr><td class="h"><a id="L1072">1072</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ($@)</td></tr>
+<tr><td class="h"><a id="L1076">1076</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if ref $data eq &quot;ARRAY&quot;</td></tr>
+<tr><td class="h"><a id="L1077">1077</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if (ref $data eq &quot;HASH&quot; and defined $data-&gt;{&#39;lat&#39;})</td></tr>
+<tr><td class="h"><a id="L1107">1107</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">if not $ok and defined $lat and defined $lon</td></tr>
+<tr><td class="h"><a id="L1111">1111</a></td><td class="c3">100</td><td class="c3">T</td><td class="c3">F</td><td class="s">$ok ? :</td></tr>
 </table>
 </body>
 </html>
