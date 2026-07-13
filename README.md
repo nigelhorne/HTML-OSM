@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 # VERSION
 
-Version 0.09
+Version 0.10
 
 # SYNOPSIS
 

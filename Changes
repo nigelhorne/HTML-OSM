@@ -1,6 +1,6 @@
 Revision history for HTML-OSM
 
-0.10
+0.10	Sun Jul 12 21:23:33 EDT 2026
 	[ Bug Fixes ]
 	- Don't try to call a method on an ininitialized variable
 	- Use consistent default sizes

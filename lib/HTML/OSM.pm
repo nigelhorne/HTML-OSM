@@ -24,11 +24,11 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 =head1 VERSION
 
-Version 0.09
+Version 0.10
 
 =cut
 
-our $VERSION = '0.09';
+our $VERSION = '0.10';
 
 # CDN URLs pinned to tested versions.  Override via constructor params to use
 # a self-hosted copy or a different version.
