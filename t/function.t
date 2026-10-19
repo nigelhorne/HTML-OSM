@@ -174,6 +174,7 @@ subtest 'new: method-style with no args produces correct defaults' => sub {
 	like($m->{cluster_css_url},     qr/MarkerCluster/, 'cluster_css_url');
 	like($m->{heatmap_js_url},      qr/leaflet.heat/,  'heatmap_js_url');
 	like($m->{gpx_js_url},          qr/gpx/i,          'gpx_js_url');
+	like($m->{tile_url},            qr/openstreetmap/, 'tile_url');
 	returns_ok($m, { type => 'object', isa => 'HTML::OSM' }, 'returns HTML::OSM');
 	memory_cycle_ok($m->{coordinates}, 'no cycles in coordinates');
 	diag("defaults: zoom=$m->{zoom} h=$m->{height} w=$m->{width}") if $ENV{TEST_VERBOSE};
@@ -210,9 +211,11 @@ subtest 'new: coordinates must be arrayref' => sub {
 
 subtest 'new: CDN URLs overridable' => sub {
 	my $m = HTML::OSM->new(css_url => 'https://my.cdn/leaflet.css',
-	                        gpx_js_url => 'https://my.cdn/gpx.js');
+	                        gpx_js_url => 'https://my.cdn/gpx.js',
+	                        tile_url  => 'https://tiles.internal/{z}/{x}/{y}.png');
 	is($m->{css_url},    'https://my.cdn/leaflet.css', 'css_url overridden');
 	is($m->{gpx_js_url}, 'https://my.cdn/gpx.js',     'gpx_js_url overridden');
+	is($m->{tile_url},   'https://tiles.internal/{z}/{x}/{y}.png', 'tile_url overridden');
 };
 
 subtest 'new: clone merges overrides, skips validation, is a distinct object' => sub {

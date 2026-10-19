@@ -102,6 +102,12 @@ subtest 'new: min_interval must be >= 0 — negative rejected' => sub {
 		'negative min_interval croaks';
 };
 
+subtest 'new: tile_url must be a string' => sub {
+	throws_ok { HTML::OSM->new(tile_url => []) }
+		qr/\b(?:invalid|not|string|tile_url)\b/i,
+		'tile_url as an arrayref croaks';
+};
+
 subtest 'new: geocoder must respond to geocode() — unqualified object rejected' => sub {
 	# An object without the required method should fail schema validation.
 	my $bad_geo = bless {}, 'ECBadGeo';   # no geocode() method

@@ -24,11 +24,11 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 # CDN URLs pinned to tested versions.  Override via constructor params to use
 # a self-hosted copy or a different version.
@@ -39,6 +39,7 @@ Readonly::Scalar my $CLUSTER_CSS_URL         => 'https://unpkg.com/leaflet.marke
 Readonly::Scalar my $CLUSTER_DEFAULT_CSS_URL => 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css';
 Readonly::Scalar my $HEATMAP_JS_URL          => 'https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js';
 Readonly::Scalar my $GPX_JS_URL              => 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js';
+Readonly::Scalar my $TILE_URL               => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 Readonly::Scalar my $NOMINATIM_HOST          => 'nominatim.openstreetmap.org/search';
 
 # WGS-84 valid ranges
@@ -73,6 +74,14 @@ Supply your own C<cache> object to persist across processes.
 
 Set C<min_interval> (seconds) to throttle outbound Nominatim calls
 and comply with the API fair-use policy.
+
+=item * Tile server
+
+C<tile_url> replaces the OpenStreetMap tile layer, so a map can use an
+internal tile server or run on an air-gapped network.  It accepts the same
+Leaflet placeholders as the default, for example
+C<http://tiles.internal/{z}/{x}/{y}.png>.  The attribution remains the
+OpenStreetMap credit, which is the usual requirement for OSM-derived tiles.
 
 =back
 
@@ -111,6 +120,7 @@ merging C<%overrides> onto the existing object's state without re-validating.
     js_url                  => { type => string,                    optional },
     logger                  => { type => object,                    optional },
     min_interval            => { type => number,  min => 0,         optional },
+    tile_url                => { type => string,                    optional },
     ua                      => { type => object,                    optional },
     width                   => { type => string,                    optional },
     zoom                    => { type => integer, min => 0, max => 19, optional },
@@ -179,6 +189,7 @@ sub new
 			js_url                  => { type => 'string',                         optional => 1 },
 			logger                  => { type => 'object',                         optional => 1 },
 			min_interval            => { type => 'number',  min => 0,              optional => 1 },
+			tile_url                => { type => 'string',                         optional => 1 },
 			ua                      => { type => 'object',                         optional => 1 },
 			width                   => { type => 'string',                         optional => 1 },
 			zoom                    => { type => 'integer', min => $ZOOM_MIN, max => $ZOOM_MAX, optional => 1 },
@@ -212,6 +223,7 @@ sub new
 		cluster_default_css_url => $CLUSTER_DEFAULT_CSS_URL,
 		heatmap_js_url          => $HEATMAP_JS_URL,
 		gpx_js_url              => $GPX_JS_URL,
+		tile_url                => $TILE_URL,
 		%{$params},
 	}, $class;
 }
@@ -869,6 +881,7 @@ sub onload_render
 	};
 
 	# --- <body> ---
+	my $tile_url = _js_string($self->{tile_url});
 	my $body = qq{
 		<input type="text" id="search-box" placeholder="Enter location">
 		<button id="clear-search-button">Clear search markers</button>
@@ -876,7 +889,7 @@ sub onload_render
 		<div id="map"></div>
 		<script>
 			var map = L.map('map').setView([$center_lat, $center_lon], $self->{zoom});
-			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			L.tileLayer('$tile_url', {
 				attribution: '&copy; OpenStreetMap contributors'
 			}).addTo(map);
 

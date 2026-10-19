@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 # VERSION
 
-Version 0.10
+Version 0.11
 
 # SYNOPSIS
 
@@ -28,6 +28,14 @@ Version 0.10
 
     Set `min_interval` (seconds) to throttle outbound Nominatim calls
     and comply with the API fair-use policy.
+
+- Tile server
+
+    `tile_url` replaces the OpenStreetMap tile layer, so a map can use an
+    internal tile server or run on an air-gapped network. It accepts the same
+    Leaflet placeholders as the default, for example
+    `http://tiles.internal/{z}/{x}/{y}.png`. The attribution remains the
+    OpenStreetMap credit, which is the usual requirement for OSM-derived tiles.
 
 # SUBROUTINES/METHODS
 
@@ -64,6 +72,7 @@ merging `%overrides` onto the existing object's state without re-validating.
       js_url                  => { type => string,                    optional },
       logger                  => { type => object,                    optional },
       min_interval            => { type => number,  min => 0,         optional },
+      tile_url                => { type => string,                    optional },
       ua                      => { type => object,                    optional },
       width                   => { type => string,                    optional },
       zoom                    => { type => integer, min => 0, max => 19, optional },

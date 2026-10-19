@@ -761,6 +761,27 @@ subtest 'onload_render: body contains OpenStreetMap tile layer URL' => sub {
 	like($body, qr/openstreetmap\.org/, 'OSM tile URL in body');
 };
 
+subtest 'onload_render: tile_url replaces the default tile server' => sub {
+	my $m = HTML::OSM->new(
+		tile_url => 'http://tiles.internal/{z}/{x}/{y}.png',
+	);
+	$m->add_marker([$C{LAT_LONDON}, $C{LON_LONDON}]);
+	my (undef, $body) = $m->onload_render();
+	like($body, qr{L\.tileLayer\('http://tiles\.internal/\{z\}/\{x\}/\{y\}\.png'},
+		'the configured tile URL is used');
+	unlike($body, qr/tile\.openstreetmap\.org/, 'the default tile server is gone');
+};
+
+subtest 'onload_render: tile_url is escaped for a JS string' => sub {
+	my $m = HTML::OSM->new(
+		tile_url => q{http://tiles.internal/o'Reilly/{z}/{x}/{y}.png},
+	);
+	$m->add_marker([$C{LAT_LONDON}, $C{LON_LONDON}]);
+	my (undef, $body) = $m->onload_render();
+	like($body, qr{o\\'Reilly}, 'the apostrophe is escaped');
+	unlike($body, qr{o'Reilly}, 'the raw apostrophe cannot end the literal');
+};
+
 subtest 'onload_render: body contains map setView call' => sub {
 	my $m = HTML::OSM->new();
 	$m->add_marker([$C{LAT_LONDON}, $C{LON_LONDON}]);
