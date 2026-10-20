@@ -1,6 +1,6 @@
 Revision history for HTML-OSM
 
-0.11
+0.11	Mon Oct 19 09:48:31 PM EDT 2026
 	[ Bug Fixes ]
 	- Heatmap radius and blur are now forced to positive numbers, so they can
 	  no longer inject JavaScript
