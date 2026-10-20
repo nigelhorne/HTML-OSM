@@ -12,10 +12,15 @@ Revision history for HTML-OSM
 	- add_marker('') and center('') return 0 instead of croaking from a
 	  private helper; a coordinate with no lat/lon and no address is skipped
 	- A user agent passed in by the caller is no longer reconfigured
-	- Coordinates are no longer rejected, or written into the JavaScript as
-	  "51,5074", when Perl prints numbers with a comma decimal point under a
-	  locale such as de_DE (seen with Perl 5.38.0 on macOS).  JSON layers are
-	  encoded under the C numeric locale for the same reason
+	- Some perls (seen with 5.38.0 on macOS) print and read numbers with the
+	  locale's decimal point, so under de_DE 51.5074 printed as "51,5074" and
+	  "51.5074" was read as 51.  Coordinates were rejected, and the computed
+	  map centre lost its fractions.  Coordinates are now always written with
+	  a '.', converted to numbers without the locale, and range-checked
+	  correctly ("90.5" was read as 90 and accepted).  JSON layers are
+	  encoded under the C numeric locale, and heatmap radius/blur accept
+	  decimals such as "12.5"
+	  Fixes https://matrix.perl-magpie.org/results/97965e64-9dc9-11f1-963c-fccfcb508d96
 
 	[ Enhancements ]
 	- new(tile_url => ...) replaces the OpenStreetMap tile layer, so maps can

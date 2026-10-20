@@ -129,6 +129,28 @@ subtest '_num_str: strings, undef and refs are returned as they are' => sub {
 	is(HTML::OSM::_num_str(Scalar::Util::dualvar(1, 'abc')), 'abc', 'non-numeric text of a dualvar is left for _validate to reject');
 };
 
+subtest '_num_val: decimal strings convert without Perl string parsing' => sub {
+	is(HTML::OSM::_num_val('51.5074'), 51.5074, 'positive');
+	is(HTML::OSM::_num_val('-0.1278'), -0.1278, 'negative');
+	is(HTML::OSM::_num_val('.5'),      0.5,     'leading decimal point');
+	is(HTML::OSM::_num_val('-.5'),     -0.5,    'negative leading decimal point');
+	is(HTML::OSM::_num_val('90'),      90,      'integer');
+	is(HTML::OSM::_num_val('0.0001'),  0.0001,  'leading zeros in the fraction');
+	is(HTML::OSM::_num_val(Scalar::Util::dualvar(51.5, '51,5')), 51.5, 'comma-printed number');
+};
+
+subtest '_num_val: other text falls back to Perl conversion' => sub {
+	is(HTML::OSM::_num_val('1e2'), 100, 'exponent');
+	is(HTML::OSM::_num_val('-'),   0,   'lone sign');
+};
+
+subtest '_validate: 90.5 is out of range (not read as 90)' => sub {
+	local $SIG{__WARN__} = sub { };
+	is(HTML::OSM::_validate('90.5', '0'),   0, 'latitude 90.5 rejected');
+	is(HTML::OSM::_validate('0', '-180.5'), 0, 'longitude -180.5 rejected');
+	is(HTML::OSM::_validate('90', '180'),   1, 'exact limits accepted');
+};
+
 subtest '_validate: comma-printed numbers pass' => sub {
 	is(HTML::OSM::_validate(Scalar::Util::dualvar(51.5, '51,5'), Scalar::Util::dualvar(-0.1, '-0,1')), 1, 'accepted');
 };
@@ -204,11 +226,13 @@ subtest '_css_length: hostile value falls back to the default with a warning' =>
 subtest '_positive_number: positive numbers are returned as numbers' => sub {
 	is(HTML::OSM::_positive_number(30, 25),     30,  'integer');
 	is(HTML::OSM::_positive_number('12.5', 25), 12.5, 'numeric string');
-	is(HTML::OSM::_positive_number(' 7', 25),   7,   'leading space is dropped by numification');
+	is(HTML::OSM::_positive_number(' 7', 25),   7,   'surrounding space is trimmed');
+	is(HTML::OSM::_positive_number('.5', 25),   0.5, 'leading decimal point');
+	is(HTML::OSM::_positive_number(Scalar::Util::dualvar(12.5, '12,5'), 25), '12.5', 'comma-printed number');
 };
 
 subtest '_positive_number: everything else gives the default' => sub {
-	for my $v (undef, '', 0, -5, 'abc', '1});alert(1);//', 'Inf', 'NaN', 1e9) {
+	for my $v (undef, '', 0, -5, 'abc', '1});alert(1);//', 'Inf', 'NaN', 1e9, '1e2', '12,5', [1]) {
 		is(HTML::OSM::_positive_number($v, 25), 25, 'default for ' . ($v // 'undef'));
 	}
 };

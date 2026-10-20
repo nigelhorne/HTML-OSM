@@ -14,7 +14,7 @@ use Params::Get 0.13;
 use Params::Validate::Strict 0.28;
 use POSIX qw(localeconv setlocale LC_NUMERIC);
 use Readonly;
-use Scalar::Util qw(blessed looks_like_number);
+use Scalar::Util qw(blessed);
 use Time::HiRes qw(time);
 use URI::Escape qw(uri_escape_utf8);
 
@@ -932,10 +932,12 @@ sub onload_render
 	} elsif(@valid_coordinates) {
 		my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
 		for my $c (@valid_coordinates) {
-			$min_lat = $c->[0] if $c->[0] < $min_lat;
-			$max_lat = $c->[0] if $c->[0] > $max_lat;
-			$min_lon = $c->[1] if $c->[1] < $min_lon;
-			$max_lon = $c->[1] if $c->[1] > $max_lon;
+			# Convert with _num_val: some perls read '51.5074' as 51 under de_DE
+			my ($lat, $lon) = (_num_val($c->[0]), _num_val($c->[1]));
+			$min_lat = $lat if $lat < $min_lat;
+			$max_lat = $lat if $lat > $max_lat;
+			$min_lon = $lon if $lon < $min_lon;
+			$max_lon = $lon if $lon > $max_lon;
 		}
 		$center_lat = ($min_lat + $max_lat) / 2;
 		$center_lon = ($min_lon + $max_lon) / 2;
@@ -1209,10 +1211,11 @@ sub _validate
 	# a final newline, which would make "0\n" valid and embed a newline in JS.
 	my $numeric = qr/^-?(?:\d+(?:\.\d+)?|\.\d+)\z/;
 
+	# Range checks use _num_val, which does not depend on the locale
 	my $ok = defined($lat) && defined($lon)
 	      && $lat =~ $numeric && $lon =~ $numeric
-	      && $lat >= $LAT_MIN && $lat <= $LAT_MAX
-	      && $lon >= $LON_MIN && $lon <= $LON_MAX;
+	      && _num_val($lat) >= $LAT_MIN && _num_val($lat) <= $LAT_MAX
+	      && _num_val($lon) >= $LON_MIN && _num_val($lon) <= $LON_MAX;
 
 	carp(sprintf 'Skipping invalid coordinate: (%s, %s)',
 	     $lat // 'undef', $lon // 'undef')
@@ -1294,19 +1297,27 @@ sub _css_length
 	return $default;
 }
 
-# _positive_number: Return $value as a number when it is a positive number.
+# _positive_number: Return $value as text when it is a positive number.
 # Purpose: Heatmap options go straight into the JavaScript, so anything that
-#          is not a plain number must not reach it.
+#          is not a plain number must not reach it.  The check works on the
+#          text form so it does not depend on the locale (see _num_val).
 # Entry:   ($value, $default).
-# Exit:    0 + $value, or $default when $value is missing, not numeric or <= 0.
+# Exit:    $value as a dot-decimal string, or $default when $value is missing,
+#          not a plain decimal number, <= 0 or >= 1e6.
 sub _positive_number
 {
 	my ($value, $default) = @_;
 
-	return $default unless defined($value) && looks_like_number($value);
-	# looks_like_number accepts 'Inf' and 'NaN', which are not valid in JS literals
-	return $default unless $value > 0 && $value < 1e6;
-	return _num_str(0 + $value);
+	return $default unless defined($value) && !ref($value);
+
+	my $str = _num_str($value);
+	$str =~ s/\A\s+|\s+\z//g;
+	# Plain decimals only: rejects signs, exponents, 'Inf' and 'NaN'
+	return $default unless $str =~ /\A(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)\z/;
+
+	my $number = _num_val($str);
+	return $default unless $number > 0 && $number < 1e6;
+	return _num_str($number);
 }
 
 # _num_str: Return a number as text with '.' as the decimal point.
@@ -1333,6 +1344,28 @@ sub _num_str
 	$str =~ s/\Q$radix\E/./ if defined($radix) && length($radix) && $radix ne '.';
 	$str =~ tr/,/./;    # Perl never groups digits, so a comma can only be a decimal point
 	return $str;
+}
+
+# _num_val: Convert a decimal string such as '-0.1278' to a number.
+# Purpose: The perls that print numbers with the locale's decimal point also
+#          read them that way, so under de_DE '51.5074' + 0 is 51.  Building
+#          the value from its whole and fractional digit strings uses only
+#          integer conversion, which no locale affects.
+# Entry:   A number, or a string in the form _validate accepts.
+# Exit:    The numeric value.  Anything else falls back to Perl's own conversion.
+sub _num_val
+{
+	my $str = _num_str(shift);
+
+	my ($sign, $whole, $frac) = $str =~ /\A(-?)([0-9]*)(?:\.([0-9]+))?\z/;
+	if(!defined($sign) || (!length($whole) && !defined($frac))) {
+		no warnings 'numeric';
+		return 0 + $str;
+	}
+
+	my $value = length($whole) ? 0 + $whole : 0;
+	$value += $frac / (10 ** length($frac)) if defined($frac);
+	return $sign ? -$value : $value;
 }
 
 =head1 LIMITATIONS

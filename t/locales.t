@@ -71,6 +71,9 @@ for my $spec (@locales) {
 			local $SIG{__WARN__} = sub { };    # suppress _validate carp
 			ok(!$m->add_marker([999, 999], html => 'Out of range'),
 				"out-of-range coords rejected under $lang locale");
+			# Read as 90 by perls that parse with the locale's decimal point
+			ok(!$m->add_marker(['90.5', '0'], html => 'Just out of range'),
+				"latitude 90.5 rejected under $lang locale");
 		}
 
 		# Coord with leading decimal point (documented as valid since 0.05)
@@ -83,8 +86,10 @@ for my $spec (@locales) {
 		my (undef, $body) = $m->onload_render();
 		like($body, qr/L\.marker\(\[51\.5074, -0\.1278\]\)/,
 			"marker written with '.' decimals under $lang locale");
-		like($body, qr/setView\(\[-?\d+(?:\.\d+)?, -0\.1278\], \d+\)/,
-			"computed centre written with '.' decimals under $lang locale");
+		# Midpoint of 51.5074 and 0.5 is 26.0037.  Some perls read '51.5074'
+		# as 51 under a comma locale, which gave [25.5, 0] here.
+		like($body, qr/setView\(\[26\.0037, -0\.1278\], \d+\)/,
+			"computed centre is the true midpoint under $lang locale");
 		unlike($body, qr/\d,\d{3,}/, "no comma-decimal numbers under $lang locale");
 		is(setlocale(LC_NUMERIC), $numeric_before, "LC_NUMERIC restored after render under $lang locale");
 
