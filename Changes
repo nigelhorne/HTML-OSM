@@ -12,6 +12,10 @@ Revision history for HTML-OSM
 	- add_marker('') and center('') return 0 instead of croaking from a
 	  private helper; a coordinate with no lat/lon and no address is skipped
 	- A user agent passed in by the caller is no longer reconfigured
+	- Coordinates are no longer rejected, or written into the JavaScript as
+	  "51,5074", when Perl prints numbers with a comma decimal point under a
+	  locale such as de_DE (seen with Perl 5.38.0 on macOS).  JSON layers are
+	  encoded under the C numeric locale for the same reason
 
 	[ Enhancements ]
 	- new(tile_url => ...) replaces the OpenStreetMap tile layer, so maps can
@@ -27,6 +31,8 @@ Revision history for HTML-OSM
 	- Document that only one map can be rendered per page
 
 	[ Build ]
+	- Declare IPC::System::Simple as a runtime prerequisite: autodie qw(:all)
+	  needs it when the module loads
 	- Set MIN_PERL_VERSION to 5.010
 	- Remove ExtUtils::MakeMaker from PREREQ_PM (it stays in CONFIGURE_REQUIRES)
 	- Declare HTTP::Response for tests; drop unused Test::JSON,
@@ -36,6 +42,8 @@ Revision history for HTML-OSM
 	- Cover the default tile URL, a configured tile URL and JS-string escaping
 	- Cover tile_attribution, email, the render-time checks and the new
 	  escaping helpers
+	- Simulate comma-decimal number printing so the locale fix is tested on
+	  every platform, and check the rendered output under real locales
 
 0.10	Sun Jul 12 21:23:33 EDT 2026
 	[ Bug Fixes ]

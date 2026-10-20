@@ -2,11 +2,14 @@
 
 requires 'perl', '5.010';
 
+requires 'B';
 requires 'CHI';
 requires 'Carp';
+requires 'IPC::System::Simple';   # autodie qw(:all) loads it at import time
 requires 'JSON::MaybeXS';
 requires 'LWP::UserAgent';
 requires 'Object::Configure', '0.15';
+requires 'POSIX';
 requires 'Params::Get', '0.13';
 requires 'Params::Validate::Strict', '0.28';
 requires 'Readonly';
@@ -21,7 +24,6 @@ on 'configure' => sub {
 on 'test' => sub {
 	requires 'File::Temp';
 	requires 'HTTP::Response';
-	requires 'IPC::System::Simple';
 	requires 'Test::Compile';
 	requires 'Test::DescribeMe';
 	requires 'Test::HTTPStatus';

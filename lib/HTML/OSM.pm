@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use autodie qw(:all);
+use B ();
 use Carp qw(carp croak);
 use CHI;
 use JSON::MaybeXS qw(decode_json encode_json);
@@ -11,6 +12,7 @@ use LWP::UserAgent;
 use Object::Configure 0.15;
 use Params::Get 0.13;
 use Params::Validate::Strict 0.28;
+use POSIX qw(localeconv setlocale LC_NUMERIC);
 use Readonly;
 use Scalar::Util qw(blessed looks_like_number);
 use Time::HiRes qw(time);
@@ -373,6 +375,9 @@ sub add_marker
 	}
 
 	return 0 unless defined($lat) && defined($lon);
+
+	# Store the text form with a '.' decimal point, whatever the locale
+	($lat, $lon) = (_num_str($lat), _num_str($lon));
 	return 0 unless _validate($lat, $lon);
 
 	push @{$self->{coordinates}}, [$lat, $lon, $params->{'html'}, $params->{'icon'}];
@@ -712,6 +717,9 @@ sub center
 	}
 
 	return 0 unless defined($lat) && defined($lon);
+
+	# Store the text form with a '.' decimal point, whatever the locale
+	($lat, $lon) = (_num_str($lat), _num_str($lon));
 	return 0 unless _validate($lat, $lon);
 
 	$self->{'center'} = [$lat, $lon];
@@ -911,7 +919,9 @@ sub onload_render
 		# Validate ALL coordinates here — including geocoder-returned ones.
 		# A compromised geocoder or Nominatim response could return a crafted
 		# lat/lon string that would inject JS if embedded without validation.
-		next unless defined($lat) && defined($lon) && _validate($lat, $lon);
+		next unless defined($lat) && defined($lon);
+		($lat, $lon) = (_num_str($lat), _num_str($lon));
+		next unless _validate($lat, $lon);
 		push @valid_coordinates, [$lat, $lon, $label, $icon_url];
 	}
 
@@ -932,6 +942,8 @@ sub onload_render
 	} else {
 		croak 'center() must be called when no point markers are provided';
 	}
+	# The midpoint is a new number, so it needs the same treatment as markers
+	($center_lat, $center_lon) = (_num_str($center_lat), _num_str($center_lon));
 
 	# --- <head> ---
 	my %url = map { $_ => _html_attr($self->{$_}) }
@@ -1189,7 +1201,7 @@ sub _fetch_coordinates
 # Side Effects: carp when coordinates are defined but out-of-range/non-numeric.
 sub _validate
 {
-	my ($lat, $lon) = @_;
+	my ($lat, $lon) = map { _num_str($_) } @_;
 
 	# Require at least one digit (rejects empty string — unlike \d* which matches '').
 	# Leading-decimal notation (e.g. -.5167) is valid per Changes 0.05.
@@ -1213,11 +1225,25 @@ sub _validate
 # <script> block.  JSON encoders do not escape '/' by default, so a value like
 # '</script>' would close the enclosing script tag and allow HTML injection.
 # Escaping every '</' as '<\/' prevents this without altering the decoded value.
+# Encoding runs under the C numeric locale: some encoders print numbers through
+# the C library or Perl's own stringification, and under a locale such as
+# de_DE 0.5 could come out as 0,5, which JSON reads as two numbers.
 # Entry:   Any Perl data structure accepted by encode_json.
 # Exit:    JSON string safe for direct insertion inside a <script> block.
+# Side Effects: LC_NUMERIC is switched to 'C' for the encode and then restored.
 sub _html_json
 {
-	my $j = encode_json(shift);
+	my $data = shift;
+
+	my $saved_error  = $@;
+	my $saved_locale = setlocale(LC_NUMERIC);
+	setlocale(LC_NUMERIC, 'C');
+	my $j   = eval { encode_json($data) };
+	my $err = $@;
+	setlocale(LC_NUMERIC, $saved_locale) if defined($saved_locale);
+	die $err unless defined($j);
+	$@ = $saved_error;
+
 	$j =~ s|</|<\\/|g;
 	return $j;
 }
@@ -1280,7 +1306,33 @@ sub _positive_number
 	return $default unless defined($value) && looks_like_number($value);
 	# looks_like_number accepts 'Inf' and 'NaN', which are not valid in JS literals
 	return $default unless $value > 0 && $value < 1e6;
-	return 0 + $value;
+	return _num_str(0 + $value);
+}
+
+# _num_str: Return a number as text with '.' as the decimal point.
+# Purpose: Perl should print numbers with a '.' whatever the locale, but some
+#          builds (seen with Perl 5.38.0 on macOS) use the LC_NUMERIC decimal
+#          point, so 51.5074 prints as '51,5074' under de_DE.  That fails
+#          _validate, and in JavaScript '[51,5074, -0,1278]' is four numbers.
+# Entry:   Any scalar.
+# Exit:    A value Perl holds as a number comes back as text with a '.'
+#          decimal point; anything else (strings, undef, refs) is unchanged.
+sub _num_str
+{
+	my $value = shift;
+
+	return $value if !defined($value) || ref($value);
+
+	# Only a value Perl holds as a number can have been printed with a locale
+	# decimal point; a string such as '51,5' never gets these flags.
+	my $flags = B::svref_2object(\$value)->FLAGS;
+	return $value unless $flags & (B::SVf_IOK() | B::SVf_NOK());
+
+	my $str   = "$value";
+	my $radix = (localeconv() || {})->{decimal_point};
+	$str =~ s/\Q$radix\E/./ if defined($radix) && length($radix) && $radix ne '.';
+	$str =~ tr/,/./;    # Perl never groups digits, so a comma can only be a decimal point
+	return $str;
 }
 
 =head1 LIMITATIONS

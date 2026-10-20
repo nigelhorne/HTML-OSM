@@ -34,22 +34,23 @@ WriteMakefile(
 			},
 		},
 	}, PREREQ_PM => {
+		'B' => 0,
 		'Carp' => 0,
 		'CHI' => 0,
+		'IPC::System::Simple' => 0,	# autodie qw(:all) loads it at import time
 		'LWP::UserAgent' => 0,
 		'JSON::MaybeXS' => 0,
 		'Object::Configure' => 0.15,
 		'Params::Get' => 0.13,
 		'Params::Validate::Strict' => 0.28,
+		'POSIX' => 0,
 		'Readonly' => 0,
 		'Scalar::Util' => 0,
 		'Time::HiRes' => 0,
 		'URI::Escape' => 0
 	}, TEST_REQUIRES => {
-	  	'IPC::System::Simple' => 0,
 		'File::Temp' => 0,
 		'HTTP::Response' => 0,
-		'IPC::System::Simple' => 0,
 		'Test::Compile' => 0,
 		'Test::DescribeMe' => 0,
 		'Test::HTTPStatus' => 0,

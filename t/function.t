@@ -5,6 +5,7 @@ use warnings;
 
 use CHI;
 use Readonly;
+use POSIX ();
 use Scalar::Util qw(blessed refaddr);
 use Test::Memory::Cycle;
 use Test::Mockingbird qw(mock restore_all);
@@ -102,6 +103,52 @@ subtest '_js_string: combined — backslash then quote escaped in correct order'
 
 subtest '_js_string: lone CR -> literal \r sequence' => sub {
 	is(HTML::OSM::_js_string("a\rb"), 'a\\rb', 'lone CR escaped');
+};
+
+# ─────────────────────────────────────────────────────────────────────────────
+# _num_str() — numbers as text with a '.' decimal point, whatever the locale.
+# A dualvar simulates Perl builds that print 51.5074 as '51,5074'.
+# ─────────────────────────────────────────────────────────────────────────────
+
+subtest '_num_str: number printed with a comma comes back with a dot' => sub {
+	is(HTML::OSM::_num_str(Scalar::Util::dualvar(51.5074, '51,5074')), '51.5074', 'positive');
+	is(HTML::OSM::_num_str(Scalar::Util::dualvar(-0.1278, '-0,1278')), '-0.1278', 'negative');
+};
+
+subtest '_num_str: ordinary numbers and numeric strings are unchanged' => sub {
+	is(HTML::OSM::_num_str(51.5074), '51.5074', 'number');
+	is(HTML::OSM::_num_str(-90),     '-90',     'integer');
+	is(HTML::OSM::_num_str('.5'),    '.5',      'numeric string');
+};
+
+subtest '_num_str: strings, undef and refs are returned as they are' => sub {
+	is(HTML::OSM::_num_str('51,5074'), '51,5074', 'comma string is not a number, so it is left alone');
+	is(HTML::OSM::_num_str(undef), undef, 'undef');
+	my $ref = [1];
+	is(HTML::OSM::_num_str($ref), $ref, 'ref');
+	is(HTML::OSM::_num_str(Scalar::Util::dualvar(1, 'abc')), 'abc', 'non-numeric text of a dualvar is left for _validate to reject');
+};
+
+subtest '_validate: comma-printed numbers pass' => sub {
+	is(HTML::OSM::_validate(Scalar::Util::dualvar(51.5, '51,5'), Scalar::Util::dualvar(-0.1, '-0,1')), 1, 'accepted');
+};
+
+# ─────────────────────────────────────────────────────────────────────────────
+# _html_json() — encodes under the C numeric locale and restores everything.
+# ─────────────────────────────────────────────────────────────────────────────
+
+subtest '_html_json: restores LC_NUMERIC and $@' => sub {
+	my $before = POSIX::setlocale(POSIX::LC_NUMERIC());
+	eval { die "sentinel\n" };
+	is(HTML::OSM::_html_json([0.5, -0.1278]), '[0.5,-0.1278]', 'numbers encoded with dots');
+	is($@, "sentinel\n", '$@ preserved');
+	is(POSIX::setlocale(POSIX::LC_NUMERIC()), $before, 'LC_NUMERIC restored');
+};
+
+subtest '_html_json: an encode error still propagates and the locale is restored' => sub {
+	my $before = POSIX::setlocale(POSIX::LC_NUMERIC());
+	throws_ok { HTML::OSM::_html_json(\*STDOUT) } qr/./, 'unencodable data dies';
+	is(POSIX::setlocale(POSIX::LC_NUMERIC()), $before, 'LC_NUMERIC restored after the error');
 };
 
 # ─────────────────────────────────────────────────────────────────────────────

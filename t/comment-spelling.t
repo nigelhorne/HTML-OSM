@@ -15,6 +15,7 @@ __DATA__
 attr
 CDN
 Choropleth
+de
 env
 fitBounds
 Geocode
@@ -25,15 +26,18 @@ GeoJSON
 GPX
 Heatmap
 html
-js
 JS
+js
 lon
+macOS
 Nominatim
+num
 onload
 OSM
 params
 px
 rc
+str
 UA
 usr
 WGS
