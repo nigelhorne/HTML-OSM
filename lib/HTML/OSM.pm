@@ -82,6 +82,7 @@ internal tile server or run on an air-gapped network.  It accepts the same
 Leaflet placeholders as the default, for example
 C<http://tiles.internal/{z}/{x}/{y}.png>.  The attribution remains the
 OpenStreetMap credit, which is the usual requirement for OSM-derived tiles.
+The optional in-page search box still calls Nominatim when a reader uses it.
 
 =back
 

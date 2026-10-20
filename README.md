@@ -36,6 +36,7 @@ Version 0.11
     Leaflet placeholders as the default, for example
     `http://tiles.internal/{z}/{x}/{y}.png`. The attribution remains the
     OpenStreetMap credit, which is the usual requirement for OSM-derived tiles.
+    The optional in-page search box still calls Nominatim when a reader uses it.
 
 # SUBROUTINES/METHODS
 
