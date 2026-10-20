@@ -1,6 +1,6 @@
 Revision history for HTML-OSM
 
-0.11	Mon Oct 19 2026
+0.11	
 	[ Enhancements ]
 	- new(tile_url => ...) replaces the OpenStreetMap tile layer, so maps can
 	  use an internal tile server or run on an air-gapped network

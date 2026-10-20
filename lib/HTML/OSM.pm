@@ -367,7 +367,7 @@ Returns 1 on success.
         popup => 'name',
     );
 
-    # Raw JSON string — decoded automatically
+    # Raw JSON string - decoded automatically
     $map->add_geojson('{"type":"FeatureCollection","features":[]}');
 
     # Multiple GeoJSON layers with different styles on the same map
@@ -419,7 +419,7 @@ Returns 1 on success.
 
 =head3 EXAMPLES
 
-    # Basic heatmap — [lat, lon] per point
+    # Basic heatmap - [lat, lon] per point
     $map->add_heatmap([
         [51.5074, -0.1278],
         [51.6000, -0.2000],
@@ -547,7 +547,7 @@ Returns 1 on success.
         scale => ['#f7fbff', '#6baed6', '#08519c'],
     );
 
-    # choropleth-only map — center() must be called explicitly
+    # choropleth-only map - center() must be called explicitly
     $map->center([54.0, -2.0]);
     $map->add_choropleth(\@uk_features, \%population_by_region);
     my ($head, $body) = $map->onload_render();
