@@ -40,6 +40,35 @@ my ($head, $body) = $map->onload_render();
     OpenStreetMap credit, which is the usual requirement for OSM-derived tiles.
     The optional in-page search box still calls Nominatim when a reader uses it.
 
+- Tile attribution
+
+    `tile_attribution` replaces the credit shown in the corner of the map.
+    Set it when the tiles come from a provider that asks for a different
+    credit.  The value is HTML that Leaflet renders as it is, so pass only
+    trusted text.
+
+- Nominatim contact address
+
+    `email` is added to every Nominatim request the module makes, as the
+    Nominatim usage policy asks of heavy users.  It is not put into the rendered
+    page, so the in-page search box sends no address.
+
+## Description
+
+`HTML::OSM` builds an interactive map from OpenStreetMap tiles and the
+Leaflet.js library.  Give it points as latitude and longitude, as place
+names, or as geocoder result objects.  It can also draw GeoJSON shapes,
+heatmaps, GPX tracks and choropleth (colour-filled region) layers, and can
+group nearby markers into clusters.
+
+Place names are turned into coordinates by an injected geocoder or, without
+one, by the Nominatim service.  The answers are cached, and requests can be
+spaced out with `min_interval`.
+
+`onload_render()` returns two HTML fragments: one for the page's
+`<head>` and one for its `<body>`.  The interface follows
+[HTML::GoogleMaps::V3](https://metacpan.org/pod/HTML%3A%3AGoogleMaps%3A%3AV3), so code written for that module needs few changes.
+
 ## Subroutines/Methods
 
 ### New
@@ -70,6 +99,7 @@ merging `%overrides` onto the existing object's state without re-validating.
   config_file             => { type => string,                    optional },
   coordinates             => { type => arrayref,                  optional },
   css_url                 => { type => string,                    optional },
+  email                   => { type => string,                    optional },
   geocoder                => { type => object, can => geocode,    optional },
   gpx_js_url              => { type => string,                    optional },
   heatmap_js_url          => { type => string,                    optional },
@@ -78,6 +108,7 @@ merging `%overrides` onto the existing object's state without re-validating.
   js_url                  => { type => string,                    optional },
   logger                  => { type => object,                    optional },
   min_interval            => { type => number,  min => 0,         optional },
+  tile_attribution        => { type => string,                    optional },
   tile_url                => { type => string,                    optional },
   ua                      => { type => object,                    optional },
   width                   => { type => string,                    optional },
@@ -123,6 +154,8 @@ $map->add_marker($geo_coder_result);
 ```
 
 Returns 1 on success, 0 if the point cannot be resolved or is out of range.
+An empty address, or an arrayref that does not hold exactly two elements,
+also returns 0.
 
 #### Api Specification
 
@@ -143,9 +176,10 @@ icon  : string   (optional icon URL)
 #### Messages
 
 ```
-| Message                              | Meaning / Resolution                        |
-|--------------------------------------|---------------------------------------------|
-| add_marker(): unknown point type     | Point is a ref type with no lat/lon methods |
+| Message                                 | Meaning / Resolution                        |
+|-----------------------------------------|---------------------------------------------|
+| add_marker(): unknown point type: TYPE | Point is a ref type with no lat/lon methods |
+| Skipping invalid coordinate: (LAT, LON) | Warning: the point is not numeric or is out of range; 0 is returned |
 ```
 
 #### Examples
@@ -246,8 +280,8 @@ Returns 1 on success.
 
 ```
 points : arrayref of ([lat, lon] | [lat, lon, intensity])
-radius : integer  default 25
-blur   : integer  default 15
+radius : number  default 25 (a value that is not a positive number uses the default)
+blur   : number  default 15 (a value that is not a positive number uses the default)
 ```
 
 ##### Output
@@ -259,9 +293,9 @@ blur   : integer  default 15
 #### Messages
 
 ```
-| Message                              | Meaning / Resolution              |
-|--------------------------------------|-----------------------------------|
-| add_heatmap: points must be arrayref | First argument is not an arrayref |
+| Message                                 | Meaning / Resolution              |
+|-----------------------------------------|-----------------------------------|
+| add_heatmap: points must be an arrayref | First argument is not an arrayref |
 ```
 
 #### Examples
@@ -311,9 +345,9 @@ url : string  URL of the GPX file (required)
 #### Messages
 
 ```
-| Message              | Meaning / Resolution       |
-|----------------------|----------------------------|
-| add_gpx: url required | No URL argument supplied  |
+| Message                  | Meaning / Resolution     |
+|--------------------------|--------------------------|
+| add_gpx: url is required | No URL argument supplied |
 ```
 
 #### Examples
@@ -364,10 +398,10 @@ scale    : arrayref hex-colour strings low-to-high  (default: 5-step YlGnBu)
 #### Messages
 
 ```
-| Message                                  | Meaning / Resolution                   |
-|------------------------------------------|----------------------------------------|
-| add_choropleth: features must be arrayref | First argument is not an arrayref      |
-| add_choropleth: values must be hashref    | Second argument is not a hashref       |
+| Message                                     | Meaning / Resolution              |
+|---------------------------------------------|-----------------------------------|
+| add_choropleth: features must be an arrayref | First argument is not an arrayref |
+| add_choropleth: values must be a hashref     | Second argument is not a hashref  |
 ```
 
 #### Examples
@@ -403,7 +437,8 @@ $map->center($geo_object);
 $map->center('Berlin, Germany');
 ```
 
-Returns 1 on success, 0 if the point cannot be resolved.
+Returns 1 on success, 0 if the point cannot be resolved or is out of range.
+An empty address also returns 0.
 
 #### Api Specification
 
@@ -422,11 +457,12 @@ point : arrayref [lat, lon] | object with latitude()/longitude() | string addres
 #### Messages
 
 ```perl
-| Message                                        | Meaning / Resolution                     |
-|------------------------------------------------|------------------------------------------|
-| center(): usage: point => [lat, lon]           | No point argument supplied               |
-| center(): point must have latitude & longitude | Arrayref has != 2 elements               |
-| center(): unknown point type                   | Ref type has no lat/lon methods          |
+| Message                                            | Meaning / Resolution            |
+|----------------------------------------------------|---------------------------------|
+| center(): usage: point => [ latitude, longitude ]  | No point argument supplied      |
+| center(): point must have latitude and longitude   | Arrayref has != 2 elements      |
+| center(): unknown point type: TYPE                 | Ref type has no lat/lon methods |
+| Skipping invalid coordinate: (LAT, LON)            | Warning: point is not numeric or is out of range; 0 is returned |
 ```
 
 #### Examples
@@ -519,6 +555,12 @@ The rendered page provides:
 leaving static markers (added via `add_marker`) intact.
 - A "Reset Map" button that returns the view to the initial centre and zoom.
 
+Values that reach the object without going through `new()`'s checks (from a
+config file or a clone) are checked again here.  A `zoom` that is not an
+integer from 0 to 19 is replaced by 12, and a `width` or `height` that is
+not a CSS length (such as `600px`, `100%` or `auto`) is replaced by the
+default.  Each replacement gives a warning.
+
 #### Api Specification
 
 ##### Input
@@ -539,7 +581,13 @@ leaving static markers (added via `add_marker`) intact.
 | Message                                          | Meaning / Resolution                        |
 |--------------------------------------------------|---------------------------------------------|
 | No map data provided                             | No markers, GeoJSON, heatmap, GPX, or choropleth added yet |
-| center() must be called when no point markers    | Non-marker-only render needs explicit centre |
+| center() must be called when no point markers are provided | Non-marker-only render needs explicit centre |
+| Skipping invalid coordinate: (LAT, LON)          | Warning: a marker is not numeric or out of range; it is left off the map |
+| onload_render: invalid zoom 'Z', using 12        | Warning: zoom from a config file or clone is out of range |
+| onload_render: invalid width 'W', using 600px    | Warning: width is not a CSS length |
+| onload_render: invalid height 'H', using 400px   | Warning: height is not a CSS length |
+| _fetch_coordinates: failed to decode Nominatim response: ERROR | Warning: Nominatim returned something that is not JSON; the marker is skipped |
+| _fetch_coordinates: unrecognised geocoder result type: TYPE | Warning: the injected geocoder returned an unknown type; the marker is skipped |
 ```
 
 #### Examples
@@ -571,6 +619,8 @@ $tt->process('map.tt', {
 ```
 1. Gather all data layers; croak if none populated.
 2. Geocode/validate each coordinate tuple; discard invalids with a warning.
+   A tuple with no coordinates and no address is discarded.
+   Re-check zoom, width and height; fall back to defaults with a warning.
 3. Determine map centre: caller-supplied > computed midpoint of marker bounds.
    Croak if neither is available.
 4. Build <head>: Leaflet CSS + JS; inject cluster/heatmap/GPX plugin assets
@@ -594,6 +644,11 @@ can merge arbitrary state.  Callers are responsible for passing valid overrides.
 - **Config-file params unvalidated**: Keys injected by
 [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure) from a config file are not re-run through the schema, so
 a malformed config file can introduce invalid types at runtime.
+`onload_render()` checks `zoom`, `width` and `height` again and
+HTML-escapes the CDN URLs, so a bad value cannot inject markup into the page.
+- **One map per page**: The rendered HTML uses fixed element IDs
+(`map`, `search-box`, `clear-search-button` and `reset-button`), so two
+maps on the same page will clash.
 - **Private-method encapsulation**: `_fetch_coordinates`, `_validate`,
 and `_js_string` are named with a leading underscore by convention only.
 Using [Sub::Private](https://metacpan.org/pod/Sub%3A%3APrivate) in `enforce` mode would make the contract explicit, but
@@ -622,7 +677,17 @@ Please report bugs at [https://github.com/nigelhorne/HTML-OSM/issues](https://gi
 
 This module is provided as-is without any warranty.
 
-[https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM](https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM)
+Please report problems and ask questions at
+[https://github.com/nigelhorne/HTML-OSM/issues](https://github.com/nigelhorne/HTML-OSM/issues).
+
+You can find documentation for this module with the perldoc command.
+
+```
+perldoc HTML::OSM
+```
+
+You can also look for information at MetaCPAN:
+[https://metacpan.org/dist/HTML-OSM](https://metacpan.org/dist/HTML-OSM).
 
 ### Todo
 
@@ -692,7 +757,7 @@ AddGPX
   gpx_tracks' = gpx_tracks ⌢ ⟨url?⟩
 ```
 
-### Add\_Chropleth
+### Add\_Choropleth
 
 ```
 AddChoropleth

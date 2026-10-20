@@ -100,6 +100,72 @@ subtest '_js_string: combined — backslash then quote escaped in correct order'
 	is($got, "\\\\\\'", 'backslash then quote: order preserved');
 };
 
+subtest '_js_string: lone CR -> literal \r sequence' => sub {
+	is(HTML::OSM::_js_string("a\rb"), 'a\\rb', 'lone CR escaped');
+};
+
+# ─────────────────────────────────────────────────────────────────────────────
+# _html_attr() — escapes a value for a double-quoted HTML attribute.
+# ─────────────────────────────────────────────────────────────────────────────
+
+subtest '_html_attr: undef becomes empty string' => sub {
+	is(HTML::OSM::_html_attr(undef), '', 'undef input gives empty string');
+};
+
+subtest '_html_attr: plain URL passes through unchanged' => sub {
+	is(HTML::OSM::_html_attr('https://unpkg.com/leaflet.js'), 'https://unpkg.com/leaflet.js', 'URL unchanged');
+};
+
+subtest '_html_attr: &, <, > and " become entities, & first' => sub {
+	is(HTML::OSM::_html_attr(q{a&b"c<d>}), 'a&amp;b&quot;c&lt;d&gt;', 'all four escaped');
+	is(HTML::OSM::_html_attr('&lt;'), '&amp;lt;', 'existing entity is not left as-is');
+};
+
+# ─────────────────────────────────────────────────────────────────────────────
+# _css_length() — validates width/height before they reach the <style> block.
+# ─────────────────────────────────────────────────────────────────────────────
+
+subtest '_css_length: valid lengths are returned unchanged' => sub {
+	for my $v (qw(600px 100% 2.5em 50vh auto 300)) {
+		is(HTML::OSM::_css_length('width', $v, $CFG{DEFAULT_WIDTH}), $v, "'$v' accepted");
+	}
+};
+
+subtest '_css_length: undef and empty fall back to the default silently' => sub {
+	my @warnings;
+	local $SIG{__WARN__} = sub { push @warnings, @_ };
+	is(HTML::OSM::_css_length('width', undef, $CFG{DEFAULT_WIDTH}), $CFG{DEFAULT_WIDTH}, 'undef -> default');
+	is(HTML::OSM::_css_length('width', '',    $CFG{DEFAULT_WIDTH}), $CFG{DEFAULT_WIDTH}, 'empty -> default');
+	is(scalar @warnings, 0, 'no warning for a missing value');
+};
+
+subtest '_css_length: hostile value falls back to the default with a warning' => sub {
+	my @warnings;
+	local $SIG{__WARN__} = sub { push @warnings, @_ };
+	is(HTML::OSM::_css_length('height', '1px}</style><script>', $CFG{DEFAULT_HEIGHT}),
+		$CFG{DEFAULT_HEIGHT}, 'injection attempt replaced');
+	is(HTML::OSM::_css_length('height', "600px\n", $CFG{DEFAULT_HEIGHT}),
+		$CFG{DEFAULT_HEIGHT}, 'trailing newline rejected');
+	is(scalar @warnings, 2, 'one warning per replacement');
+	like($warnings[0], qr/onload_render: invalid height/, 'warning names the field');
+};
+
+# ─────────────────────────────────────────────────────────────────────────────
+# _positive_number() — heatmap radius/blur are embedded raw in JS.
+# ─────────────────────────────────────────────────────────────────────────────
+
+subtest '_positive_number: positive numbers are returned as numbers' => sub {
+	is(HTML::OSM::_positive_number(30, 25),     30,  'integer');
+	is(HTML::OSM::_positive_number('12.5', 25), 12.5, 'numeric string');
+	is(HTML::OSM::_positive_number(' 7', 25),   7,   'leading space is dropped by numification');
+};
+
+subtest '_positive_number: everything else gives the default' => sub {
+	for my $v (undef, '', 0, -5, 'abc', '1});alert(1);//', 'Inf', 'NaN', 1e9) {
+		is(HTML::OSM::_positive_number($v, 25), 25, 'default for ' . ($v // 'undef'));
+	}
+};
+
 # ─────────────────────────────────────────────────────────────────────────────
 # _validate() — private helper, called as a plain function (not a method).
 # ─────────────────────────────────────────────────────────────────────────────

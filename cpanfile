@@ -1,8 +1,9 @@
 # Generated from Makefile.PL using makefilepl2cpanfile
 
+requires 'perl', '5.010';
+
 requires 'CHI';
 requires 'Carp';
-requires 'ExtUtils::MakeMaker', '6.64';
 requires 'JSON::MaybeXS';
 requires 'LWP::UserAgent';
 requires 'Object::Configure', '0.15';
@@ -14,24 +15,22 @@ requires 'Time::HiRes';
 requires 'URI::Escape';
 
 on 'configure' => sub {
-	requires 'ExtUtils::MakeMaker', '6.64';
+	requires 'ExtUtils::MakeMaker', '6.64';   # Minimum version for TEST_REQUIRES
 };
 
 on 'test' => sub {
 	requires 'File::Temp';
+	requires 'HTTP::Response';
 	requires 'IPC::System::Simple';
 	requires 'Test::Compile';
 	requires 'Test::DescribeMe';
-	requires 'Test::HTML::Lint';
 	requires 'Test::HTTPStatus';
-	requires 'Test::JSON';
 	requires 'Test::Memory::Cycle';
 	requires 'Test::Mockingbird';
 	requires 'Test::Most';
 	requires 'Test::Needs';
 	requires 'Test::RequiresInternet';
 	requires 'Test::Returns';
-	requires 'Test::Warnings';
 	requires 'Test::Which';
 	requires 'Test::Without::Module';
 };

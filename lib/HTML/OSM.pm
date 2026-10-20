@@ -1,11 +1,9 @@
-#!/usr/bin/env perl
-
 package HTML::OSM;
 
 use strict;
 use warnings;
-use autodie qw(:all);
 
+use autodie qw(:all);
 use Carp qw(carp croak);
 use CHI;
 use JSON::MaybeXS qw(decode_json encode_json);
@@ -14,7 +12,7 @@ use Object::Configure 0.15;
 use Params::Get 0.13;
 use Params::Validate::Strict 0.28;
 use Readonly;
-use Scalar::Util qw(blessed);
+use Scalar::Util qw(blessed looks_like_number);
 use Time::HiRes qw(time);
 use URI::Escape qw(uri_escape_utf8);
 
@@ -39,8 +37,19 @@ Readonly::Scalar my $CLUSTER_CSS_URL         => 'https://unpkg.com/leaflet.marke
 Readonly::Scalar my $CLUSTER_DEFAULT_CSS_URL => 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css';
 Readonly::Scalar my $HEATMAP_JS_URL          => 'https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js';
 Readonly::Scalar my $GPX_JS_URL              => 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js';
-Readonly::Scalar my $TILE_URL               => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+Readonly::Scalar my $TILE_URL                => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+Readonly::Scalar my $TILE_ATTRIBUTION        => '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 Readonly::Scalar my $NOMINATIM_HOST          => 'nominatim.openstreetmap.org/search';
+
+# Rendering defaults, also used when a stored value is unusable at render time
+Readonly::Scalar my $DEFAULT_ZOOM   => 12;
+Readonly::Scalar my $DEFAULT_HEIGHT => '400px';
+Readonly::Scalar my $DEFAULT_WIDTH  => '600px';
+Readonly::Scalar my $DEFAULT_RADIUS => 25;
+Readonly::Scalar my $DEFAULT_BLUR   => 15;
+
+# A CSS length: a number with an optional unit, or 'auto'
+Readonly::Scalar my $CSS_LENGTH => qr/\A(?:auto|[0-9]+(?:\.[0-9]+)?(?:px|%|em|rem|ex|ch|vh|vw|vmin|vmax|pt|pc|cm|mm|in)?)\z/;
 
 # WGS-84 valid ranges
 Readonly::Scalar my $LAT_MIN => -90;
@@ -84,7 +93,36 @@ C<http://tiles.internal/{z}/{x}/{y}.png>.  The attribution remains the
 OpenStreetMap credit, which is the usual requirement for OSM-derived tiles.
 The optional in-page search box still calls Nominatim when a reader uses it.
 
+=item * Tile attribution
+
+C<tile_attribution> replaces the credit shown in the corner of the map.
+Set it when the tiles come from a provider that asks for a different
+credit.  The value is HTML that Leaflet renders as it is, so pass only
+trusted text.
+
+=item * Nominatim contact address
+
+C<email> is added to every Nominatim request the module makes, as the
+Nominatim usage policy asks of heavy users.  It is not put into the rendered
+page, so the in-page search box sends no address.
+
 =back
+
+=head1 DESCRIPTION
+
+C<HTML::OSM> builds an interactive map from OpenStreetMap tiles and the
+Leaflet.js library.  Give it points as latitude and longitude, as place
+names, or as geocoder result objects.  It can also draw GeoJSON shapes,
+heatmaps, GPX tracks and choropleth (colour-filled region) layers, and can
+group nearby markers into clusters.
+
+Place names are turned into coordinates by an injected geocoder or, without
+one, by the Nominatim service.  The answers are cached, and requests can be
+spaced out with C<min_interval>.
+
+C<onload_render()> returns two HTML fragments: one for the page's
+C<< <head> >> and one for its C<< <body> >>.  The interface follows
+L<HTML::GoogleMaps::V3>, so code written for that module needs few changes.
 
 =head1 SUBROUTINES/METHODS
 
@@ -113,6 +151,7 @@ merging C<%overrides> onto the existing object's state without re-validating.
     config_file             => { type => string,                    optional },
     coordinates             => { type => arrayref,                  optional },
     css_url                 => { type => string,                    optional },
+    email                   => { type => string,                    optional },
     geocoder                => { type => object, can => geocode,    optional },
     gpx_js_url              => { type => string,                    optional },
     heatmap_js_url          => { type => string,                    optional },
@@ -121,6 +160,7 @@ merging C<%overrides> onto the existing object's state without re-validating.
     js_url                  => { type => string,                    optional },
     logger                  => { type => object,                    optional },
     min_interval            => { type => number,  min => 0,         optional },
+    tile_attribution        => { type => string,                    optional },
     tile_url                => { type => string,                    optional },
     ua                      => { type => object,                    optional },
     width                   => { type => string,                    optional },
@@ -182,6 +222,7 @@ sub new
 			config_file             => { type => 'string',                         optional => 1 },
 			coordinates             => { type => 'arrayref',                       optional => 1 },
 			css_url                 => { type => 'string',                         optional => 1 },
+			email                   => { type => 'string',                         optional => 1 },
 			geocoder                => { type => 'object',  can => 'geocode',      optional => 1 },
 			gpx_js_url              => { type => 'string',                         optional => 1 },
 			heatmap_js_url          => { type => 'string',                         optional => 1 },
@@ -190,6 +231,7 @@ sub new
 			js_url                  => { type => 'string',                         optional => 1 },
 			logger                  => { type => 'object',                         optional => 1 },
 			min_interval            => { type => 'number',  min => 0,              optional => 1 },
+			tile_attribution        => { type => 'string',                         optional => 1 },
 			tile_url                => { type => 'string',                         optional => 1 },
 			ua                      => { type => 'object',                         optional => 1 },
 			width                   => { type => 'string',                         optional => 1 },
@@ -210,10 +252,10 @@ sub new
 	return bless {
 		# Defaults — spread of %{$params} below overrides each one when supplied.
 		coordinates             => [],
-		height                  => '400px',
+		height                  => $DEFAULT_HEIGHT,
 		host                    => $NOMINATIM_HOST,
-		width                   => '600px',
-		zoom                    => 12,
+		width                   => $DEFAULT_WIDTH,
+		zoom                    => $DEFAULT_ZOOM,
 		min_interval            => 0,
 		last_request            => 0,
 		cluster                 => 0,
@@ -225,6 +267,7 @@ sub new
 		heatmap_js_url          => $HEATMAP_JS_URL,
 		gpx_js_url              => $GPX_JS_URL,
 		tile_url                => $TILE_URL,
+		tile_attribution        => $TILE_ATTRIBUTION,
 		%{$params},
 	}, $class;
 }
@@ -238,6 +281,8 @@ Add a point marker to the map.
     $map->add_marker($geo_coder_result);
 
 Returns 1 on success, 0 if the point cannot be resolved or is out of range.
+An empty address, or an arrayref that does not hold exactly two elements,
+also returns 0.
 
 =head3 API SPECIFICATION
 
@@ -253,9 +298,10 @@ Returns 1 on success, 0 if the point cannot be resolved or is out of range.
 
 =head3 MESSAGES
 
-  | Message                              | Meaning / Resolution                        |
-  |--------------------------------------|---------------------------------------------|
-  | add_marker(): unknown point type     | Point is a ref type with no lat/lon methods |
+  | Message                                 | Meaning / Resolution                        |
+  |-----------------------------------------|---------------------------------------------|
+  | add_marker(): unknown point type: TYPE | Point is a ref type with no lat/lon methods |
+  | Skipping invalid coordinate: (LAT, LON) | Warning: the point is not numeric or is out of range; 0 is returned |
 
 =head3 EXAMPLES
 
@@ -315,6 +361,8 @@ sub add_marker
 		return 0 if scalar(@{$point}) != 2;
 		($lat, $lon) = @{$point};
 	} elsif(!ref($point)) {
+		# An empty or missing address cannot be resolved
+		return 0 unless defined($point) && length($point);
 		($lat, $lon) = $self->_fetch_coordinates($point);
 	} elsif($point->can('latitude')) {
 		($lat, $lon) = ($point->latitude(), $point->longitude());
@@ -404,8 +452,8 @@ Returns 1 on success.
 =head4 INPUT
 
   points : arrayref of ([lat, lon] | [lat, lon, intensity])
-  radius : integer  default 25
-  blur   : integer  default 15
+  radius : number  default 25 (a value that is not a positive number uses the default)
+  blur   : number  default 15 (a value that is not a positive number uses the default)
 
 =head4 OUTPUT
 
@@ -413,9 +461,9 @@ Returns 1 on success.
 
 =head3 MESSAGES
 
-  | Message                              | Meaning / Resolution              |
-  |--------------------------------------|-----------------------------------|
-  | add_heatmap: points must be arrayref | First argument is not an arrayref |
+  | Message                                 | Meaning / Resolution              |
+  |-----------------------------------------|-----------------------------------|
+  | add_heatmap: points must be an arrayref | First argument is not an arrayref |
 
 =head3 EXAMPLES
 
@@ -469,9 +517,9 @@ Returns 1 on success.
 
 =head3 MESSAGES
 
-  | Message              | Meaning / Resolution       |
-  |----------------------|----------------------------|
-  | add_gpx: url required | No URL argument supplied  |
+  | Message                  | Meaning / Resolution     |
+  |--------------------------|--------------------------|
+  | add_gpx: url is required | No URL argument supplied |
 
 =head3 EXAMPLES
 
@@ -526,10 +574,10 @@ Returns 1 on success.
 
 =head3 MESSAGES
 
-  | Message                                  | Meaning / Resolution                   |
-  |------------------------------------------|----------------------------------------|
-  | add_choropleth: features must be arrayref | First argument is not an arrayref      |
-  | add_choropleth: values must be hashref    | Second argument is not a hashref       |
+  | Message                                     | Meaning / Resolution              |
+  |---------------------------------------------|-----------------------------------|
+  | add_choropleth: features must be an arrayref | First argument is not an arrayref |
+  | add_choropleth: values must be a hashref     | Second argument is not a hashref  |
 
 =head3 EXAMPLES
 
@@ -597,7 +645,8 @@ Set the map centre to a given point.
     $map->center($geo_object);
     $map->center('Berlin, Germany');
 
-Returns 1 on success, 0 if the point cannot be resolved.
+Returns 1 on success, 0 if the point cannot be resolved or is out of range.
+An empty address also returns 0.
 
 =head3 API SPECIFICATION
 
@@ -611,11 +660,12 @@ Returns 1 on success, 0 if the point cannot be resolved.
 
 =head3 MESSAGES
 
-  | Message                                        | Meaning / Resolution                     |
-  |------------------------------------------------|------------------------------------------|
-  | center(): usage: point => [lat, lon]           | No point argument supplied               |
-  | center(): point must have latitude & longitude | Arrayref has != 2 elements               |
-  | center(): unknown point type                   | Ref type has no lat/lon methods          |
+  | Message                                            | Meaning / Resolution            |
+  |----------------------------------------------------|---------------------------------|
+  | center(): usage: point => [ latitude, longitude ]  | No point argument supplied      |
+  | center(): point must have latitude and longitude   | Arrayref has != 2 elements      |
+  | center(): unknown point type: TYPE                 | Ref type has no lat/lon methods |
+  | Skipping invalid coordinate: (LAT, LON)            | Warning: point is not numeric or is out of range; 0 is returned |
 
 =head3 EXAMPLES
 
@@ -652,6 +702,8 @@ sub center
 	} elsif(ref($point) && $point->can('latitude')) {
 		($lat, $lon) = ($point->latitude(), $point->longitude());
 	} elsif(!ref($point)) {
+		# An empty address cannot be resolved
+		return 0 unless length($point);
 		($lat, $lon) = $self->_fetch_coordinates($point);
 	} else {
 		my $msg = 'center(): unknown point type: ' . ref($point);
@@ -751,6 +803,12 @@ leaving static markers (added via C<add_marker>) intact.
 
 =back
 
+Values that reach the object without going through C<new()>'s checks (from a
+config file or a clone) are checked again here.  A C<zoom> that is not an
+integer from 0 to 19 is replaced by 12, and a C<width> or C<height> that is
+not a CSS length (such as C<600px>, C<100%> or C<auto>) is replaced by the
+default.  Each replacement gives a warning.
+
 =head3 API SPECIFICATION
 
 =head4 INPUT
@@ -766,7 +824,13 @@ leaving static markers (added via C<add_marker>) intact.
   | Message                                          | Meaning / Resolution                        |
   |--------------------------------------------------|---------------------------------------------|
   | No map data provided                             | No markers, GeoJSON, heatmap, GPX, or choropleth added yet |
-  | center() must be called when no point markers    | Non-marker-only render needs explicit centre |
+  | center() must be called when no point markers are provided | Non-marker-only render needs explicit centre |
+  | Skipping invalid coordinate: (LAT, LON)          | Warning: a marker is not numeric or out of range; it is left off the map |
+  | onload_render: invalid zoom 'Z', using 12        | Warning: zoom from a config file or clone is out of range |
+  | onload_render: invalid width 'W', using 600px    | Warning: width is not a CSS length |
+  | onload_render: invalid height 'H', using 400px   | Warning: height is not a CSS length |
+  | _fetch_coordinates: failed to decode Nominatim response: ERROR | Warning: Nominatim returned something that is not JSON; the marker is skipped |
+  | _fetch_coordinates: unrecognised geocoder result type: TYPE | Warning: the injected geocoder returned an unknown type; the marker is skipped |
 
 =head3 EXAMPLES
 
@@ -794,6 +858,8 @@ leaving static markers (added via C<add_marker>) intact.
 
   1. Gather all data layers; croak if none populated.
   2. Geocode/validate each coordinate tuple; discard invalids with a warning.
+     A tuple with no coordinates and no address is discarded.
+     Re-check zoom, width and height; fall back to defaults with a warning.
   3. Determine map centre: caller-supplied > computed midpoint of marker bounds.
      Croak if neither is available.
   4. Build <head>: Leaflet CSS + JS; inject cluster/heatmap/GPX plugin assets
@@ -811,8 +877,9 @@ sub onload_render
 {
 	my $self = shift;
 
-	my $height            = $self->{'height'} || '400px';
-	my $width             = $self->{'width'}  || '600px';
+	my $height            = _css_length('height', $self->{'height'}, $DEFAULT_HEIGHT);
+	my $width             = _css_length('width',  $self->{'width'},  $DEFAULT_WIDTH);
+	my $zoom              = $self->{'zoom'};
 	my $coordinates       = $self->{coordinates}        || [];
 	my $geojson_layers    = $self->{geojson}             || [];
 	my $heatmap_layers    = $self->{heatmap_layers}      || [];
@@ -825,11 +892,20 @@ sub onload_render
 		croak 'No map data provided';
 	}
 
+	# Config-file and clone values skip new()'s schema, so check zoom again
+	# before it is put into the JavaScript.
+	if(!defined($zoom) || $zoom !~ /\A[0-9]+\z/ || $zoom < $ZOOM_MIN || $zoom > $ZOOM_MAX) {
+		carp sprintf("onload_render: invalid zoom '%s', using %d", $zoom // 'undef', $DEFAULT_ZOOM);
+		$zoom = $DEFAULT_ZOOM;
+	}
+
 	# Geocode address strings; validate and discard bad numeric pairs.
 	my @valid_coordinates;
 	for my $coord (@$coordinates) {
 		my ($lat, $lon, $label, $icon_url) = @$coord;
 		if(!defined $lat || !defined $lon) {
+			# No coordinates and no address: nothing to look up
+			next unless defined($label) && length($label);
 			($lat, $lon) = $self->_fetch_coordinates($label);
 		}
 		# Validate ALL coordinates here — including geocoder-returned ones.
@@ -858,20 +934,22 @@ sub onload_render
 	}
 
 	# --- <head> ---
+	my %url = map { $_ => _html_attr($self->{$_}) }
+		qw(css_url js_url cluster_css_url cluster_default_css_url cluster_js_url heatmap_js_url gpx_js_url);
 	my $head = qq{
-		<link rel="stylesheet" href="$self->{css_url}" />
-		<script src="$self->{js_url}"></script>
+		<link rel="stylesheet" href="$url{css_url}" />
+		<script src="$url{js_url}"></script>
 	};
 
 	if($self->{cluster}) {
 		$head .= qq{
-		<link rel="stylesheet" href="$self->{cluster_css_url}" />
-		<link rel="stylesheet" href="$self->{cluster_default_css_url}" />
-		<script src="$self->{cluster_js_url}"></script>
+		<link rel="stylesheet" href="$url{cluster_css_url}" />
+		<link rel="stylesheet" href="$url{cluster_default_css_url}" />
+		<script src="$url{cluster_js_url}"></script>
 		};
 	}
-	$head .= qq{\t\t<script src="$self->{heatmap_js_url}"></script>\n} if @$heatmap_layers;
-	$head .= qq{\t\t<script src="$self->{gpx_js_url}"></script>\n}     if @$gpx_tracks;
+	$head .= qq{\t\t<script src="$url{heatmap_js_url}"></script>\n} if @$heatmap_layers;
+	$head .= qq{\t\t<script src="$url{gpx_js_url}"></script>\n}     if @$gpx_tracks;
 
 	$head .= qq{
 		<style>
@@ -882,16 +960,17 @@ sub onload_render
 	};
 
 	# --- <body> ---
-	my $tile_url = _js_string($self->{tile_url});
+	my $tile_url         = _js_string($self->{tile_url});
+	my $tile_attribution = _js_string($self->{tile_attribution});
 	my $body = qq{
 		<input type="text" id="search-box" placeholder="Enter location">
 		<button id="clear-search-button">Clear search markers</button>
 		<button id="reset-button">Reset Map</button>
 		<div id="map"></div>
 		<script>
-			var map = L.map('map').setView([$center_lat, $center_lon], $self->{zoom});
+			var map = L.map('map').setView([$center_lat, $center_lon], $zoom);
 			L.tileLayer('$tile_url', {
-				attribution: '&copy; OpenStreetMap contributors'
+				attribution: '$tile_attribution'
 			}).addTo(map);
 
 			var searchMarkers = [];
@@ -946,8 +1025,9 @@ sub onload_render
 	for my $layer (@$heatmap_layers) {
 		my $pts    = _html_json($layer->{points});
 		my $opts   = $layer->{opts} || {};
-		my $radius = $opts->{radius} || 25;
-		my $blur   = $opts->{blur}   || 15;
+		# Only plain positive numbers reach the JavaScript
+		my $radius = _positive_number($opts->{radius}, $DEFAULT_RADIUS);
+		my $blur   = _positive_number($opts->{blur},   $DEFAULT_BLUR);
 		$body .= "\t\t\tL.heatLayer($pts, { radius: $radius, blur: $blur }).addTo(map);\n";
 	}
 
@@ -988,7 +1068,7 @@ sub onload_render
 	# Event handlers.
 	$body .= qq{
 			document.getElementById('reset-button').addEventListener('click', function() {
-				map.setView([$center_lat, $center_lon], $self->{zoom});
+				map.setView([$center_lat, $center_lon], $zoom);
 			});
 
 			document.getElementById('clear-search-button').addEventListener('click', function() {
@@ -1069,12 +1149,16 @@ sub _fetch_coordinates
 		Time::HiRes::sleep($self->{min_interval} - $elapsed);
 	}
 
-	my $ua = $self->{'ua'}
-		|| LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
-	$ua->default_header(accept_encoding => 'gzip,deflate');
-	$ua->env_proxy(1);
+	# Configure only a UA we create; a caller's UA is used as supplied
+	my $ua = $self->{'ua'};
+	if(!$ua) {
+		$ua = LWP::UserAgent->new(agent => __PACKAGE__ . "/$VERSION");
+		$ua->default_header(accept_encoding => 'gzip,deflate');
+		$ua->env_proxy(1);
+	}
 
-	my $url      = 'https://' . $self->{'host'} . '?format=json&q=' . uri_escape_utf8($location);
+	my $url = 'https://' . $self->{'host'} . '?format=json&q=' . uri_escape_utf8($location);
+	$url .= '&email=' . uri_escape_utf8($self->{'email'}) if $self->{'email'};
 	my $response = $ua->get($url);
 	$self->{'last_request'} = time();
 
@@ -1148,8 +1232,55 @@ sub _js_string
 	$s =~ s/\\/\\\\/g;    # escape backslash first to avoid double-escaping
 	$s =~ s/'/\\'/g;      # escape our JS string delimiter
 	$s =~ s/\r?\n/\\n/g;  # newlines would break the JS string
+	$s =~ s/\r/\\r/g;     # a lone carriage return also ends a JS string
 	$s =~ s|</|<\\/|g;    # prevent </script> injection
 	return $s;
+}
+
+# _html_attr: Escape a Perl string for safe embedding in a double-quoted HTML attribute.
+# Purpose: Stop a configured CDN URL from closing the attribute or the tag.
+# Entry:   Any scalar (undef becomes '').
+# Exit:    String with &, <, > and " replaced by entities.
+sub _html_attr
+{
+	my $s = shift // '';
+	$s =~ s/&/&amp;/g;    # escape ampersand first to avoid double-escaping
+	$s =~ s/</&lt;/g;
+	$s =~ s/>/&gt;/g;
+	$s =~ s/"/&quot;/g;
+	return $s;
+}
+
+# _css_length: Check a width or height before it is put into the <style> block.
+# Purpose: Values from a config file or a clone skip new()'s schema, so a value
+#          such as '1px}</style><script>' could otherwise reach the page.
+# Entry:   ($name, $value, $default) - name is used only in the warning.
+# Exit:    $value when it is a CSS length; otherwise $default.
+# Side Effects: carp when a non-empty value is replaced.
+sub _css_length
+{
+	my ($name, $value, $default) = @_;
+
+	return $default unless defined($value) && length($value);
+	return $value if $value =~ $CSS_LENGTH;
+
+	carp "onload_render: invalid $name '$value', using $default";
+	return $default;
+}
+
+# _positive_number: Return $value as a number when it is a positive number.
+# Purpose: Heatmap options go straight into the JavaScript, so anything that
+#          is not a plain number must not reach it.
+# Entry:   ($value, $default).
+# Exit:    0 + $value, or $default when $value is missing, not numeric or <= 0.
+sub _positive_number
+{
+	my ($value, $default) = @_;
+
+	return $default unless defined($value) && looks_like_number($value);
+	# looks_like_number accepts 'Inf' and 'NaN', which are not valid in JS literals
+	return $default unless $value > 0 && $value < 1e6;
+	return 0 + $value;
 }
 
 =head1 LIMITATIONS
@@ -1167,6 +1298,12 @@ can merge arbitrary state.  Callers are responsible for passing valid overrides.
 =item * B<Config-file params unvalidated>: Keys injected by
 L<Object::Configure> from a config file are not re-run through the schema, so
 a malformed config file can introduce invalid types at runtime.
+C<onload_render()> checks C<zoom>, C<width> and C<height> again and
+HTML-escapes the CDN URLs, so a bad value cannot inject markup into the page.
+
+=item * B<One map per page>: The rendered HTML uses fixed element IDs
+(C<map>, C<search-box>, C<clear-search-button> and C<reset-button>), so two
+maps on the same page will clash.
 
 =item * B<Private-method encapsulation>: C<_fetch_coordinates>, C<_validate>,
 and C<_js_string> are named with a leading underscore by convention only.
@@ -1207,7 +1344,15 @@ Please report bugs at L<https://github.com/nigelhorne/HTML-OSM/issues>.
 
 This module is provided as-is without any warranty.
 
-L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-OSM>
+Please report problems and ask questions at
+L<https://github.com/nigelhorne/HTML-OSM/issues>.
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc HTML::OSM
+
+You can also look for information at MetaCPAN:
+L<https://metacpan.org/dist/HTML-OSM>.
 
 =head2 TODO
 
@@ -1269,7 +1414,7 @@ Allow per-marker removal via clicking on a marker.
   -----------------------------------------
     gpx_tracks' = gpx_tracks ⌢ ⟨url?⟩
 
-=head2 add_chropleth
+=head2 add_choropleth
 
   AddChoropleth
     ΔHTML_OSM
