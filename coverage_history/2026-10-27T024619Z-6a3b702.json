@@ -1,0 +1,568 @@
+{
+   "runs" : [
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069468.80014,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "-e",
+         "start" : 1793069191.67907,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069191.82172,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "-e",
+         "start" : 1793069191.82163,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069192.37677,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/10-compile.t",
+         "start" : 1793069192.05251,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069192.9137,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/20-new.t",
+         "start" : 1793069192.83755,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069193.5641,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/30-basics.t",
+         "start" : 1793069193.56373,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069194.25402,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/40-layers.t",
+         "start" : 1793069194.07879,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069195.07662,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/circle_marker.t",
+         "start" : 1793069194.89809,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069195.52419,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/comment-spelling.t",
+         "start" : 1793069195.52399,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069195.75264,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/cover.t",
+         "start" : 1793069195.75244,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069196.64089,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/edge_cases.t",
+         "start" : 1793069196.17921,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069197.23356,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/eof.t",
+         "start" : 1793069197.23333,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069197.46383,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/eol.t",
+         "start" : 1793069197.46363,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069198.07839,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/extended_tests.t",
+         "start" : 1793069197.88621,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069199.30212,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/function.t",
+         "start" : 1793069198.75848,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069460.95558,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/fuzz.t",
+         "start" : 1793069200.09061,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069455.76202,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "/opt/hostedtoolcache/perl/5.40.5/x64/bin/fuzz-harness-generator",
+         "start" : 1793069200.35521,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069455.71227,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "/opt/hostedtoolcache/perl/5.40.5/x64/bin/prove",
+         "start" : 1793069200.56465,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069454.8299,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "/tmp/WR6n9cvheI",
+         "start" : 1793069201.00773,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069460.85649,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "/opt/hostedtoolcache/perl/5.40.5/x64/bin/fuzz-harness-generator",
+         "start" : 1793069456.12671,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069460.80551,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "/opt/hostedtoolcache/perl/5.40.5/x64/bin/prove",
+         "start" : 1793069456.33548,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069460.14375,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "/tmp/AdPcEdmmmW",
+         "start" : 1793069456.78206,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069461.71648,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/integration.t",
+         "start" : 1793069461.41998,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069463.51872,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/limiting.t",
+         "start" : 1793069462.45062,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069464.23086,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/locales.t",
+         "start" : 1793069464.1224,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069464.93914,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/mock.t",
+         "start" : 1793069464.86027,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069465.71574,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/options.t",
+         "start" : 1793069465.55212,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069466.15618,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/pod-cm.t",
+         "start" : 1793069466.15598,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069466.39045,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/pod-coverage.t",
+         "start" : 1793069466.3902,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069466.62582,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/pod-snippets.t",
+         "start" : 1793069466.62563,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069466.85772,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/pod-synopsis.t",
+         "start" : 1793069466.85751,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069467.09164,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/pod.t",
+         "start" : 1793069467.09139,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069468.1056,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/unit.t",
+         "start" : 1793069467.52433,
+         "version" : "0.12"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Generate an interactive OpenStreetMap with Leaflet.js",
+         "dir" : "/home/runner/work/HTML-OSM/HTML-OSM",
+         "finish" : 1793069468.7574,
+         "name" : "HTML-OSM",
+         "perl" : "5.40.5",
+         "run" : "t/vars.t",
+         "start" : 1793069468.75718,
+         "version" : "0.12"
+      }
+   ],
+   "summary" : {
+      "/opt/hostedtoolcache/perl/5.40.5/x64/bin/fuzz-harness-generator" : {
+         "branch" : {
+            "covered" : 11,
+            "error" : 69,
+            "percentage" : 13.75,
+            "total" : 80,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 5,
+            "error" : 25,
+            "percentage" : 16.6666666666667,
+            "total" : 30,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 52,
+            "error" : 120,
+            "percentage" : 30.2325581395349,
+            "total" : 172
+         },
+         "subroutine" : {
+            "covered" : 9,
+            "error" : 4,
+            "percentage" : 69.2307692307692,
+            "total" : 13
+         },
+         "total" : {
+            "covered" : 77,
+            "error" : 218,
+            "percentage" : 26.1016949152542,
+            "total" : 295,
+            "uncoverable" : 0
+         }
+      },
+      "/opt/hostedtoolcache/perl/5.40.5/x64/bin/prove" : {
+         "branch" : {
+            "covered" : 2,
+            "error" : 2,
+            "percentage" : 50,
+            "total" : 4,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 14,
+            "percentage" : 100,
+            "total" : 14
+         },
+         "subroutine" : {
+            "covered" : 4,
+            "percentage" : 100,
+            "total" : 4
+         },
+         "total" : {
+            "covered" : 20,
+            "error" : 2,
+            "percentage" : 90.9090909090909,
+            "total" : 22,
+            "uncoverable" : 0
+         }
+      },
+      "/tmp/AdPcEdmmmW" : {
+         "branch" : {
+            "covered" : 100,
+            "error" : 646,
+            "percentage" : 13.4048257372654,
+            "total" : 746,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 58,
+            "error" : 259,
+            "percentage" : 18.2965299684543,
+            "total" : 317,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 308,
+            "error" : 900,
+            "percentage" : 25.4966887417219,
+            "total" : 1208
+         },
+         "subroutine" : {
+            "covered" : 30,
+            "error" : 30,
+            "percentage" : 50,
+            "total" : 60
+         },
+         "total" : {
+            "covered" : 496,
+            "error" : 1835,
+            "percentage" : 21.2784212784213,
+            "total" : 2331,
+            "uncoverable" : 0
+         }
+      },
+      "/tmp/WR6n9cvheI" : {
+         "branch" : {
+            "covered" : 172,
+            "error" : 574,
+            "percentage" : 23.0563002680965,
+            "total" : 746,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 72,
+            "error" : 245,
+            "percentage" : 22.7129337539432,
+            "total" : 317,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 433,
+            "error" : 774,
+            "percentage" : 35.874067937034,
+            "total" : 1207
+         },
+         "subroutine" : {
+            "covered" : 39,
+            "error" : 21,
+            "percentage" : 65,
+            "total" : 60
+         },
+         "total" : {
+            "covered" : 716,
+            "error" : 1614,
+            "percentage" : 30.7296137339056,
+            "total" : 2330,
+            "uncoverable" : 0
+         }
+      },
+      "Total" : {
+         "branch" : {
+            "covered" : 487,
+            "error" : 1301,
+            "percentage" : 27.2371364653244,
+            "total" : 1788,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 299,
+            "error" : 562,
+            "percentage" : 34.7270615563298,
+            "total" : 861,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 1223,
+            "error" : 1794,
+            "percentage" : 40.5369572422937,
+            "total" : 3017
+         },
+         "subroutine" : {
+            "covered" : 119,
+            "error" : 55,
+            "percentage" : 68.3908045977011,
+            "total" : 174
+         },
+         "total" : {
+            "covered" : 2128,
+            "error" : 3712,
+            "percentage" : 36.4383561643836,
+            "total" : 5840,
+            "uncoverable" : 0
+         }
+      },
+      "blib/lib/HTML/OSM.pm" : {
+         "branch" : {
+            "covered" : 202,
+            "error" : 10,
+            "percentage" : 95.2830188679245,
+            "total" : 212,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 164,
+            "error" : 33,
+            "percentage" : 83.248730964467,
+            "total" : 197,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 416,
+            "percentage" : 100,
+            "total" : 416
+         },
+         "subroutine" : {
+            "covered" : 37,
+            "percentage" : 100,
+            "total" : 37
+         },
+         "total" : {
+            "covered" : 819,
+            "error" : 43,
+            "percentage" : 95.0116009280742,
+            "total" : 862,
+            "uncoverable" : 0
+         }
+      }
+   }
+}
