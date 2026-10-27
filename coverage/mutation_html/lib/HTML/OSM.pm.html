@@ -487,17 +487,17 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  146: 
 </span><span class="">  147: C&lt;onload_render()&gt; returns two HTML fragments: one for the page&#39;s
 </span><span class="">  148: C&lt;&lt; &lt;head&gt; &gt;&gt; and one for its C&lt;&lt; &lt;body&gt; &gt;&gt;.  The interface follows
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  149: L&lt;HTML::GoogleMaps::V3&gt;, so code written for that module needs few changes.
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  150: 
+</span><span class="">  149: L&lt;HTML::GoogleMaps::V3&gt;, so code written for that module needs few changes.
+</span><span class="">  150: 
 </span><span class="">  151: =head1 SUBROUTINES/METHODS
 </span><span class="">  152: 
 </span><span class="">  153: =head2 new
 </span><span class="">  154: 
 </span><span class="">  155: Construct a new C&lt;HTML::OSM&gt; object.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  156: 
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  157:     my $map = HTML::OSM-&gt;new(%params);
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  158:     my $map = HTML::OSM-&gt;new(\%params);
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  159: 
+</span><span class="">  156: 
+</span><span class="">  157:     my $map = HTML::OSM-&gt;new(%params);
+</span><span class="">  158:     my $map = HTML::OSM-&gt;new(\%params);
+</span><span class="">  159: 
 </span><span class="">  160: Both method-style (C&lt;&lt; HTML::OSM-&gt;new(...) &gt;&gt;) and function-style
 </span><span class="">  161: (C&lt;HTML::OSM::new(...)&gt;) calls are supported.
 </span><span class="">  162: Calling C&lt;&lt; $existing_obj-&gt;new(%overrides) &gt;&gt; performs a shallow clone,
@@ -536,8 +536,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  195: 
 </span><span class="">  196: =head4 OUTPUT
 </span><span class="">  197: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  198:   { type =&gt; object, isa =&gt; &#39;HTML::OSM&#39; }
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  199: 
+</span><span class="">  198:   { type =&gt; object, isa =&gt; &#39;HTML::OSM&#39; }
+</span><span class="">  199: 
 </span><span class="">  200: =head3 MESSAGES
 </span><span class="">  201: 
 </span><span class="">  202:   | Message                                        | Meaning / Resolution                          |
@@ -564,17 +564,17 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  223: 	# Function-style call: HTML::OSM::new(key =&gt; val).
 </span><span class="">  224: 	# Perl places the first argument where the class name should be,
 </span><span class="">  225: 	# so we put it back and set the class explicitly.
-</span><span class="">  226: 	if(defined($class) &amp;&amp; !blessed($class) &amp;&amp; !UNIVERSAL::isa($class, __PACKAGE__)) {
-</span><span class="">  227: 		unshift @_, $class;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  226: 	if(defined($class) &amp;&amp; !blessed($class) &amp;&amp; !UNIVERSAL::isa($class, __PACKAGE__)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  227: 		unshift @_, $class;
 </span><span class="">  228: 		$class = __PACKAGE__;
 </span><span class="">  229: 	}
 </span><span class="">  230: 
 </span><span class="">  231: 	# Clone path: $obj-&gt;new(%overrides) &acirc;&#128;&#148; shallow-merge onto the existing
 </span><span class="">  232: 	# object without re-running schema validation so subclasses can extend.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">233 → 233 → 238</span></span>  233: 	if(blessed($class)) {
-</span><span class="">  234: 		my $extra = Params::Get::get_params(undef, \@_) || {};
-</span><span class="">  235: 		return bless { %{$class}, %{$extra} }, ref($class);
-</span><span class="">  236: 	}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">233 → 233 → 238</span></span>  233: 	if(blessed($class)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  234: 		my $extra = Params::Get::get_params(undef, \@_) || {};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  235: 		return bless { %{$class}, %{$extra} }, ref($class);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  236: 	}
 </span><span class="">  237: 
 </span><span class="">  238: 	$class //= __PACKAGE__;
 </span><span class="">  239: 
@@ -617,18 +617,18 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  276: 		global     =&gt; 1,
 </span><span class="">  277: 		expires_in =&gt; &#39;1 day&#39;,
 </span><span class="">  278: 	);
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  279: 
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  280: 	return bless {
-</span><span class="">  281: 		# Defaults &acirc;&#128;&#148; spread of %{$params} below overrides each one when supplied.
+</span><span class="">  279: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  280: 	return bless {
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  281: 		# Defaults &acirc;&#128;&#148; spread of %{$params} below overrides each one when supplied.
 </span><span class="">  282: 		coordinates             =&gt; [],
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  283: 		height                  =&gt; $DEFAULT_HEIGHT,
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  284: 		host                    =&gt; $NOMINATIM_HOST,
+</span><span class="">  283: 		height                  =&gt; $DEFAULT_HEIGHT,
+</span><span class="">  284: 		host                    =&gt; $NOMINATIM_HOST,
 </span><span class="">  285: 		width                   =&gt; $DEFAULT_WIDTH,
 </span><span class="">  286: 		zoom                    =&gt; $DEFAULT_ZOOM,
 </span><span class="">  287: 		min_interval            =&gt; 0,
 </span><span class="">  288: 		last_request            =&gt; 0,
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  289: 		cluster                 =&gt; 0,
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  290: 		search                  =&gt; 1,
+</span><span class="">  289: 		cluster                 =&gt; 0,
+</span><span class="">  290: 		search                  =&gt; 1,
 </span><span class="">  291: 		css_url                 =&gt; $LEAFLET_CSS_URL,
 </span><span class="">  292: 		js_url                  =&gt; $LEAFLET_JS_URL,
 </span><span class="">  293: 		cluster_js_url          =&gt; $CLUSTER_JS_URL,
@@ -639,9 +639,9 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  298: 		tile_url                =&gt; $TILE_URL,
 </span><span class="">  299: 		tile_attribution        =&gt; $TILE_ATTRIBUTION,
 </span><span class="">  300: 		%{$params},
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  301: 	}, $class;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  302: }
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  303: 
+</span><span class="">  301: 	}, $class;
+</span><span class="">  302: }
+</span><span class="">  303: 
 </span><span class="">  304: =head2 add_marker
 </span><span class="">  305: 
 </span><span class="">  306: Add a point marker to the map.
@@ -652,12 +652,12 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  311: 
 </span><span class="">  312: Returns 1 on success, 0 if the point cannot be resolved or is out of range.
 </span><span class="">  313: An empty address, or an arrayref that does not hold exactly two elements,
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  314: also returns 0.
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  315: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  316: =head3 API SPECIFICATION
+</span><span class="">  314: also returns 0.
+</span><span class="">  315: 
+</span><span class="">  316: =head3 API SPECIFICATION
 </span><span class="">  317: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  318: =head4 INPUT
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  319: 
+</span><span class="">  318: =head4 INPUT
+</span><span class="">  319: 
 </span><span class="">  320:   point : arrayref [lat, lon] | string address | object with latitude()/longitude()
 </span><span class="">  321:   html  : string   (optional popup label)
 </span><span class="">  322:   icon  : string   (optional icon URL)
@@ -705,17 +705,17 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  364: 	my $self = shift;
 </span><span class="">  365: 
 </span><span class="">  366: 	my ($lat, $lon, $params) = $self-&gt;_point_args(&#39;add_marker&#39;, @_);
-</span><span class="">  367: 	return 0 unless defined($lat);
-</span><span class="">  368: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  367: 	return 0 unless defined($lat);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  368: 
 </span><span class="">  369: 	push @{$self-&gt;{coordinates}}, [$lat, $lon, $params-&gt;{&#39;html&#39;}, $params-&gt;{&#39;icon&#39;}];
-</span><span class="">  370: 	return 1;
-</span><span class="">  371: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  370: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  371: }
 </span><span class="">  372: 
 </span><span class="">  373: =head2 add_circle_marker
 </span><span class="">  374: 
 </span><span class="">  375: Add a filled circle whose size in pixels can show a quantity, such as the
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  376: population of a town.
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  377: 
+</span><span class="">  376: population of a town.
+</span><span class="">  377: 
 </span><span class="">  378:     $map-&gt;add_circle_marker([51.5074, -0.1278],
 </span><span class="">  379:         html   =&gt; &#39;London&#39;,
 </span><span class="">  380:         radius =&gt; 12,
@@ -772,28 +772,28 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  431: 
 </span><span class="">  432: 	my ($lat, $lon, $params) = $self-&gt;_point_args(&#39;add_circle_marker&#39;, @_);
 </span><span class="">  433: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  434: 	# Check the options even when the point is unusable, so a bad radius or
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  435: 	# colour is reported whatever the data
+</span><span class="">  434: 	# Check the options even when the point is unusable, so a bad radius or
+</span><span class="">  435: 	# colour is reported whatever the data
 </span><span class="">  436: 	my $radius = $params-&gt;{&#39;radius&#39;} // $DEFAULT_CIRCLE_RADIUS;
 </span><span class="">  437: 	my $checked = _positive_number($radius, undef);
-</span><span class="">  438: 	if(!defined($checked)) {
-</span><span class="">  439: 		my $msg = &#39;add_circle_marker(): radius must be a positive number&#39;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  438: 	if(!defined($checked)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  439: 		my $msg = &#39;add_circle_marker(): radius must be a positive number&#39;;
 </span><span class="">  440: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
 </span><span class="">  441: 		croak $msg;
 </span><span class="">  442: 	}
 </span><span class="">  443: 
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">444 → 445 → 451</span></span>  444: 	my $colour = $params-&gt;{&#39;colour&#39;} // $DEFAULT_CIRCLE_COLOUR;
-</span><span class="">  445: 	if(ref($colour) || $colour !~ $HEX_COLOUR) {
-</span><span class="">  446: 		my $msg = &quot;add_circle_marker(): invalid colour: $colour&quot;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  445: 	if(ref($colour) || $colour !~ $HEX_COLOUR) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  446: 		my $msg = &quot;add_circle_marker(): invalid colour: $colour&quot;;
 </span><span class="">  447: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
 </span><span class="">  448: 		croak $msg;
 </span><span class="">  449: 	}
 </span><span class="">  450: 
-</span><span class="">  451: 	return 0 unless defined($lat);
-</span><span class="">  452: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  451: 	return 0 unless defined($lat);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  452: 
 </span><span class="">  453: 	push @{$self-&gt;{circle_markers}}, [$lat, $lon, $params-&gt;{&#39;html&#39;}, $checked, lc($colour)];
-</span><span class="">  454: 	return 1;
-</span><span class="">  455: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  454: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  455: }
 </span><span class="">  456: 
 </span><span class="">  457: =head2 add_geojson
 </span><span class="">  458: 
@@ -821,8 +821,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  480:   | Message              | Meaning / Resolution            |
 </span><span class="">  481:   |----------------------|---------------------------------|
 </span><span class="">  482:   | (JSON parse error)   | data string is not valid JSON   |
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  483: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  484: =head3 EXAMPLES
+</span><span class="">  483: 
+</span><span class="">  484: =head3 EXAMPLES
 </span><span class="">  485: 
 </span><span class="">  486:     # Pre-parsed GeoJSON structure with style and popup property
 </span><span class="">  487:     $map-&gt;add_geojson(
@@ -850,8 +850,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  509: 	$data = decode_json($data) if !ref($data);
 </span><span class="">  510: 
 </span><span class="">  511: 	push @{$self-&gt;{geojson}}, { data =&gt; $data, opts =&gt; $params };
-</span><span class="">  512: 	return 1;
-</span><span class="">  513: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  512: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  513: }
 </span><span class="">  514: 
 </span><span class="">  515: =head2 add_heatmap
 </span><span class="">  516: 
@@ -899,23 +899,23 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  558: 
 </span><span class="">  559: =cut
 </span><span class="">  560: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  561: sub add_heatmap
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  562: {
+</span><span class="">  561: sub add_heatmap
+</span><span class="">  562: {
 </span><span class="">  563: 	my $self   = shift;
 </span><span class="">  564: 	my $points = shift;
 </span><span class="">  565: 	my $params = Params::Get::get_params(undef, \@_) || {};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  566: 
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  567: 	croak &#39;add_heatmap: points must be an arrayref&#39; unless ref($points) eq &#39;ARRAY&#39;;
+</span><span class="">  566: 
+</span><span class="">  567: 	croak &#39;add_heatmap: points must be an arrayref&#39; unless ref($points) eq &#39;ARRAY&#39;;
 </span><span class="">  568: 
 </span><span class="">  569: 	push @{$self-&gt;{heatmap_layers}}, { points =&gt; $points, opts =&gt; $params };
-</span><span class="">  570: 	return 1;
-</span><span class="">  571: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  570: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  571: }
 </span><span class="">  572: 
 </span><span class="">  573: =head2 add_gpx
 </span><span class="">  574: 
 </span><span class="">  575: Add a GPX track to the map from a URL.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  576: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  577:     $map-&gt;add_gpx(&#39;https://example.com/track.gpx&#39;);
+</span><span class="">  576: 
+</span><span class="">  577:     $map-&gt;add_gpx(&#39;https://example.com/track.gpx&#39;);
 </span><span class="">  578: 
 </span><span class="">  579: The map view is auto-fitted to the track bounds after loading.
 </span><span class="">  580: Requires the leaflet-gpx plugin (C&lt;gpx_js_url&gt;).
@@ -957,8 +957,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  616: 	croak &#39;add_gpx: url is required&#39; unless $url;
 </span><span class="">  617: 
 </span><span class="">  618: 	push @{$self-&gt;{gpx_tracks}}, $url;
-</span><span class="">  619: 	return 1;
-</span><span class="">  620: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  619: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  620: }
 </span><span class="">  621: 
 </span><span class="">  622: =head2 add_choropleth
 </span><span class="">  623: 
@@ -973,10 +973,10 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  632: 
 </span><span class="">  633: Colours are pre-computed in Perl and baked into the emitted JavaScript.
 </span><span class="">  634: No extra browser plugin is required.
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  635: Returns 1 on success.
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  636: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  637: =head3 API SPECIFICATION
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  638: 
+</span><span class="">  635: Returns 1 on success.
+</span><span class="">  636: 
+</span><span class="">  637: =head3 API SPECIFICATION
+</span><span class="">  638: 
 </span><span class="">  639: =head4 INPUT
 </span><span class="">  640: 
 </span><span class="">  641:   features : arrayref of GeoJSON Feature hashrefs  (required)
@@ -987,12 +987,12 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  646: =head4 OUTPUT
 </span><span class="">  647: 
 </span><span class="">  648:   { type =&gt; integer, value =&gt; 1 }
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  649: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  650: =head3 MESSAGES
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  651: 
+</span><span class="">  649: 
+</span><span class="">  650: =head3 MESSAGES
+</span><span class="">  651: 
 </span><span class="">  652:   | Message                                     | Meaning / Resolution              |
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  653:   |---------------------------------------------|-----------------------------------|
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  654:   | add_choropleth: features must be an arrayref | First argument is not an arrayref |
+</span><span class="">  653:   |---------------------------------------------|-----------------------------------|
+</span><span class="">  654:   | add_choropleth: features must be an arrayref | First argument is not an arrayref |
 </span><span class="">  655:   | add_choropleth: values must be a hashref     | Second argument is not a hashref  |
 </span><span class="">  656: 
 </span><span class="">  657: =head3 EXAMPLES
@@ -1035,13 +1035,13 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  694: 	# extra maths &acirc;&#128;&#148; the resulting lookup object is baked into the JS.
 </span><span class="">  695: 	my @sorted_vals = sort { $a &lt;=&gt; $b } values %{$values};
 </span><span class="">  696: 	my ($min, $max) = ($sorted_vals[0] // 0, $sorted_vals[-1] // 0);
-</span><span class="">  697: 	$max = $min + 1 if $max == $min;    # avoid division by zero for single-value sets
-</span><span class="">  698: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  697: 	$max = $min + 1 if $max == $min;    # avoid division by zero for single-value sets
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  698: 
 </span><span class="">  699: 	my %colors;
 </span><span class="">  700: 	while(my ($k, $v) = each %{$values}) {
 </span><span class="">  701: 		my $idx = int(($v - $min) / ($max - $min) * $#{$scale});
 </span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  702: 		$idx = $#{$scale} if $idx &gt; $#{$scale};
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  703: 		$colors{$k} = $scale-&gt;[$idx];
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  703: 		$colors{$k} = $scale-&gt;[$idx];
 </span><span class="">  704: 	}
 </span><span class="">  705: 
 </span><span class="">  706: 	push @{$self-&gt;{choropleth_layers}}, {
@@ -1111,31 +1111,31 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  770: 
 </span><span class="">  771: 	my ($lat, $lon);
 </span><span class="">  772: 
-</span><span class="">  773: 	if(ref($point) eq &#39;ARRAY&#39;) {
-</span><span class="">  774: 		croak &#39;center(): point must have latitude and longitude&#39;
-</span><span class="">  775: 			if scalar(@{$point}) != 2;
-</span><span class="">  776: 		($lat, $lon) = @{$point};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  773: 	if(ref($point) eq &#39;ARRAY&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  774: 		croak &#39;center(): point must have latitude and longitude&#39;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  775: 			if scalar(@{$point}) != 2;
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  776: 		($lat, $lon) = @{$point};
 </span><span class="">  777: 	} elsif(ref($point) &amp;&amp; $point-&gt;can(&#39;latitude&#39;)) {
 </span><span class="">  778: 		($lat, $lon) = ($point-&gt;latitude(), $point-&gt;longitude());
 </span><span class="">  779: 	} elsif(!ref($point)) {
 </span><span class="">  780: 		# An empty address cannot be resolved
-</span><span class="">  781: 		return 0 unless length($point);
-</span><span class="">  782: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  781: 		return 0 unless length($point);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  782: 		($lat, $lon) = $self-&gt;_fetch_coordinates($point);
 </span><span class="">  783: 	} else {
 </span><span class="">  784: 		my $msg = &#39;center(): unknown point type: &#39; . ref($point);
 </span><span class="">  785: 		$self-&gt;{logger}-&gt;error($msg) if $self-&gt;{logger};
 </span><span class="">  786: 		croak $msg;
 </span><span class="">  787: 	}
 </span><span class="">  788: 
-</span><span class="">  789: 	return 0 unless defined($lat) &amp;&amp; defined($lon);
-</span><span class="">  790: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  789: 	return 0 unless defined($lat) &amp;&amp; defined($lon);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  790: 
 </span><span class="">  791: 	# Store the text form with a &#39;.&#39; decimal point, whatever the locale
 </span><span class="">  792: 	($lat, $lon) = (_num_str($lat), _num_str($lon));
-</span><span class="">  793: 	return 0 unless _validate($lat, $lon);
-</span><span class="">  794: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  793: 	return 0 unless _validate($lat, $lon);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  794: 
 </span><span class="">  795: 	$self-&gt;{&#39;center&#39;} = [$lat, $lon];
-</span><span class="">  796: 	return 1;
-</span><span class="">  797: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  796: 	return 1;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  797: }
 </span><span class="">  798: 
 </span><span class="">  799: =head2 zoom
 </span><span class="">  800: 
@@ -1147,8 +1147,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  806: =head3 API SPECIFICATION
 </span><span class="">  807: 
 </span><span class="">  808: =head4 INPUT
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  809: 
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  810:   { zoom =&gt; { type =&gt; integer, min =&gt; 0, max =&gt; 19, optional =&gt; 1 } }
+</span><span class="">  809: 
+</span><span class="">  810:   { zoom =&gt; { type =&gt; integer, min =&gt; 0, max =&gt; 19, optional =&gt; 1 } }
 </span><span class="">  811: 
 </span><span class="">  812: =head4 OUTPUT
 </span><span class="">  813: 
@@ -1157,8 +1157,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  816: =head3 MESSAGES
 </span><span class="">  817: 
 </span><span class="">  818:   | Message                      | Meaning / Resolution                      |
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  819:   |------------------------------|-------------------------------------------|
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  820:   | (Params::Validate::Strict)   | zoom is not an integer or is out of range |
+</span><span class="">  819:   |------------------------------|-------------------------------------------|
+</span><span class="">  820:   | (Params::Validate::Strict)   | zoom is not an integer or is out of range |
 </span><span class="">  821: 
 </span><span class="">  822: =head3 EXAMPLES
 </span><span class="">  823: 
@@ -1169,32 +1169,32 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  828:     my $level = $map-&gt;zoom();
 </span><span class="">  829:     print &quot;Current zoom: $level\n&quot;;    # 14
 </span><span class="">  830: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  831:     # Setter return value equals the new level
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  832:     my $confirmed = $map-&gt;zoom(10);
+</span><span class="">  831:     # Setter return value equals the new level
+</span><span class="">  832:     my $confirmed = $map-&gt;zoom(10);
 </span><span class="">  833:     die &#39;unexpected&#39; unless $confirmed == 10;
 </span><span class="">  834: 
 </span><span class="">  835:     # Chain: set via new(), read back via zoom()
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  836:     my $m = HTML::OSM-&gt;new(zoom =&gt; 6);
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  837:     $m-&gt;zoom($m-&gt;zoom() + 2);   # nudge up by 2
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  838: 
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  839: =cut
-</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="">  840: 
+</span><span class="">  836:     my $m = HTML::OSM-&gt;new(zoom =&gt; 6);
+</span><span class="">  837:     $m-&gt;zoom($m-&gt;zoom() + 2);   # nudge up by 2
+</span><span class="">  838: 
+</span><span class="">  839: =cut
+</span><span class="">  840: 
 </span><span class="">  841: sub zoom
 </span><span class="">  842: {
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">843 → 845 → 855</span></span>  843: 	my $self = shift;
 </span><span class="">  844: 
-</span><span class="">  845: 	if(scalar(@_)) {
-</span><span class="">  846: 		my $params = Params::Validate::Strict::validate_strict({
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  845: 	if(scalar(@_)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  846: 		my $params = Params::Validate::Strict::validate_strict({
 </span><span class="">  847: 			args   =&gt; Params::Get::get_params(&#39;zoom&#39;, \@_),
 </span><span class="">  848: 			schema =&gt; {
 </span><span class="">  849: 				zoom =&gt; { optional =&gt; 1, type =&gt; &#39;integer&#39;, min =&gt; $ZOOM_MIN, max =&gt; $ZOOM_MAX },
 </span><span class="">  850: 			},
 </span><span class="">  851: 		});
 </span><span class="">  852: 		$self-&gt;{&#39;zoom&#39;} = $params-&gt;{&#39;zoom&#39;} if defined($params-&gt;{&#39;zoom&#39;});
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  853: 	}
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  854: 
-</span><span class="">  855: 	return $self-&gt;{&#39;zoom&#39;};
-</span><span class="">  856: }
+</span><span class="">  853: 	}
+</span><span class="">  854: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  855: 	return $self-&gt;{&#39;zoom&#39;};
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="">  856: }
 </span><span class="">  857: 
 </span><span class="">  858: =head2 onload_render
 </span><span class="">  859: 
@@ -1225,14 +1225,14 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  884: =back
 </span><span class="">  885: 
 </span><span class="">  886: Values that reach the object without going through C&lt;new()&gt;&#39;s checks (from a
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  887: config file or a clone) are checked again here.  A C&lt;zoom&gt; that is not an
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  888: integer from 0 to 19 is replaced by 12, and a C&lt;width&gt; or C&lt;height&gt; that is
+</span><span class="">  887: config file or a clone) are checked again here.  A C&lt;zoom&gt; that is not an
+</span><span class="">  888: integer from 0 to 19 is replaced by 12, and a C&lt;width&gt; or C&lt;height&gt; that is
 </span><span class="">  889: not a CSS length (such as C&lt;600px&gt;, C&lt;100%&gt; or C&lt;auto&gt;) is replaced by the
 </span><span class="">  890: default.  A C&lt;max_zoom&gt; that is not an integer from 0 to 28 is ignored.  Each
 </span><span class="">  891: replacement gives a warning.
 </span><span class="">  892: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  893: =head3 API SPECIFICATION
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  894: 
+</span><span class="">  893: =head3 API SPECIFICATION
+</span><span class="">  894: 
 </span><span class="">  895: =head4 INPUT
 </span><span class="">  896: 
 </span><span class="">  897:   (none - uses object state)
@@ -1259,11 +1259,11 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  918: 
 </span><span class="">  919:     # Minimal: one marker, embed in a CGI response
 </span><span class="">  920:     use HTML::OSM;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  921:     my $map = HTML::OSM-&gt;new(zoom =&gt; 12);
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  922:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;London&#39;);
+</span><span class="">  921:     my $map = HTML::OSM-&gt;new(zoom =&gt; 12);
+</span><span class="">  922:     $map-&gt;add_marker([51.5074, -0.1278], html =&gt; &#39;London&#39;);
 </span><span class="">  923:     my ($head, $body) = $map-&gt;onload_render();
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  924:     print &quot;Content-Type: text/html\n\n&quot;;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  925:     print &quot;&lt;html&gt;&lt;head&gt;$head&lt;/head&gt;&lt;body&gt;$body&lt;/body&gt;&lt;/html&gt;\n&quot;;
+</span><span class="">  924:     print &quot;Content-Type: text/html\n\n&quot;;
+</span><span class="">  925:     print &quot;&lt;html&gt;&lt;head&gt;$head&lt;/head&gt;&lt;body&gt;$body&lt;/body&gt;&lt;/html&gt;\n&quot;;
 </span><span class="">  926: 
 </span><span class="">  927:     # Mixed layers: markers + GeoJSON, explicit center
 </span><span class="">  928:     $map-&gt;center([51.5, -0.1]);
@@ -1316,8 +1316,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  975: 	my $choropleth_layers = $self-&gt;{choropleth_layers}   || [];
 </span><span class="">  976: 	my $circle_markers    = $self-&gt;{circle_markers}      || [];
 </span><span class="">  977: 
-</span><span class="">  978: 	unless(@$coordinates || @$geojson_layers || @$heatmap_layers
-</span><span class="">  979: 	                     || @$gpx_tracks     || @$choropleth_layers
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  978: 	unless(@$coordinates || @$geojson_layers || @$heatmap_layers
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  979: 	                     || @$gpx_tracks     || @$choropleth_layers
 </span><span class="">  980: 	                     || @$circle_markers) {
 </span><span class="">  981: 		$self-&gt;{logger}-&gt;error(&#39;No map data provided&#39;) if $self-&gt;{logger};
 </span><span class="">  982: 		croak &#39;No map data provided&#39;;
@@ -1325,8 +1325,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class="">  984: 
 </span><span class="">  985: 	# Config-file and clone values skip new()&#39;s schema, so check zoom again
 </span><span class="">  986: 	# before it is put into the JavaScript.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">987 → 987 → 993</span></span>  987: 	if(!defined($zoom) || $zoom !~ /\A[0-9]+\z/ || $zoom &lt; $ZOOM_MIN || $zoom &gt; $ZOOM_MAX) {
-</span><span class="">  988: 		carp sprintf(&quot;onload_render: invalid zoom &#39;%s&#39;, using %d&quot;, $zoom // &#39;undef&#39;, $DEFAULT_ZOOM);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">987 → 987 → 993</span></span>  987: 	if(!defined($zoom) || $zoom !~ /\A[0-9]+\z/ || $zoom &lt; $ZOOM_MIN || $zoom &gt; $ZOOM_MAX) {
+</span><p> <b> Mutants (Total: 7, Killed: 7, Survived: 0)</b><p><span class="">  988: 		carp sprintf(&quot;onload_render: invalid zoom &#39;%s&#39;, using %d&quot;, $zoom // &#39;undef&#39;, $DEFAULT_ZOOM);
 </span><span class="">  989: 		$zoom = $DEFAULT_ZOOM;
 </span><span class="">  990: 	}
 </span><span class="">  991: 
@@ -1334,8 +1334,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">993 → 994 → 1011</span></span>  993: 	my @valid_coordinates;
 </span><span class="">  994: 	for my $coord (@$coordinates) {
 </span><span class="">  995: 		my ($lat, $lon, $label, $icon_url) = @$coord;
-</span><span class="">  996: 		if(!defined $lat || !defined $lon) {
-</span><span class="">  997: 			# No coordinates and no address: nothing to look up
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic.">  996: 		if(!defined $lat || !defined $lon) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="">  997: 			# No coordinates and no address: nothing to look up
 </span><span class="">  998: 			next unless defined($label) &amp;&amp; length($label);
 </span><span class="">  999: 			($lat, $lon) = $self-&gt;_fetch_coordinates($label);
 </span><span class=""> 1000: 		}
@@ -1362,38 +1362,38 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1021: 
 </span><span class=""> 1022: 	# Only an integer in Leaflet&#39;s range is put into the tile layer options
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1023 → 1024 → 1028</span></span> 1023: 	my $max_zoom = $self-&gt;{&#39;max_zoom&#39;};
-</span><span class=""> 1024: 	if(defined($max_zoom) &amp;&amp; ($max_zoom !~ /\A[0-9]+\z/ || $max_zoom &gt; $MAX_ZOOM_LIMIT)) {
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1025: 		carp &quot;onload_render: invalid max_zoom &#39;$max_zoom&#39;, ignoring it&quot;;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1026: 		undef $max_zoom;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1024: 	if(defined($max_zoom) &amp;&amp; ($max_zoom !~ /\A[0-9]+\z/ || $max_zoom &gt; $MAX_ZOOM_LIMIT)) {
+</span><p> <b> Mutants (Total: 4, Killed: 4, Survived: 0)</b><p><span class=""> 1025: 		carp &quot;onload_render: invalid max_zoom &#39;$max_zoom&#39;, ignoring it&quot;;
+</span><span class=""> 1026: 		undef $max_zoom;
 </span><span class=""> 1027: 	}
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1028 → 1036 → 1052</span></span> 1028: 	my $max_zoom_js = defined($max_zoom) ? &quot;,\n\t\t\t\tmaxZoom: $max_zoom&quot; : &#39;&#39;;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1029: 
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1030: 	# A config file can give the words &#39;false&#39;, &#39;no&#39; or &#39;off&#39;
+</span><span class=""> 1029: 
+</span><span class=""> 1030: 	# A config file can give the words &#39;false&#39;, &#39;no&#39; or &#39;off&#39;
 </span><span class=""> 1031: 	my $search = $self-&gt;{&#39;search&#39;};
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1032: 	$search = 0 if defined($search) &amp;&amp; $search =~ /\A(?:false|no|off)\z/i;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1033: 
+</span><span class=""> 1032: 	$search = 0 if defined($search) &amp;&amp; $search =~ /\A(?:false|no|off)\z/i;
+</span><span class=""> 1033: 
 </span><span class=""> 1034: 	# Determine map centre: caller-set wins; else compute from marker bounds.
 </span><span class=""> 1035: 	my ($center_lat, $center_lon);
-</span><span class=""> 1036: 	if($self-&gt;{&#39;center&#39;}) {
-</span><span class=""> 1037: 		($center_lat, $center_lon) = @{$self-&gt;{&#39;center&#39;}};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1036: 	if($self-&gt;{&#39;center&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1037: 		($center_lat, $center_lon) = @{$self-&gt;{&#39;center&#39;}};
 </span><span class=""> 1038: 	} elsif(@valid_coordinates || @valid_circles) {
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1039: 		my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1040: 		for my $c (@valid_coordinates, @valid_circles) {
+</span><span class=""> 1039: 		my ($min_lat, $min_lon, $max_lat, $max_lon) = (90, 180, -90, -180);
+</span><span class=""> 1040: 		for my $c (@valid_coordinates, @valid_circles) {
 </span><span class=""> 1041: 			# Convert with _num_val: some perls read &#39;51.5074&#39; as 51 under de_DE
 </span><span class=""> 1042: 			my ($lat, $lon) = (_num_val($c-&gt;[0]), _num_val($c-&gt;[1]));
-</span><span class=""> 1043: 			$min_lat = $lat if $lat &lt; $min_lat;
-</span><span class=""> 1044: 			$max_lat = $lat if $lat &gt; $max_lat;
-</span><span class=""> 1045: 			$min_lon = $lon if $lon &lt; $min_lon;
-</span><span class=""> 1046: 			$max_lon = $lon if $lon &gt; $max_lon;
-</span><span class=""> 1047: 		}
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1048: 		$center_lat = ($min_lat + $max_lat) / 2;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1049: 		$center_lon = ($min_lon + $max_lon) / 2;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1043: 			$min_lat = $lat if $lat &lt; $min_lat;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1044: 			$max_lat = $lat if $lat &gt; $max_lat;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1045: 			$min_lon = $lon if $lon &lt; $min_lon;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1046: 			$max_lon = $lon if $lon &gt; $max_lon;
+</span><p> <b> Mutants (Total: 3, Killed: 3, Survived: 0)</b><p><span class=""> 1047: 		}
+</span><span class=""> 1048: 		$center_lat = ($min_lat + $max_lat) / 2;
+</span><span class=""> 1049: 		$center_lon = ($min_lon + $max_lon) / 2;
 </span><span class=""> 1050: 	} else {
 </span><span class=""> 1051: 		croak &#39;center() must be called when no point markers are provided&#39;;
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1052 → 1064 → 1071</span></span> 1052: 	}
 </span><span class=""> 1053: 	# The midpoint is a new number, so it needs the same treatment as markers
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1054: 	($center_lat, $center_lon) = (_num_str($center_lat), _num_str($center_lon));
-</span><p> <b> Mutants (Total: 4, Killed: 4, Survived: 0)</b><p><span class=""> 1055: 
+</span><span class=""> 1054: 	($center_lat, $center_lon) = (_num_str($center_lat), _num_str($center_lon));
+</span><span class=""> 1055: 
 </span><span class=""> 1056: 	# --- &lt;head&gt; ---
 </span><span class=""> 1057: 	my %url = map { $_ =&gt; _html_attr($self-&gt;{$_}) }
 </span><span class=""> 1058: 		qw(css_url js_url cluster_css_url cluster_default_css_url cluster_js_url heatmap_js_url gpx_js_url);
@@ -1402,21 +1402,21 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1061: 		&lt;script src=&quot;$url{js_url}&quot;&gt;&lt;/script&gt;
 </span><span class=""> 1062: 	};
 </span><span class=""> 1063: 
-</span><span class=""> 1064: 	if($self-&gt;{cluster}) {
-</span><span class=""> 1065: 		$head .= qq{
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1064: 	if($self-&gt;{cluster}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1065: 		$head .= qq{
 </span><span class=""> 1066: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$url{cluster_css_url}&quot; /&gt;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1067: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$url{cluster_default_css_url}&quot; /&gt;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1068: 		&lt;script src=&quot;$url{cluster_js_url}&quot;&gt;&lt;/script&gt;
+</span><span class=""> 1067: 		&lt;link rel=&quot;stylesheet&quot; href=&quot;$url{cluster_default_css_url}&quot; /&gt;
+</span><span class=""> 1068: 		&lt;script src=&quot;$url{cluster_js_url}&quot;&gt;&lt;/script&gt;
 </span><span class=""> 1069: 		};
 </span><span class=""> 1070: 	}
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1071 → 1074 → 1092</span></span> 1071: 	$head .= qq{\t\t&lt;script src=&quot;$url{heatmap_js_url}&quot;&gt;&lt;/script&gt;\n} if @$heatmap_layers;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1072: 	$head .= qq{\t\t&lt;script src=&quot;$url{gpx_js_url}&quot;&gt;&lt;/script&gt;\n}     if @$gpx_tracks;
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1073: 
-</span><span class=""> 1074: 	if($search) {
-</span><span class=""> 1075: 		$head .= qq{
+</span><span class=""> 1072: 	$head .= qq{\t\t&lt;script src=&quot;$url{gpx_js_url}&quot;&gt;&lt;/script&gt;\n}     if @$gpx_tracks;
+</span><span class=""> 1073: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1074: 	if($search) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1075: 		$head .= qq{
 </span><span class=""> 1076: 		&lt;style&gt;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1077: 			#map { width: $width; height: $height; }
-</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1078: 			#search-box { margin: 10px; padding: 5px; }
+</span><span class=""> 1077: 			#map { width: $width; height: $height; }
+</span><span class=""> 1078: 			#search-box { margin: 10px; padding: 5px; }
 </span><span class=""> 1079: 			#reset-button, #clear-search-button { margin: 10px; padding: 5px; cursor: pointer; }
 </span><span class=""> 1080: 		&lt;/style&gt;
 </span><span class=""> 1081: 		};
@@ -1433,8 +1433,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1092 → 1095 → 1100</span></span> 1092: 	my $tile_url         = _js_string($self-&gt;{tile_url});
 </span><span class=""> 1093: 	my $tile_attribution = _js_string($self-&gt;{tile_attribution});
 </span><span class=""> 1094: 	my $body = &#39;&#39;;
-</span><span class=""> 1095: 	if($search) {
-</span><span class=""> 1096: 		$body .= qq{
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1095: 	if($search) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1096: 		$body .= qq{
 </span><span class=""> 1097: 		&lt;input type=&quot;text&quot; id=&quot;search-box&quot; placeholder=&quot;Enter location&quot;&gt;
 </span><span class=""> 1098: 		&lt;button id=&quot;clear-search-button&quot;&gt;Clear search markers&lt;/button&gt;};
 </span><span class=""> 1099: 	}
@@ -1442,28 +1442,28 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1101: 		&lt;button id=&quot;reset-button&quot;&gt;Reset Map&lt;/button&gt;
 </span><span class=""> 1102: 		&lt;div id=&quot;map&quot;&gt;&lt;/div&gt;
 </span><span class=""> 1103: 		&lt;script&gt;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1104: 			var map = L.map(&#39;map&#39;).setView([$center_lat, $center_lon], $zoom);
-</span><p> <b> Mutants (Total: 6, Killed: 6, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1105: 			L.tileLayer(&#39;$tile_url&#39;, {
-</span><p> <b> Mutants (Total: 6, Killed: 6, Survived: 0)</b><p><span class=""> 1106: 				attribution: &#39;$tile_attribution&#39;$max_zoom_js
+</span><span class=""> 1104: 			var map = L.map(&#39;map&#39;).setView([$center_lat, $center_lon], $zoom);
+</span><span class=""> 1105: 			L.tileLayer(&#39;$tile_url&#39;, {
+</span><span class=""> 1106: 				attribution: &#39;$tile_attribution&#39;$max_zoom_js
 </span><span class=""> 1107: 			}).addTo(map);
 </span><span class=""> 1108: 	};
 </span><span class=""> 1109: 	$body .= &quot;\n\t\t\tvar searchMarkers = [];\n&quot; if $search;
 </span><span class=""> 1110: 
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1111: 	# Point and circle markers &acirc;&#128;&#148; optionally grouped into one cluster layer.
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1112: 	my $clustered = $self-&gt;{cluster} &amp;&amp; (@valid_coordinates || @valid_circles);
+</span><span class=""> 1111: 	# Point and circle markers &acirc;&#128;&#148; optionally grouped into one cluster layer.
+</span><span class=""> 1112: 	my $clustered = $self-&gt;{cluster} &amp;&amp; (@valid_coordinates || @valid_circles);
 </span><span class=""> 1113: 	$body .= &quot;\t\t\tvar clusterGroup = L.markerClusterGroup();\n&quot; if $clustered;
-</span><span class=""> 1114: 	if(@valid_coordinates) {
-</span><span class=""> 1115: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1114: 	if(@valid_coordinates) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1115: 
 </span><span class=""> 1116: 		for my $coord (@valid_coordinates) {
 </span><span class=""> 1117: 			my ($lat, $lon, $label, $icon_url) = @$coord;
 </span><span class=""> 1118: 			my $js_label = _js_string($label);
-</span><span class=""> 1119: 			if($icon_url) {
-</span><span class=""> 1120: 				my $js_icon = _js_string($icon_url);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1119: 			if($icon_url) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1120: 				my $js_icon = _js_string($icon_url);
 </span><span class=""> 1121: 				my $add_cmd = $self-&gt;{cluster}
 </span><span class=""> 1122: 					? &#39;clusterGroup.addLayer(m);&#39;
 </span><span class=""> 1123: 					: &#39;m.addTo(map);&#39;;
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1124: 				$body .= qq{
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1125: 			(function() {
+</span><span class=""> 1124: 				$body .= qq{
+</span><span class=""> 1125: 			(function() {
 </span><span class=""> 1126: 				var icon = L.icon({ iconUrl: &#39;$js_icon&#39;, iconAnchor: [16,32], popupAnchor: [0,-32] });
 </span><span class=""> 1127: 				var m = L.marker([$lat, $lon], { icon: icon }).bindPopup(&#39;$js_label&#39;);
 </span><span class=""> 1128: 				$add_cmd
@@ -1476,15 +1476,15 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1135: 			}
 </span><span class=""> 1136: 		}
 </span><span class=""> 1137: 	}
-</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1138: 
-</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1139 → 1139 → 1152</span></span> 1139: 	for my $circle (@valid_circles) {
+</span><span class=""> 1138: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1139 → 1139 → 1152</span></span> 1139: 	for my $circle (@valid_circles) {
 </span><span class=""> 1140: 		my ($lat, $lon, $label, $radius, $colour) = @$circle;
 </span><span class=""> 1141: 		my $popup = (defined($label) &amp;&amp; length($label))
 </span><span class=""> 1142: 			? &quot;.bindPopup(&#39;&quot; . _js_string($label) . &quot;&#39;)&quot;
 </span><span class=""> 1143: 			: &#39;&#39;;
 </span><span class=""> 1144: 		my $circle_js = &quot;L.circleMarker([$lat, $lon], { radius: $radius, color: &#39;$colour&#39;, fillColor: &#39;$colour&#39;, fillOpacity: 0.7 })$popup&quot;;
-</span><span class=""> 1145: 		if($self-&gt;{cluster}) {
-</span><span class=""> 1146: 			$body .= &quot;\t\t\tclusterGroup.addLayer($circle_js);\n&quot;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1145: 		if($self-&gt;{cluster}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1146: 			$body .= &quot;\t\t\tclusterGroup.addLayer($circle_js);\n&quot;;
 </span><span class=""> 1147: 		} else {
 </span><span class=""> 1148: 			$body .= &quot;\t\t\t$circle_js.addTo(map);\n&quot;;
 </span><span class=""> 1149: 		}
@@ -1498,11 +1498,11 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1157: 		my $opts     = $layer-&gt;{opts} || {};
 </span><span class=""> 1158: 		my $style_js = &#39;&#39;;
 </span><span class=""> 1159: 		my $popup_js = &#39;&#39;;
-</span><span class=""> 1160: 		if(my $style = $opts-&gt;{style}) {
-</span><span class=""> 1161: 			$style_js = &#39;style: &#39; . _html_json($style) . &#39;,&#39;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1160: 		if(my $style = $opts-&gt;{style}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1161: 			$style_js = &#39;style: &#39; . _html_json($style) . &#39;,&#39;;
 </span><span class=""> 1162: 		}
-</span><span class=""> 1163: 		if(my $prop = $opts-&gt;{popup}) {
-</span><span class=""> 1164: 			my $js_prop = _js_string($prop);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1163: 		if(my $prop = $opts-&gt;{popup}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1164: 			my $js_prop = _js_string($prop);
 </span><span class=""> 1165: 			$popup_js = &quot;onEachFeature: function(f,l){ if(f.properties &amp;&amp; f.properties[&#39;$js_prop&#39;]){ l.bindPopup(String(f.properties[&#39;$js_prop&#39;])); } },&quot;;
 </span><span class=""> 1166: 		}
 </span><span class=""> 1167: 		$body .= &quot;\t\t\tL.geoJSON($json, { $style_js $popup_js }).addTo(map);\n&quot;;
@@ -1559,8 +1559,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1218: 			});
 </span><span class=""> 1219: 	};
 </span><span class=""> 1220: 
-</span><span class=""> 1221: 	if($search) {
-</span><span class=""> 1222: 		$body .= qq{
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1221: 	if($search) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1222: 		$body .= qq{
 </span><span class=""> 1223: 			document.getElementById(&#39;clear-search-button&#39;).addEventListener(&#39;click&#39;, function() {
 </span><span class=""> 1224: 				searchMarkers.forEach(function(m) { map.removeLayer(m); });
 </span><span class=""> 1225: 				searchMarkers = [];
@@ -1606,18 +1606,18 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1265 → 1268 → 1287</span></span> 1265: 	my ($self, $caller, @args) = @_;
 </span><span class=""> 1266: 	my ($params, $point);
 </span><span class=""> 1267: 
-</span><span class=""> 1268: 	if(ref($args[0]) eq &#39;ARRAY&#39;) {
-</span><span class=""> 1269: 		$point  = shift @args;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1268: 	if(ref($args[0]) eq &#39;ARRAY&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1269: 		$point  = shift @args;
 </span><span class=""> 1270: 		$params = Params::Get::get_params(undef, \@args) || {};
 </span><span class=""> 1271: 		# Single-element arrayref is a wrapped address string
-</span><span class=""> 1272: 		$point  = $point-&gt;[0] if scalar(@{$point}) == 1;
-</span><span class=""> 1273: 	} elsif(blessed($args[0]) &amp;&amp; $args[0]-&gt;can(&#39;latitude&#39;)) {
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1272: 		$point  = $point-&gt;[0] if scalar(@{$point}) == 1;
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1273: 	} elsif(blessed($args[0]) &amp;&amp; $args[0]-&gt;can(&#39;latitude&#39;)) {
 </span><span class=""> 1274: 		# Geo object as first positional arg: extract before Params::Get sees it,
 </span><span class=""> 1275: 		# otherwise Params::Get mistakes the blessed hashref for the params hash.
 </span><span class=""> 1276: 		$point  = shift @args;
 </span><span class=""> 1277: 		$params = Params::Get::get_params(undef, \@args) || {};
-</span><span class=""> 1278: 	} elsif(defined($args[0]) &amp;&amp; !ref($args[0]) &amp;&amp; scalar(@args) % 2 != 0) {
-</span><span class=""> 1279: 		# Plain string as first positional arg, optionally followed by key-value pairs.
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1278: 	} elsif(defined($args[0]) &amp;&amp; !ref($args[0]) &amp;&amp; scalar(@args) % 2 != 0) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1279: 		# Plain string as first positional arg, optionally followed by key-value pairs.
 </span><span class=""> 1280: 		# An odd total count signals a leading positional; even count means all key-value.
 </span><span class=""> 1281: 		$point  = shift @args;
 </span><span class=""> 1282: 		$params = Params::Get::get_params(undef, \@args) || {};
@@ -1629,9 +1629,9 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1288: 
 </span><span class=""> 1289: 	my ($lat, $lon);
 </span><span class=""> 1290: 
-</span><span class=""> 1291: 	if(ref($point) eq &#39;ARRAY&#39;) {
-</span><span class=""> 1292: 		return (undef, undef, $params) if scalar(@{$point}) != 2;
-</span><span class=""> 1293: 		($lat, $lon) = @{$point};
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1291: 	if(ref($point) eq &#39;ARRAY&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1292: 		return (undef, undef, $params) if scalar(@{$point}) != 2;
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1293: 		($lat, $lon) = @{$point};
 </span><span class=""> 1294: 	} elsif(!ref($point)) {
 </span><span class=""> 1295: 		# An empty or missing address cannot be resolved
 </span><span class=""> 1296: 		return (undef, undef, $params) unless defined($point) &amp;&amp; length($point);
@@ -1666,22 +1666,22 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1325: 	croak &#39;address not given to _fetch_coordinates&#39; unless $location;
 </span><span class=""> 1326: 
 </span><span class=""> 1327: 	# Prefer an injected geocoder (e.g. Geo::Coder::List) to avoid HTTP.
-</span><span class=""> 1328: 	if(my $geocoder = $self-&gt;{&#39;geocoder&#39;}) {
-</span><span class=""> 1329: 		my $rc = $geocoder-&gt;geocode($location);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1328: 	if(my $geocoder = $self-&gt;{&#39;geocoder&#39;}) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1329: 		my $rc = $geocoder-&gt;geocode($location);
 </span><span class=""> 1330: 		return (undef, undef) unless defined $rc;
 </span><span class=""> 1331: 
-</span><span class=""> 1332: 		if(blessed($rc) &amp;&amp; $rc-&gt;can(&#39;latitude&#39;)) {
-</span><span class=""> 1333: 			return ($rc-&gt;latitude(), $rc-&gt;longitude());
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1332: 		if(blessed($rc) &amp;&amp; $rc-&gt;can(&#39;latitude&#39;)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1333: 			return ($rc-&gt;latitude(), $rc-&gt;longitude());
 </span><span class=""> 1334: 		}
-</span><span class=""> 1335: 		if(ref($rc) eq &#39;HASH&#39;) {
-</span><span class=""> 1336: 			return ($rc-&gt;{lat}, $rc-&gt;{lon})
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1335: 		if(ref($rc) eq &#39;HASH&#39;) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1336: 			return ($rc-&gt;{lat}, $rc-&gt;{lon})
 </span><span class=""> 1337: 				if defined($rc-&gt;{lat}) &amp;&amp; defined($rc-&gt;{lon});
 </span><span class=""> 1338: 			return ($rc-&gt;{geometry}{location}{lat}, $rc-&gt;{geometry}{location}{lng})
 </span><span class=""> 1339: 				if defined($rc-&gt;{geometry}{location}{lat});
 </span><span class=""> 1340: 		}
 </span><span class=""> 1341: 		# Some geocoders return a flat [lat, lon] arrayref
-</span><span class=""> 1342: 		return @{$rc} if ref($rc) eq &#39;ARRAY&#39;;
-</span><span class=""> 1343: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1342: 		return @{$rc} if ref($rc) eq &#39;ARRAY&#39;;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1343: 
 </span><span class=""> 1344: 		# Unrecognised return type &acirc;&#128;&#148; treat as failure
 </span><span class=""> 1345: 		carp &#39;_fetch_coordinates: unrecognised geocoder result type: &#39; . ref($rc);
 </span><span class=""> 1346: 		return (undef, undef);
@@ -1689,20 +1689,20 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1348: 
 </span><span class=""> 1349: 	# Direct Nominatim path: apply caching and rate-limiting.
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1350 → 1351 → 1356</span></span> 1350: 	my $cache_key = &#39;osm:&#39; . uri_escape_utf8($location);
-</span><span class=""> 1351: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
-</span><span class=""> 1352: 		return ($cached-&gt;{lat}, $cached-&gt;{lon});
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1351: 	if(my $cached = $self-&gt;{cache}-&gt;get($cache_key)) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1352: 		return ($cached-&gt;{lat}, $cached-&gt;{lon});
 </span><span class=""> 1353: 	}
 </span><span class=""> 1354: 
 </span><span class=""> 1355: 	# Honour the minimum interval between outbound requests.
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1356 → 1357 → 1362</span></span> 1356: 	my $elapsed = time() - $self-&gt;{last_request};
-</span><span class=""> 1357: 	if($elapsed &lt; $self-&gt;{min_interval}) {
-</span><span class=""> 1358: 		Time::HiRes::sleep($self-&gt;{min_interval} - $elapsed);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1357: 	if($elapsed &lt; $self-&gt;{min_interval}) {
+</span><p> <b> Mutants (Total: 4, Killed: 4, Survived: 0)</b><p><span class=""> 1358: 		Time::HiRes::sleep($self-&gt;{min_interval} - $elapsed);
 </span><span class=""> 1359: 	}
 </span><span class=""> 1360: 
 </span><span class=""> 1361: 	# Configure only a UA we create; a caller&#39;s UA is used as supplied
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1362 → 1363 → 1369</span></span> 1362: 	my $ua = $self-&gt;{&#39;ua&#39;};
-</span><span class=""> 1363: 	if(!$ua) {
-</span><span class=""> 1364: 		$ua = LWP::UserAgent-&gt;new(agent =&gt; __PACKAGE__ . &quot;/$VERSION&quot;);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1363: 	if(!$ua) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1364: 		$ua = LWP::UserAgent-&gt;new(agent =&gt; __PACKAGE__ . &quot;/$VERSION&quot;);
 </span><span class=""> 1365: 		$ua-&gt;default_header(accept_encoding =&gt; &#39;gzip,deflate&#39;);
 </span><span class=""> 1366: 		$ua-&gt;env_proxy(1);
 </span><span class=""> 1367: 	}
@@ -1712,18 +1712,18 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1371: 	my $response = $ua-&gt;get($url);
 </span><span class=""> 1372: 	$self-&gt;{&#39;last_request&#39;} = time();
 </span><span class=""> 1373: 
-</span><span class=""> 1374: 	if($response-&gt;is_success()) {
-</span><span class=""> 1375: 		# eval guard: Nominatim normally returns valid JSON, but a maintenance
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1374: 	if($response-&gt;is_success()) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1375: 		# eval guard: Nominatim normally returns valid JSON, but a maintenance
 </span><span class=""> 1376: 		# page or rate-limit response could return HTML with a 200 OK.  Dying
 </span><span class=""> 1377: 		# inside _fetch_coordinates would bubble uncaught to add_marker / onload_render.
 </span><span class=""> 1378: 		my $data = eval { decode_json($response-&gt;decoded_content()) };
-</span><span class=""> 1379: 		if($@) {
-</span><span class=""> 1380: 			carp &quot;_fetch_coordinates: failed to decode Nominatim response: $@&quot;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1379: 		if($@) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1380: 			carp &quot;_fetch_coordinates: failed to decode Nominatim response: $@&quot;;
 </span><span class=""> 1381: 			return (undef, undef);
 </span><span class=""> 1382: 		}
 </span><span class=""> 1383: 		$data = $data-&gt;[0] if ref($data) eq &#39;ARRAY&#39;;
-</span><span class=""> 1384: 		if(ref($data) eq &#39;HASH&#39; &amp;&amp; defined($data-&gt;{lat})) {
-</span><span class=""> 1385: 			$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $data);
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1384: 		if(ref($data) eq &#39;HASH&#39; &amp;&amp; defined($data-&gt;{lat})) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1385: 			$self-&gt;{&#39;cache&#39;}-&gt;set($cache_key, $data);
 </span><span class=""> 1386: 			return ($data-&gt;{lat}, $data-&gt;{lon});
 </span><span class=""> 1387: 		}
 </span><span class=""> 1388: 	}
@@ -1750,15 +1750,15 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1409: 	# Range checks use _num_val, which does not depend on the locale
 </span><span class=""> 1410: 	my $ok = defined($lat) &amp;&amp; defined($lon)
 </span><span class=""> 1411: 	      &amp;&amp; $lat =~ $numeric &amp;&amp; $lon =~ $numeric
-</span><span class=""> 1412: 	      &amp;&amp; _num_val($lat) &gt;= $LAT_MIN &amp;&amp; _num_val($lat) &lt;= $LAT_MAX
-</span><span class=""> 1413: 	      &amp;&amp; _num_val($lon) &gt;= $LON_MIN &amp;&amp; _num_val($lon) &lt;= $LON_MAX;
-</span><span class=""> 1414: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1412: 	      &amp;&amp; _num_val($lat) &gt;= $LAT_MIN &amp;&amp; _num_val($lat) &lt;= $LAT_MAX
+</span><p> <b> Mutants (Total: 6, Killed: 6, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1413: 	      &amp;&amp; _num_val($lon) &gt;= $LON_MIN &amp;&amp; _num_val($lon) &lt;= $LON_MAX;
+</span><p> <b> Mutants (Total: 6, Killed: 6, Survived: 0)</b><p><span class=""> 1414: 
 </span><span class=""> 1415: 	carp(sprintf &#39;Skipping invalid coordinate: (%s, %s)&#39;,
 </span><span class=""> 1416: 	     $lat // &#39;undef&#39;, $lon // &#39;undef&#39;)
 </span><span class=""> 1417: 		if !$ok &amp;&amp; defined($lat) &amp;&amp; defined($lon);
 </span><span class=""> 1418: 
-</span><span class=""> 1419: 	return $ok ? 1 : 0;
-</span><span class=""> 1420: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1419: 	return $ok ? 1 : 0;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1420: }
 </span><span class=""> 1421: 
 </span><span class=""> 1422: # _html_json: Encode data as JSON and make the result safe for embedding in a
 </span><span class=""> 1423: # &lt;script&gt; block.  JSON encoders do not escape &#39;/&#39; by default, so a value like
@@ -1784,8 +1784,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1443: 	$@ = $saved_error;
 </span><span class=""> 1444: 
 </span><span class=""> 1445: 	$j =~ s|&lt;/|&lt;\\/|g;
-</span><span class=""> 1446: 	return $j;
-</span><span class=""> 1447: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1446: 	return $j;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1447: }
 </span><span class=""> 1448: 
 </span><span class=""> 1449: # _js_string: Escape a Perl string for safe embedding in a JS single-quoted literal.
 </span><span class=""> 1450: # Purpose: Prevent JS injection via user-supplied labels, URLs, or property names.
@@ -1799,8 +1799,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1458: 	$s =~ s/\r?\n/\\n/g;  # newlines would break the JS string
 </span><span class=""> 1459: 	$s =~ s/\r/\\r/g;     # a lone carriage return also ends a JS string
 </span><span class=""> 1460: 	$s =~ s|&lt;/|&lt;\\/|g;    # prevent &lt;/script&gt; injection
-</span><span class=""> 1461: 	return $s;
-</span><span class=""> 1462: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1461: 	return $s;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1462: }
 </span><span class=""> 1463: 
 </span><span class=""> 1464: # _html_attr: Escape a Perl string for safe embedding in a double-quoted HTML attribute.
 </span><span class=""> 1465: # Purpose: Stop a configured CDN URL from closing the attribute or the tag.
@@ -1813,8 +1813,8 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1472: 	$s =~ s/&lt;/&amp;lt;/g;
 </span><span class=""> 1473: 	$s =~ s/&gt;/&amp;gt;/g;
 </span><span class=""> 1474: 	$s =~ s/&quot;/&amp;quot;/g;
-</span><span class=""> 1475: 	return $s;
-</span><span class=""> 1476: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1475: 	return $s;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1476: }
 </span><span class=""> 1477: 
 </span><span class=""> 1478: # _css_length: Check a width or height before it is put into the &lt;style&gt; block.
 </span><span class=""> 1479: # Purpose: Values from a config file or a clone skip new()&#39;s schema, so a value
@@ -1826,12 +1826,12 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1485: {
 </span><span class=""> 1486: 	my ($name, $value, $default) = @_;
 </span><span class=""> 1487: 
-</span><span class=""> 1488: 	return $default unless defined($value) &amp;&amp; length($value);
-</span><span class=""> 1489: 	return $value if $value =~ $CSS_LENGTH;
-</span><span class=""> 1490: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1488: 	return $default unless defined($value) &amp;&amp; length($value);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1489: 	return $value if $value =~ $CSS_LENGTH;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1490: 
 </span><span class=""> 1491: 	carp &quot;onload_render: invalid $name &#39;$value&#39;, using $default&quot;;
-</span><span class=""> 1492: 	return $default;
-</span><span class=""> 1493: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1492: 	return $default;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1493: }
 </span><span class=""> 1494: 
 </span><span class=""> 1495: # _positive_number: Return $value as text when it is a positive number.
 </span><span class=""> 1496: # Purpose: Heatmap options go straight into the JavaScript, so anything that
@@ -1844,17 +1844,17 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1503: {
 </span><span class=""> 1504: 	my ($value, $default) = @_;
 </span><span class=""> 1505: 
-</span><span class=""> 1506: 	return $default unless defined($value) &amp;&amp; !ref($value);
-</span><span class=""> 1507: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1506: 	return $default unless defined($value) &amp;&amp; !ref($value);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1507: 
 </span><span class=""> 1508: 	my $str = _num_str($value);
 </span><span class=""> 1509: 	$str =~ s/\A\s+|\s+\z//g;
 </span><span class=""> 1510: 	# Plain decimals only: rejects signs, exponents, &#39;Inf&#39; and &#39;NaN&#39;
-</span><span class=""> 1511: 	return $default unless $str =~ /\A(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)\z/;
-</span><span class=""> 1512: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1511: 	return $default unless $str =~ /\A(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+)\z/;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1512: 
 </span><span class=""> 1513: 	my $number = _num_val($str);
-</span><span class=""> 1514: 	return $default unless $number &gt; 0 &amp;&amp; $number &lt; 1e6;
-</span><span class=""> 1515: 	return _num_str($number);
-</span><span class=""> 1516: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1514: 	return $default unless $number &gt; 0 &amp;&amp; $number &lt; 1e6;
+</span><p> <b> Mutants (Total: 8, Killed: 8, Survived: 0)</b><p><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1515: 	return _num_str($number);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1516: }
 </span><span class=""> 1517: 
 </span><span class=""> 1518: # _num_str: Return a number as text with &#39;.&#39; as the decimal point.
 </span><span class=""> 1519: # Purpose: Perl should print numbers with a &#39;.&#39; whatever the locale, but some
@@ -1868,19 +1868,19 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""> 1527: {
 </span><span class=""> 1528: 	my $value = shift;
 </span><span class=""> 1529: 
-</span><span class=""> 1530: 	return $value if !defined($value) || ref($value);
-</span><span class=""> 1531: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1530: 	return $value if !defined($value) || ref($value);
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1531: 
 </span><span class=""> 1532: 	# Only a value Perl holds as a number can have been printed with a locale
 </span><span class=""> 1533: 	# decimal point; a string such as &#39;51,5&#39; never gets these flags.
 </span><span class=""> 1534: 	my $flags = B::svref_2object(\$value)-&gt;FLAGS;
-</span><span class=""> 1535: 	return $value unless $flags &amp; (B::SVf_IOK() | B::SVf_NOK());
-</span><span class=""> 1536: 
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1535: 	return $value unless $flags &amp; (B::SVf_IOK() | B::SVf_NOK());
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1536: 
 </span><span class=""> 1537: 	my $str   = &quot;$value&quot;;
 </span><span class=""> 1538: 	my $radix = (localeconv() || {})-&gt;{decimal_point};
 </span><span class=""> 1539: 	$str =~ s/\Q$radix\E/./ if defined($radix) &amp;&amp; length($radix) &amp;&amp; $radix ne &#39;.&#39;;
 </span><span class=""> 1540: 	$str =~ tr/,/./;    # Perl never groups digits, so a comma can only be a decimal point
-</span><span class=""> 1541: 	return $str;
-</span><span class=""> 1542: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1541: 	return $str;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1542: }
 </span><span class=""> 1543: 
 </span><span class=""> 1544: # _num_val: Convert a decimal string such as &#39;-0.1278&#39; to a number.
 </span><span class=""> 1545: # Purpose: The perls that print numbers with the locale&#39;s decimal point also
@@ -1894,15 +1894,15 @@ Approximate LCSAJ segments: 213<br>
 </span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1553 → 1556 → 1561</span></span> 1553: 	my $str = _num_str(shift);
 </span><span class=""> 1554: 
 </span><span class=""> 1555: 	my ($sign, $whole, $frac) = $str =~ /\A(-?)([0-9]*)(?:\.([0-9]+))?\z/;
-</span><span class=""> 1556: 	if(!defined($sign) || (!length($whole) &amp;&amp; !defined($frac))) {
-</span><span class=""> 1557: 		no warnings &#39;numeric&#39;;
-</span><span class=""> 1558: 		return 0 + $str;
-</span><span class=""> 1559: 	}
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1556: 	if(!defined($sign) || (!length($whole) &amp;&amp; !defined($frac))) {
+</span><p> <b> Mutants (Total: 1, Killed: 1, Survived: 0)</b><p><span class=""> 1557: 		no warnings &#39;numeric&#39;;
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1558: 		return 0 + $str;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1559: 	}
 </span><span class=""> 1560: 
 </span><span class=""> 1561: 	my $value = length($whole) ? 0 + $whole : 0;
 </span><span class=""> 1562: 	$value += $frac / (10 ** length($frac)) if defined($frac);
-</span><span class=""> 1563: 	return $sign ? -$value : $value;
-</span><span class=""> 1564: }
+</span><span class="killed tooltip" data-tooltip="Mutations here were killed. Tests are effectively covering this logic."> 1563: 	return $sign ? -$value : $value;
+</span><p> <b> Mutants (Total: 2, Killed: 2, Survived: 0)</b><p><span class=""> 1564: }
 </span><span class=""> 1565: 
 </span><span class=""> 1566: =head1 LIMITATIONS
 </span><span class=""> 1567: 
