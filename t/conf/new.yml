@@ -56,3 +56,11 @@ input:
   fit:
     type: boolean
     optional: true
+  legend_position:
+    type: string
+    enum:
+      - topright
+      - topleft
+      - bottomright
+      - bottomleft
+    optional: true

@@ -27,7 +27,11 @@ Revision history for HTML-OSM
 	  legend_empty, group and fit)
 	- t/30-basics.t no longer asks Nominatim about "xyzzy" to test an unknown
 	  centre location; it uses a geocoder stub that finds nothing.  The test
-	  failed whenever Nominatim found a place of that name (RT#179908)
+	  failed whenever Nominatim found a place of that name (RT#179908).  An
+	  address the geocoder cannot find is now tested through add_marker()
+	  too.  Only the CDN checks need the internet, so the rest of the file
+	  runs without it and Test::RequiresInternet is no longer needed
+	- t/conf/new.yml covers legend_position
 	- .github/workflows/actionlint.yml lints every workflow on push and pull
 	  request: actionlint reads each expression with the contexts available where
 	  it stands, which is how Database-BI's browser.yml was refused whole -

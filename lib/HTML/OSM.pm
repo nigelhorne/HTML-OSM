@@ -1031,6 +1031,7 @@ replacement gives a warning.
   | onload_render: invalid height 'H', using 400px   | Warning: height is not a CSS length |
   | onload_render: invalid legend_position 'P', using topright | Warning: legend_position from a config file or clone is not a corner |
   | onload_render: legend entry N: ...; leaving it out of the key | Warning: a legend entry from a config file or clone is unusable |
+  | onload_render: legend must be an arrayref; leaving it out of the key | Warning: legend from a config file or clone is not an arrayref; no key is drawn |
   | _fetch_coordinates: failed to decode Nominatim response: ERROR | Warning: Nominatim returned something that is not JSON; the marker is skipped |
   | _fetch_coordinates: unrecognised geocoder result type: TYPE | Warning: the injected geocoder returned an unknown type; the marker is skipped |
 
