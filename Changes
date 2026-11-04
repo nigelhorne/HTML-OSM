@@ -1,6 +1,6 @@
 Revision history for HTML-OSM
 
-0.13
+0.13	Wed Nov  4 10:02:06 AM EST 2026
 	[ Enhancements ]
 	- new(scale => 1) adds Leaflet's scale bar, in kilometres and miles.  It
 	  is redrawn as the reader moves and zooms
