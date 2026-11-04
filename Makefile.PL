@@ -62,7 +62,7 @@ WriteMakefile(
 		'Test::DescribeMe' => 0,
 		'Test::HTTPStatus' => 0,
 		'Test::Memory::Cycle' => 0,
-		'Test::Mockingbird' => 0,
+		'Test::Mockingbird' => 0.03,	# mock 'Pkg::method' => sub {...} shorthand
 		'Test::Most' => 0,
 		'Test::Needs' => 0,
 		'Test::Returns' => 0,

@@ -32,6 +32,10 @@ Revision history for HTML-OSM
 	  too.  Only the CDN checks need the internet, so the rest of the file
 	  runs without it and Test::RequiresInternet is no longer needed
 	- t/conf/new.yml covers legend_position
+	- Require Test::Mockingbird 0.03, the first version with the
+	  mock 'Pkg::method' => sub { ... } form the tests use.  With 0.02 eight
+	  test files failed to compile
+	  Fixes https://www.cpantesters.org/cpan/report/876c3bf2-cf9d-11f1-a02c-9138a504d503
 	- .github/workflows/actionlint.yml lints every workflow on push and pull
 	  request: actionlint reads each expression with the contexts available where
 	  it stands, which is how Database-BI's browser.yml was refused whole -
