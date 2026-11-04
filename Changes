@@ -1,7 +1,33 @@
 Revision history for HTML-OSM
 
 0.13
+	[ Enhancements ]
+	- new(scale => 1) adds Leaflet's scale bar, in kilometres and miles.  It
+	  is redrawn as the reader moves and zooms
+	- new(legend => [ { label, colour, radius, group }, ... ]) draws a key in
+	  a corner of the map (legend_position, default topright), headed by
+	  legend_title.  A radius gives a swatch that size, for a key to the
+	  sizes of circle markers
+	- add_marker() and add_circle_marker() take group.  A key entry with a
+	  group is listed only while a marker of that group is in view, so the
+	  key changes as the reader pans and zooms; a marker inside a cluster
+	  counts.  When nothing is listed the key says legend_empty ("Nothing in
+	  this view")
+	- new() croaks on a key entry it cannot draw and on a position that is
+	  not a corner; onload_render() leaves out such an entry from a config
+	  file or a clone, with a warning.  Every text in the key is written as
+	  text, never as HTML
+	- new(fit => 1) opens the map on every pin and circle marker, zooming in
+	  no further than zoom, and "Reset Map" returns there.  Without it the
+	  map still opens at zoom around the markers' midpoint, which can leave
+	  them all out of view.  A centre set with center() wins
+
 	[ Tests ]
+	- Add t/legend.t (scale, legend, legend_title, legend_position,
+	  legend_empty, group and fit)
+	- t/30-basics.t no longer asks Nominatim about "xyzzy" to test an unknown
+	  centre location; it uses a geocoder stub that finds nothing.  The test
+	  failed whenever Nominatim found a place of that name (RT#179908)
 	- .github/workflows/actionlint.yml lints every workflow on push and pull
 	  request: actionlint reads each expression with the contexts available where
 	  it stands, which is how Database-BI's browser.yml was refused whole -
