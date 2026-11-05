@@ -3,8 +3,6 @@
 # https://github.com/marketplace/actions/setup-perl-environment
 
 name: Test Code
-permissions:
-  contents: read
 on:
   push:
     branches:
@@ -14,6 +12,14 @@ on:
   pull_request:
   schedule:
     - cron: '11 0 6 * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
