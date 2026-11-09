@@ -46,3 +46,4 @@ textContent
 geojson
 innerHTML
 layerGroup
+layerKey

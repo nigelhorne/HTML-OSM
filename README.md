@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 ## Version
 
-Version 0.15
+Version 0.16
 
 ## Synopsis
 
@@ -397,12 +397,15 @@ Returns 1 on success.
 
 ##### Input
 
-```
+```perl
 data  : hashref | arrayref | string (JSON)
 style : hashref   Leaflet path-style options (color, weight, fillColor, fillOpacity)
 popup : string    Feature property name whose value becomes the popup text
 name  : string    Label of the layer's checkbox in the map's layer control
 show  : boolean   Whether a named layer is drawn when the map opens (default 1)
+key   : hashref   A key to the layer's colours, shown while the layer is
+                  (see L</LAYER KEY>):
+                  { entries => [ { label, colour }, ... ], title?, position? }
 ```
 
 ##### Output
@@ -419,6 +422,8 @@ show  : boolean   Whether a named layer is drawn when the map opens (default 1)
 | (JSON parse error)                        | data string is not valid JSON   |
 | add_geojson: name must be a string        | name is a reference or empty    |
 | add_geojson: show must not be a reference | show is a reference             |
+| add_geojson: key ...                      | key is unusable; the message    |
+|                                           | says which part                 |
 ```
 
 #### Layer Control
@@ -436,6 +441,43 @@ reader can see what can be turned on.
 
 The name is shown as text: Leaflet writes it into the page as HTML, so it is
 escaped first, and `<b>` is shown as written.
+
+#### Layer Key
+
+```perl
+$map->add_geojson(\%busy,  style => { color => '#d73027' }, name => 'Counties',
+    key => {
+        title   => 'Population',
+        entries => [
+            { label => '100,000 or more', colour => '#d73027' },
+            { label => 'under 100,000',   colour => '#1a9850' },
+        ],
+    });
+$map->add_geojson(\%quiet, style => { color => '#1a9850' }, name => 'Counties');
+```
+
+`key` draws a key to a layer's colours in a corner of the map: a short line
+of each colour, as an outline is drawn, beside its label.  It is shown while
+the layer is: unticking the layer's checkbox hides the key too, and ticking it
+shows it again.  A layer with no name is always drawn, so its key always
+shows.
+
+- `entries`
+
+    Required, at least one: hashrefs of `label` (text, required) and `colour`
+    (`#rgb` or `#rrggbb`, required), listed in the order given.
+
+- `title`
+
+    Text printed above the entries.
+
+- `position`
+
+    `bottomright` (the default), `bottomleft`, `topright` or `topleft`.  The
+    marker key (`legend`) and the layer control are top right by default.
+
+Layers that share a name share one key: the first `key` given for that name.
+Every text reaches the page as text, never as HTML.
 
 #### Examples
 
@@ -973,9 +1015,11 @@ AddGeoJSON
   popup? : S ∪ {∅}
   name?  : S ∪ {∅}
   show?  : 𝔹 ∪ {∅}
+  key?   : LayerKey ∪ {∅}
 -----------------------------------------
   name? ≠ ∅ ⇒ name? ≠ ""
-  geojson' = geojson ⌢ ⟨{data, style, popup, name, show}⟩
+  key? ≠ ∅ ⇒ #key?.entries ≥ 1 ∧ key?.position ∈ Corner
+  geojson' = geojson ⌢ ⟨{data, style, popup, name, show, key}⟩
 ```
 
 ### Add\_Heatmap

@@ -24,11 +24,11 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 =head1 VERSION
 
-Version 0.15
+Version 0.16
 
 =cut
 
-our $VERSION = '0.15';
+our $VERSION = '0.16';
 
 # CDN URLs pinned to tested versions.  Override via constructor params to use
 # a self-hosted copy or a different version.
@@ -79,6 +79,9 @@ Readonly::Array  my @LEGEND_POSITIONS        => qw(topright topleft bottomright 
 Readonly::Scalar my $DEFAULT_LEGEND_POSITION => 'topright';
 Readonly::Scalar my $DEFAULT_LEGEND_EMPTY    => 'Nothing in this view';
 Readonly::Scalar my $LEGEND_SWATCH_MAX       => 25;
+# Where a GeoJSON layer's key goes: away from the marker key and the layer
+# control, which are top right.
+Readonly::Scalar my $DEFAULT_KEY_POSITION    => 'bottomright';
 
 =head1 SYNOPSIS
 
@@ -603,6 +606,9 @@ Returns 1 on success.
   popup : string    Feature property name whose value becomes the popup text
   name  : string    Label of the layer's checkbox in the map's layer control
   show  : boolean   Whether a named layer is drawn when the map opens (default 1)
+  key   : hashref   A key to the layer's colours, shown while the layer is
+                    (see L</LAYER KEY>):
+                    { entries => [ { label, colour }, ... ], title?, position? }
 
 =head4 OUTPUT
 
@@ -615,6 +621,8 @@ Returns 1 on success.
   | (JSON parse error)                        | data string is not valid JSON   |
   | add_geojson: name must be a string        | name is a reference or empty    |
   | add_geojson: show must not be a reference | show is a reference             |
+  | add_geojson: key ...                      | key is unusable; the message    |
+  |                                           | says which part                 |
 
 =head3 LAYER CONTROL
 
@@ -631,6 +639,45 @@ reader can see what can be turned on.
 
 The name is shown as text: Leaflet writes it into the page as HTML, so it is
 escaped first, and C<< <b> >> is shown as written.
+
+=head3 LAYER KEY
+
+    $map->add_geojson(\%busy,  style => { color => '#d73027' }, name => 'Counties',
+        key => {
+            title   => 'Population',
+            entries => [
+                { label => '100,000 or more', colour => '#d73027' },
+                { label => 'under 100,000',   colour => '#1a9850' },
+            ],
+        });
+    $map->add_geojson(\%quiet, style => { color => '#1a9850' }, name => 'Counties');
+
+C<key> draws a key to a layer's colours in a corner of the map: a short line
+of each colour, as an outline is drawn, beside its label.  It is shown while
+the layer is: unticking the layer's checkbox hides the key too, and ticking it
+shows it again.  A layer with no name is always drawn, so its key always
+shows.
+
+=over 4
+
+=item C<entries>
+
+Required, at least one: hashrefs of C<label> (text, required) and C<colour>
+(C<#rgb> or C<#rrggbb>, required), listed in the order given.
+
+=item C<title>
+
+Text printed above the entries.
+
+=item C<position>
+
+C<bottomright> (the default), C<bottomleft>, C<topright> or C<topleft>.  The
+marker key (C<legend>) and the layer control are top right by default.
+
+=back
+
+Layers that share a name share one key: the first C<key> given for that name.
+Every text reaches the page as text, never as HTML.
 
 =head3 EXAMPLES
 
@@ -673,6 +720,7 @@ sub add_geojson
 		croak 'add_geojson: name must be a string' if ref($name) || !length($name);
 	}
 	croak 'add_geojson: show must not be a reference' if ref($params->{show});
+	$params = { %{$params}, key => _layer_key($params->{key}) } if defined($params->{key});
 
 	push @{$self->{geojson}}, { data => $data, opts => $params };
 	return 1;
@@ -1837,6 +1885,42 @@ sub _html_json
 	return $j;
 }
 
+# The JavaScript function that draws a layer's key and shows it while the
+# layer is shown: layerKey(layer, key), key as _layer_key returns it.  Every
+# text goes in through textContent.  It is written into a function's scope,
+# never the page's.
+Readonly::Scalar my $LAYER_KEY_JS => <<'JS';
+				function layerKey(layer, k) {
+					var key = L.control({ position: k.position });
+					key.onAdd = function() {
+						var div = L.DomUtil.create('div', 'html-osm-legend html-osm-layer-key');
+						div.style.cssText = 'background: rgba(255,255,255,0.9); color: #222; padding: 6px 8px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.3); font: 12px/1.5 sans-serif; max-height: 40vh; overflow-y: auto;';
+						L.DomEvent.disableClickPropagation(div);
+						L.DomEvent.disableScrollPropagation(div);
+						if(k.title) {
+							var title = document.createElement('strong');
+							title.style.display = 'block';
+							title.textContent = k.title;
+							div.appendChild(title);
+						}
+						k.entries.forEach(function(e) {
+							var row = document.createElement('div');
+							row.className = 'html-osm-legend-entry';
+							var swatch = document.createElement('span');
+							swatch.style.cssText = 'display: inline-block; vertical-align: middle; margin-right: 6px; width: 18px; height: 0;';
+							swatch.style.borderTop = '3px solid ' + e.colour;
+							row.appendChild(swatch);
+							row.appendChild(document.createTextNode(e.label));
+							div.appendChild(row);
+						});
+						return div;
+					};
+					if(map.hasLayer(layer)) { key.addTo(map); }
+					map.on('overlayadd', function(e) { if(e.layer === layer) { key.addTo(map); } });
+					map.on('overlayremove', function(e) { if(e.layer === layer) { key.remove(); } });
+				}
+JS
+
 # _geojson_js: The JavaScript that draws the GeoJSON layers, and the layer
 #          control when any of them has a name.
 # Purpose: Unnamed layers are drawn as before, one statement each.  Named
@@ -1857,7 +1941,7 @@ sub _geojson_js
 	my $layers = shift;
 
 	my $out = '';
-	my (@names, %group_of, %shown);
+	my (@names, %group_of, %shown, %key_of);
 	for my $layer (@$layers) {
 		my $json     = _html_json($layer->{data});
 		my $opts     = $layer->{opts} || {};
@@ -1873,10 +1957,18 @@ sub _geojson_js
 		my $js = "L.geoJSON($json, { $style_js $popup_js })";
 
 		my $name = $opts->{name};
+		my $key  = ref($opts->{key}) eq 'HASH' ? $opts->{key} : undef;
 		if(!defined($name) || ref($name) || !length($name)) {
-			$out .= "\t\t\t$js.addTo(map);\n";
+			if($key) {
+				# Always drawn, so its key always shows
+				$out .= "\t\t\t(function() {\n$LAYER_KEY_JS\t\t\t\tlayerKey($js.addTo(map), "
+					. _html_json($key) . ");\n\t\t\t})();\n";
+			} else {
+				$out .= "\t\t\t$js.addTo(map);\n";
+			}
 			next;
 		}
+		$key_of{$name} //= $key if $key;
 		unless(exists $group_of{$name}) {
 			push @names, $name;
 			$group_of{$name} = [];
@@ -1889,14 +1981,55 @@ sub _geojson_js
 	return $out unless @names;
 
 	$out .= "\t\t\t(function() {\n\t\t\t\tvar overlays = {};\n\t\t\t\tvar group;\n";
+	$out .= $LAYER_KEY_JS if %key_of;
 	for my $name (@names) {
 		my $label = _js_string(_html_attr($name));
 		$out .= "\t\t\t\tgroup = L.layerGroup([" . join(', ', @{$group_of{$name}}) . "]);\n";
 		$out .= "\t\t\t\tgroup.addTo(map);\n" if $shown{$name};
 		$out .= "\t\t\t\toverlays['$label'] = group;\n";
+		$out .= "\t\t\t\tlayerKey(group, " . _html_json($key_of{$name}) . ");\n" if $key_of{$name};
 	}
 	$out .= "\t\t\t\tL.control.layers(null, overlays, { collapsed: false }).addTo(map);\n\t\t\t})();\n";
 	return $out;
+}
+
+# _layer_key: Check add_geojson's key.
+# Purpose: A key is written into the page's script, so only checked text,
+#          colours and a known corner may reach it.
+# Entry:   The key option.
+# Exit:    { entries => [ { label, colour } ], position, title? }, colours in
+#          lower case; croaks naming what is wrong.
+sub _layer_key
+{
+	my $key = shift;
+
+	croak 'add_geojson: key must be a hashref' unless ref($key) eq 'HASH';
+	my $entries = $key->{entries};
+	croak 'add_geojson: key entries must be a non-empty arrayref'
+		unless ref($entries) eq 'ARRAY' && @{$entries};
+
+	my @checked;
+	for my $n (1 .. scalar(@{$entries})) {
+		my $entry = $entries->[$n - 1];
+		croak "add_geojson: key entry $n is not a hashref" unless ref($entry) eq 'HASH';
+		my ($label, $colour) = @{$entry}{qw(label colour)};
+		croak "add_geojson: key entry $n: label is required"
+			if !defined($label) || ref($label) || !length($label);
+		croak "add_geojson: key entry $n: invalid colour: " . ($colour // 'undef')
+			if !defined($colour) || ref($colour) || $colour !~ $HEX_COLOUR;
+		push @checked, { label => "$label", colour => lc($colour) };
+	}
+
+	my $position = $key->{position} // $DEFAULT_KEY_POSITION;
+	croak 'add_geojson: key position must be one of ' . join(', ', @LEGEND_POSITIONS)
+		unless !ref($position) && grep { $_ eq $position } @LEGEND_POSITIONS;
+
+	my %out = (entries => \@checked, position => $position);
+	if(defined(my $title = $key->{title})) {
+		croak 'add_geojson: key title must be text' if ref($title);
+		$out{title} = "$title" if length($title);
+	}
+	return \%out;
 }
 
 # _js_string: Escape a Perl string for safe embedding in a JS single-quoted literal.
@@ -2147,9 +2280,11 @@ Allow per-marker removal via clicking on a marker.
     popup? : S ∪ {∅}
     name?  : S ∪ {∅}
     show?  : 𝔹 ∪ {∅}
+    key?   : LayerKey ∪ {∅}
   -----------------------------------------
     name? ≠ ∅ ⇒ name? ≠ ""
-    geojson' = geojson ⌢ ⟨{data, style, popup, name, show}⟩
+    key? ≠ ∅ ⇒ #key?.entries ≥ 1 ∧ key?.position ∈ Corner
+    geojson' = geojson ⌢ ⟨{data, style, popup, name, show, key}⟩
 
 =head2 add_heatmap
 

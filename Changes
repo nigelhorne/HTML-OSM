@@ -1,5 +1,12 @@
 Revision history for HTML-OSM
 
+0.16	Mon Nov  9 03:45:08 PM EST 2026
+	[ Enhancements ]
+	- add_geojson() takes key: a key to a layer's colours, a line of each
+	  colour beside its label, in a corner of the map (bottom right by
+	  default).  It is shown while the layer is, so unticking the layer's
+	  checkbox hides it too.  t/layer-key.t
+
 0.15	Mon Nov  9 01:01:45 PM EST 2026
 	[ Enhancements ]
 	- add_geojson() takes name and show.  A named layer gets a checkbox in
