@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 ## Version
 
-Version 0.14
+Version 0.15
 
 ## Synopsis
 
@@ -96,7 +96,8 @@ my ($head, $body) = $map->onload_render();
 Leaflet.js library.  Give it points as latitude and longitude, as place
 names, or as geocoder result objects.  It can also draw GeoJSON shapes,
 heatmaps, GPX tracks and choropleth (colour-filled region) layers, and can
-group nearby markers into clusters.
+group nearby markers into clusters.  A named GeoJSON layer gets a checkbox on
+the map, so the reader can turn it on and off.
 
 Place names are turned into coordinates by an injected geocoder or, without
 one, by the Nominatim service.  The answers are cached, and requests can be
@@ -389,6 +390,7 @@ $map->add_geojson(\%data, style => { color => '#ff0000' }, popup => 'name');
 ```
 
 The first argument may be a hashref/arrayref (GeoJSON structure) or a JSON string.
+Give it a `name` and the reader can hide and show it (see ["LAYER CONTROL"](#layer-control)).
 Returns 1 on success.
 
 #### Api Specification
@@ -399,6 +401,8 @@ Returns 1 on success.
 data  : hashref | arrayref | string (JSON)
 style : hashref   Leaflet path-style options (color, weight, fillColor, fillOpacity)
 popup : string    Feature property name whose value becomes the popup text
+name  : string    Label of the layer's checkbox in the map's layer control
+show  : boolean   Whether a named layer is drawn when the map opens (default 1)
 ```
 
 ##### Output
@@ -410,10 +414,28 @@ popup : string    Feature property name whose value becomes the popup text
 #### Messages
 
 ```
-| Message              | Meaning / Resolution            |
-|----------------------|---------------------------------|
-| (JSON parse error)   | data string is not valid JSON   |
+| Message                                   | Meaning / Resolution            |
+|-------------------------------------------|---------------------------------|
+| (JSON parse error)                        | data string is not valid JSON   |
+| add_geojson: name must be a string        | name is a reference or empty    |
+| add_geojson: show must not be a reference | show is a reference             |
 ```
+
+#### Layer Control
+
+Give a layer a `name` and the map gains Leaflet's layer control, a box of
+checkboxes in its top right corner, one for each name, so the reader can hide
+and show that layer.  `show => 0` starts it hidden: the reader turns it
+on.  As with `search`, the strings `false`, `no` and `off` are false.
+
+Layers given the same name share one checkbox, which is ticked when any of
+them has `show` on.  A layer with no name is always drawn, whatever `show`
+says, because nothing could turn it on.  The control is written once, after
+the last GeoJSON layer, and is left open (not collapsed into an icon), so the
+reader can see what can be turned on.
+
+The name is shown as text: Leaflet writes it into the page as HTML, so it is
+escaped first, and `<b>` is shown as written.
 
 #### Examples
 
@@ -431,6 +453,15 @@ $map->add_geojson('{"type":"FeatureCollection","features":[]}');
 # Multiple GeoJSON layers with different styles on the same map
 $map->add_geojson(\%country_borders, style => { color => '#333333', fillOpacity => 0 });
 $map->add_geojson(\%river_data,      style => { color => '#0099ff', weight => 1    });
+
+# County outlines the reader can turn on: hidden at first
+$map->add_geojson(
+    { type => 'FeatureCollection', features => \@counties },
+    style => { color => '#555555', weight => 1, fill => 0 },
+    popup => 'name',
+    name  => 'County boundaries',
+    show  => 0,
+);
 ```
 
 ### Add\_Heatmap
@@ -940,8 +971,11 @@ AddGeoJSON
   data?  : GeoJSONStruct ∪ S
   style? : StyleMap ∪ {∅}
   popup? : S ∪ {∅}
+  name?  : S ∪ {∅}
+  show?  : 𝔹 ∪ {∅}
 -----------------------------------------
-  geojson' = geojson ⌢ ⟨{data, style, popup}⟩
+  name? ≠ ∅ ⇒ name? ≠ ""
+  geojson' = geojson ⌢ ⟨{data, style, popup, name, show}⟩
 ```
 
 ### Add\_Heatmap

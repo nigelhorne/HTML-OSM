@@ -24,11 +24,11 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 =head1 VERSION
 
-Version 0.14
+Version 0.15
 
 =cut
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 # CDN URLs pinned to tested versions.  Override via constructor params to use
 # a self-hosted copy or a different version.
@@ -172,7 +172,8 @@ C<HTML::OSM> builds an interactive map from OpenStreetMap tiles and the
 Leaflet.js library.  Give it points as latitude and longitude, as place
 names, or as geocoder result objects.  It can also draw GeoJSON shapes,
 heatmaps, GPX tracks and choropleth (colour-filled region) layers, and can
-group nearby markers into clusters.
+group nearby markers into clusters.  A named GeoJSON layer gets a checkbox on
+the map, so the reader can turn it on and off.
 
 Place names are turned into coordinates by an injected geocoder or, without
 one, by the Nominatim service.  The answers are cached, and requests can be
@@ -590,6 +591,7 @@ Add a GeoJSON layer to the map.
     $map->add_geojson(\%data, style => { color => '#ff0000' }, popup => 'name');
 
 The first argument may be a hashref/arrayref (GeoJSON structure) or a JSON string.
+Give it a C<name> and the reader can hide and show it (see L</LAYER CONTROL>).
 Returns 1 on success.
 
 =head3 API SPECIFICATION
@@ -599,6 +601,8 @@ Returns 1 on success.
   data  : hashref | arrayref | string (JSON)
   style : hashref   Leaflet path-style options (color, weight, fillColor, fillOpacity)
   popup : string    Feature property name whose value becomes the popup text
+  name  : string    Label of the layer's checkbox in the map's layer control
+  show  : boolean   Whether a named layer is drawn when the map opens (default 1)
 
 =head4 OUTPUT
 
@@ -606,9 +610,27 @@ Returns 1 on success.
 
 =head3 MESSAGES
 
-  | Message              | Meaning / Resolution            |
-  |----------------------|---------------------------------|
-  | (JSON parse error)   | data string is not valid JSON   |
+  | Message                                   | Meaning / Resolution            |
+  |-------------------------------------------|---------------------------------|
+  | (JSON parse error)                        | data string is not valid JSON   |
+  | add_geojson: name must be a string        | name is a reference or empty    |
+  | add_geojson: show must not be a reference | show is a reference             |
+
+=head3 LAYER CONTROL
+
+Give a layer a C<name> and the map gains Leaflet's layer control, a box of
+checkboxes in its top right corner, one for each name, so the reader can hide
+and show that layer.  C<< show => 0 >> starts it hidden: the reader turns it
+on.  As with C<search>, the strings C<false>, C<no> and C<off> are false.
+
+Layers given the same name share one checkbox, which is ticked when any of
+them has C<show> on.  A layer with no name is always drawn, whatever C<show>
+says, because nothing could turn it on.  The control is written once, after
+the last GeoJSON layer, and is left open (not collapsed into an icon), so the
+reader can see what can be turned on.
+
+The name is shown as text: Leaflet writes it into the page as HTML, so it is
+escaped first, and C<< <b> >> is shown as written.
 
 =head3 EXAMPLES
 
@@ -626,6 +648,15 @@ Returns 1 on success.
     $map->add_geojson(\%country_borders, style => { color => '#333333', fillOpacity => 0 });
     $map->add_geojson(\%river_data,      style => { color => '#0099ff', weight => 1    });
 
+    # County outlines the reader can turn on: hidden at first
+    $map->add_geojson(
+        { type => 'FeatureCollection', features => \@counties },
+        style => { color => '#555555', weight => 1, fill => 0 },
+        popup => 'name',
+        name  => 'County boundaries',
+        show  => 0,
+    );
+
 =cut
 
 sub add_geojson
@@ -636,6 +667,12 @@ sub add_geojson
 
 	# Accept either a pre-parsed structure or a raw JSON string
 	$data = decode_json($data) if !ref($data);
+
+	# The name labels a checkbox, so it must be text; show is a flag.
+	if(defined(my $name = $params->{name})) {
+		croak 'add_geojson: name must be a string' if ref($name) || !length($name);
+	}
+	croak 'add_geojson: show must not be a reference' if ref($params->{show});
 
 	push @{$self->{geojson}}, { data => $data, opts => $params };
 	return 1;
@@ -1336,20 +1373,7 @@ sub onload_render
 	}
 
 	# GeoJSON layers.
-	for my $layer (@$geojson_layers) {
-		my $json     = _html_json($layer->{data});
-		my $opts     = $layer->{opts} || {};
-		my $style_js = '';
-		my $popup_js = '';
-		if(my $style = $opts->{style}) {
-			$style_js = 'style: ' . _html_json($style) . ',';
-		}
-		if(my $prop = $opts->{popup}) {
-			my $js_prop = _js_string($prop);
-			$popup_js = "onEachFeature: function(f,l){ if(f.properties && f.properties['$js_prop']){ l.bindPopup(String(f.properties['$js_prop'])); } },";
-		}
-		$body .= "\t\t\tL.geoJSON($json, { $style_js $popup_js }).addTo(map);\n";
-	}
+	$body .= _geojson_js($geojson_layers);
 
 	# Heatmap layers.
 	for my $layer (@$heatmap_layers) {
@@ -1813,6 +1837,68 @@ sub _html_json
 	return $j;
 }
 
+# _geojson_js: The JavaScript that draws the GeoJSON layers, and the layer
+#          control when any of them has a name.
+# Purpose: Unnamed layers are drawn as before, one statement each.  Named
+#          layers are gathered by name into one L.layerGroup per name, in the
+#          order the names first appear, so one checkbox shows or hides every
+#          layer of that name; a group is on the map at first when any of its
+#          layers has show on.
+# Entry:   Arrayref of { data, opts } from add_geojson.
+# Exit:    JavaScript text ('' when there are no layers).  Named layers are
+#          wrapped in a function so their variables stay out of the page's
+#          global scope; only 'map' is read from it.
+# Notes:   Leaflet sets a control's label with innerHTML, so the name is
+#          HTML-escaped before it is made a JavaScript string.  Values from a
+#          config file or a clone skip add_geojson's checks, so a name that is
+#          not a non-empty string is dropped here, and the layer drawn unnamed.
+sub _geojson_js
+{
+	my $layers = shift;
+
+	my $out = '';
+	my (@names, %group_of, %shown);
+	for my $layer (@$layers) {
+		my $json     = _html_json($layer->{data});
+		my $opts     = $layer->{opts} || {};
+		my $style_js = '';
+		my $popup_js = '';
+		if(my $style = $opts->{style}) {
+			$style_js = 'style: ' . _html_json($style) . ',';
+		}
+		if(my $prop = $opts->{popup}) {
+			my $js_prop = _js_string($prop);
+			$popup_js = "onEachFeature: function(f,l){ if(f.properties && f.properties['$js_prop']){ l.bindPopup(String(f.properties['$js_prop'])); } },";
+		}
+		my $js = "L.geoJSON($json, { $style_js $popup_js })";
+
+		my $name = $opts->{name};
+		if(!defined($name) || ref($name) || !length($name)) {
+			$out .= "\t\t\t$js.addTo(map);\n";
+			next;
+		}
+		unless(exists $group_of{$name}) {
+			push @names, $name;
+			$group_of{$name} = [];
+			$shown{$name} = 0;
+		}
+		push @{$group_of{$name}}, $js;
+		my $show = $opts->{show};
+		$shown{$name} = 1 if !defined($show) || ($show && $show !~ /\A(?:false|no|off)\z/i);
+	}
+	return $out unless @names;
+
+	$out .= "\t\t\t(function() {\n\t\t\t\tvar overlays = {};\n\t\t\t\tvar group;\n";
+	for my $name (@names) {
+		my $label = _js_string(_html_attr($name));
+		$out .= "\t\t\t\tgroup = L.layerGroup([" . join(', ', @{$group_of{$name}}) . "]);\n";
+		$out .= "\t\t\t\tgroup.addTo(map);\n" if $shown{$name};
+		$out .= "\t\t\t\toverlays['$label'] = group;\n";
+	}
+	$out .= "\t\t\t\tL.control.layers(null, overlays, { collapsed: false }).addTo(map);\n\t\t\t})();\n";
+	return $out;
+}
+
 # _js_string: Escape a Perl string for safe embedding in a JS single-quoted literal.
 # Purpose: Prevent JS injection via user-supplied labels, URLs, or property names.
 # Entry:   Any scalar (undef becomes '').
@@ -2059,8 +2145,11 @@ Allow per-marker removal via clicking on a marker.
     data?  : GeoJSONStruct ∪ S
     style? : StyleMap ∪ {∅}
     popup? : S ∪ {∅}
+    name?  : S ∪ {∅}
+    show?  : 𝔹 ∪ {∅}
   -----------------------------------------
-    geojson' = geojson ⌢ ⟨{data, style, popup}⟩
+    name? ≠ ∅ ⇒ name? ≠ ""
+    geojson' = geojson ⌢ ⟨{data, style, popup, name, show}⟩
 
 =head2 add_heatmap
 

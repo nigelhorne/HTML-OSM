@@ -1,5 +1,13 @@
 Revision history for HTML-OSM
 
+0.15	Mon Nov  9 01:01:45 PM EST 2026
+	[ Enhancements ]
+	- add_geojson() takes name and show.  A named layer gets a checkbox in
+	  Leaflet's layer control, so the reader can hide and show it; show => 0
+	  starts it hidden.  Layers that share a name share one checkbox.  The
+	  name is escaped, because Leaflet writes it into the page as HTML.
+	  t/layer-control.t
+
 0.14	Thu Nov  5 10:55:00 AM EST 2026
 	[ Enhancements ]
 	- new(nonce => ...) puts nonce="..." on every <script> onload_render()
