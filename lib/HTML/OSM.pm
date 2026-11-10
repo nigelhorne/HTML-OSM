@@ -24,11 +24,11 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 =head1 VERSION
 
-Version 0.16
+Version 0.17
 
 =cut
 
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 # CDN URLs pinned to tested versions.  Override via constructor params to use
 # a self-hosted copy or a different version.
@@ -609,6 +609,9 @@ Returns 1 on success.
   key   : hashref   A key to the layer's colours, shown while the layer is
                     (see L</LAYER KEY>):
                     { entries => [ { label, colour }, ... ], title?, position? }
+  bands : string    Feature property holding a list of colours, each drawn
+                    as a line of its own just inside the outline, side by side
+                    (see L</BANDS>)
 
 =head4 OUTPUT
 
@@ -623,6 +626,7 @@ Returns 1 on success.
   | add_geojson: show must not be a reference | show is a reference             |
   | add_geojson: key ...                      | key is unusable; the message    |
   |                                           | says which part                 |
+  | add_geojson: bands must be a string       | bands is a reference or empty   |
 
 =head3 LAYER CONTROL
 
@@ -679,6 +683,32 @@ marker key (C<legend>) and the layer control are top right by default.
 Layers that share a name share one key: the first C<key> given for that name.
 Every text reaches the page as text, never as HTML.
 
+=head3 BANDS
+
+    # Kent's outline is red with blue inside it; Surrey's is all green
+    $kent->{properties}{colours}   = [ '#d73027', '#4575b4' ];
+    $surrey->{properties}{colours} = [ '#1a9850' ];
+    $map->add_geojson({ type => 'FeatureCollection', features => [ $kent, $surrey ] },
+        style => { weight => 2, fill => 0 }, bands => 'colours');
+
+C<bands> names a feature property that holds a list of colours (C<#rrggbb>).
+A polygon's outline is then drawn just inside its edge, not along the middle
+of it, in a line of the width C<style> gives.  So where two polygons share a
+border, each one's colour is on its own side: the border reads as a line twice
+as wide, a different colour either side, and neither hides the other.
+
+A polygon with several colours, for an area that belongs to more than one
+group, gets a line of each, side by side: the first against the edge, each
+further one further inside.  A feature without the property, or with no colour
+that can be used, is drawn as C<style> says.  Only polygons are banded; a line
+or point takes the first colour.
+
+The lines are cut to the inside of the polygon, which needs Leaflet's default
+SVG drawing.  A map drawn on a canvas shows them uncut, along the middle of the
+edge, the first colour on top.  A popup opens from the outline as before.
+Neighbours' lines meet exactly only where their shared border is the same in
+both polygons; outlines simplified one at a time leave small gaps or overlaps.
+
 =head3 EXAMPLES
 
     # Pre-parsed GeoJSON structure with style and popup property
@@ -720,6 +750,10 @@ sub add_geojson
 		croak 'add_geojson: name must be a string' if ref($name) || !length($name);
 	}
 	croak 'add_geojson: show must not be a reference' if ref($params->{show});
+	# bands names a feature property, as popup does
+	if(defined(my $bands = $params->{bands})) {
+		croak 'add_geojson: bands must be a string' if ref($bands) || !length($bands);
+	}
 	$params = { %{$params}, key => _layer_key($params->{key}) } if defined($params->{key});
 
 	push @{$self->{geojson}}, { data => $data, opts => $params };
@@ -1921,6 +1955,81 @@ Readonly::Scalar my $LAYER_KEY_JS => <<'JS';
 				}
 JS
 
+# The JavaScript functions that draw a banded layer: bandLayer(data, style,
+# each, prop) is L.geoJSON(data, ...) with every polygon's outline drawn once
+# for each colour in its property prop, every line inside the polygon.  The
+# polygon's own line is made invisible: it stays to take clicks and to be the
+# shape the others are cut to.  Each colour is a second polygon over it, cut to
+# the inside of the first by an SVG clip path, so a line 2*j widths wide shows
+# j widths inside the edge; the widest is added first, so each narrower one
+# covers all but the innermost width of the one before, and the first colour
+# ends up against the edge.  The clip path refers to the first polygon's own
+# path element, so it follows the map as it is zoomed.  Leaflet makes a new
+# path element each time a layer is put back on the map, hence the 'add'
+# handlers.  A colour reaches the page only when it is #rrggbb.  It is written
+# into a function's scope, never the page's.
+Readonly::Scalar my $BAND_JS => <<'JS';
+				function bandInside(base, style, colour, weight) {
+					var opts = {};
+					for(var k in style) { opts[k] = style[k]; }
+					opts.color = colour;
+					opts.weight = weight;
+					opts.fill = false;
+					opts.interactive = false;
+					var inner = L.polygon(base.getLatLngs(), opts);
+					var id = 'html-osm-band-' + L.stamp(base);
+					base.on('add', function() {
+						var under = base.getElement && base.getElement();
+						if(under && under.ownerSVGElement) {
+							under.setAttribute('id', id);
+							under.setAttribute('clip-rule', 'evenodd');
+						}
+					});
+					inner.on('add', function() {
+						var path = inner.getElement && inner.getElement();
+						var svg = path && path.ownerSVGElement;
+						if(!svg) { return; }
+						var ns = 'http://www.w3.org/2000/svg';
+						if(!svg.querySelector('#' + id + '-clip')) {
+							var defs = svg.querySelector('defs');
+							if(!defs) {
+								defs = document.createElementNS(ns, 'defs');
+								svg.insertBefore(defs, svg.firstChild);
+							}
+							var clip = document.createElementNS(ns, 'clipPath');
+							clip.setAttribute('id', id + '-clip');
+							var use = document.createElementNS(ns, 'use');
+							use.setAttribute('href', '#' + id);
+							clip.appendChild(use);
+							defs.appendChild(clip);
+						}
+						path.setAttribute('clip-path', 'url(#' + id + '-clip)');
+					});
+					return inner;
+				}
+				function bandLayer(data, style, each, prop) {
+					var inside = [];
+					var width = (style && style.weight) || 3;
+					var layer = L.geoJSON(data, { style: style, onEachFeature: function(f, base) {
+						if(each) { each(f, base); }
+						var list = f.properties && f.properties[prop];
+						var cols = Array.isArray(list)
+							? list.filter(function(c) { return typeof c === 'string' && /^#[0-9a-fA-F]{6}$/.test(c); }) : [];
+						if(!cols.length || !base.setStyle) { return; }
+						if(!(base instanceof L.Polygon)) {
+							base.setStyle({ color: cols[0] });
+							return;
+						}
+						base.setStyle({ color: cols[0], opacity: 0, weight: 2 * cols.length * width });
+						for(var j = cols.length - 1; j >= 0; j--) {
+							inside.push(bandInside(base, style || {}, cols[j], 2 * (j + 1) * width));
+						}
+					} });
+					inside.forEach(function(l) { layer.addLayer(l); });
+					return layer;
+				}
+JS
+
 # _geojson_js: The JavaScript that draws the GeoJSON layers, and the layer
 #          control when any of them has a name.
 # Purpose: Unnamed layers are drawn as before, one statement each.  Named
@@ -1942,33 +2051,48 @@ sub _geojson_js
 
 	my $out = '';
 	my (@names, %group_of, %shown, %key_of);
+	my $named_bands = 0;	# whether a named layer is banded
 	for my $layer (@$layers) {
 		my $json     = _html_json($layer->{data});
 		my $opts     = $layer->{opts} || {};
 		my $style_js = '';
 		my $popup_js = '';
+		my $each_js  = '';
 		if(my $style = $opts->{style}) {
 			$style_js = 'style: ' . _html_json($style) . ',';
 		}
 		if(my $prop = $opts->{popup}) {
 			my $js_prop = _js_string($prop);
-			$popup_js = "onEachFeature: function(f,l){ if(f.properties && f.properties['$js_prop']){ l.bindPopup(String(f.properties['$js_prop'])); } },";
+			$each_js  = "function(f,l){ if(f.properties && f.properties['$js_prop']){ l.bindPopup(String(f.properties['$js_prop'])); } }";
+			$popup_js = "onEachFeature: $each_js,";
 		}
 		my $js = "L.geoJSON($json, { $style_js $popup_js })";
+		# A banded layer is drawn by bandLayer, which needs the style and
+		# the popup function apart, to give them to its inner lines too
+		my $bands = $opts->{bands};
+		$bands = undef if ref($bands) || !length($bands // '');
+		if(defined $bands) {
+			$js = "bandLayer($json, " . ($opts->{style} ? _html_json($opts->{style}) : 'null')
+				. ', ' . ($each_js || 'null') . ", '" . _js_string($bands) . "')";
+		}
 
 		my $name = $opts->{name};
 		my $key  = ref($opts->{key}) eq 'HASH' ? $opts->{key} : undef;
 		if(!defined($name) || ref($name) || !length($name)) {
 			if($key) {
 				# Always drawn, so its key always shows
-				$out .= "\t\t\t(function() {\n$LAYER_KEY_JS\t\t\t\tlayerKey($js.addTo(map), "
-					. _html_json($key) . ");\n\t\t\t})();\n";
+				$out .= "\t\t\t(function() {\n$LAYER_KEY_JS" . (defined($bands) ? $BAND_JS : '')
+					. "\t\t\t\tlayerKey($js.addTo(map), " . _html_json($key) . ");\n\t\t\t})();\n";
+			} elsif(defined $bands) {
+				# Its functions are kept out of the page's scope
+				$out .= "\t\t\t(function() {\n$BAND_JS\t\t\t\t$js.addTo(map);\n\t\t\t})();\n";
 			} else {
 				$out .= "\t\t\t$js.addTo(map);\n";
 			}
 			next;
 		}
 		$key_of{$name} //= $key if $key;
+		$named_bands = 1 if defined $bands;
 		unless(exists $group_of{$name}) {
 			push @names, $name;
 			$group_of{$name} = [];
@@ -1982,6 +2106,7 @@ sub _geojson_js
 
 	$out .= "\t\t\t(function() {\n\t\t\t\tvar overlays = {};\n\t\t\t\tvar group;\n";
 	$out .= $LAYER_KEY_JS if %key_of;
+	$out .= $BAND_JS if $named_bands;
 	for my $name (@names) {
 		my $label = _js_string(_html_attr($name));
 		$out .= "\t\t\t\tgroup = L.layerGroup([" . join(', ', @{$group_of{$name}}) . "]);\n";

@@ -47,3 +47,5 @@ geojson
 innerHTML
 layerGroup
 layerKey
+bandLayer
+bandInside

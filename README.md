@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 ## Version
 
-Version 0.16
+Version 0.17
 
 ## Synopsis
 
@@ -406,6 +406,9 @@ show  : boolean   Whether a named layer is drawn when the map opens (default 1)
 key   : hashref   A key to the layer's colours, shown while the layer is
                   (see L</LAYER KEY>):
                   { entries => [ { label, colour }, ... ], title?, position? }
+bands : string    Feature property holding a list of colours, each drawn
+                  as a line of its own along the outline, side by side
+                  (see L</BANDS>)
 ```
 
 ##### Output
@@ -424,6 +427,7 @@ key   : hashref   A key to the layer's colours, shown while the layer is
 | add_geojson: show must not be a reference | show is a reference             |
 | add_geojson: key ...                      | key is unusable; the message    |
 |                                           | says which part                 |
+| add_geojson: bands must be a string       | bands is a reference or empty   |
 ```
 
 #### Layer Control
@@ -478,6 +482,30 @@ shows.
 
 Layers that share a name share one key: the first `key` given for that name.
 Every text reaches the page as text, never as HTML.
+
+#### Bands
+
+```perl
+# Kent's outline is red outside and blue inside; Surrey's is all green
+$kent->{properties}{colours}   = [ '#d73027', '#4575b4' ];
+$surrey->{properties}{colours} = [ '#1a9850' ];
+$map->add_geojson({ type => 'FeatureCollection', features => [ $kent, $surrey ] },
+    style => { weight => 2, fill => 0 }, bands => 'colours');
+```
+
+`bands` names a feature property that holds a list of colours (`#rrggbb`),
+for an area that belongs to more than one group.  A polygon with one colour is
+drawn in it, at the width `style` gives.  With two, the line is twice as wide:
+the first colour on the outer half, the second on the inner half, so both can
+be told apart along the whole outline.  Each further colour is another line of
+that width, further inside.  A feature without the property, or with no colour
+that can be used, is drawn as `style` says.  Only polygons are banded; a line
+or point takes the first colour.
+
+The inner lines are cut to the inside of the polygon, which needs Leaflet's
+default SVG drawing.  A map drawn on a canvas shows them uncut: the last colour
+then runs down the middle of the line, with the others either side.  A popup
+opens from the outline as before.
 
 #### Examples
 

@@ -1,5 +1,13 @@
 Revision history for HTML-OSM
 
+0.17
+	[ Enhancements ]
+	- add_geojson() takes bands: a feature property holding a list of
+	  colours.  Each polygon's line is drawn just inside its edge, so where
+	  two share a border each colour is on its own side.  A polygon with
+	  several colours gets a line of each, side by side.
+	  t/layer-bands.t
+
 0.16	Mon Nov  9 03:45:08 PM EST 2026
 	[ Enhancements ]
 	- add_geojson() takes key: a key to a layer's colours, a line of each
