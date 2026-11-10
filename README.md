@@ -407,7 +407,7 @@ key   : hashref   A key to the layer's colours, shown while the layer is
                   (see L</LAYER KEY>):
                   { entries => [ { label, colour }, ... ], title?, position? }
 bands : string    Feature property holding a list of colours, each drawn
-                  as a line of its own along the outline, side by side
+                  as a line of its own just inside the outline, side by side
                   (see L</BANDS>)
 ```
 
@@ -486,26 +486,30 @@ Every text reaches the page as text, never as HTML.
 #### Bands
 
 ```perl
-# Kent's outline is red outside and blue inside; Surrey's is all green
+# Kent's outline is red with blue inside it; Surrey's is all green
 $kent->{properties}{colours}   = [ '#d73027', '#4575b4' ];
 $surrey->{properties}{colours} = [ '#1a9850' ];
 $map->add_geojson({ type => 'FeatureCollection', features => [ $kent, $surrey ] },
     style => { weight => 2, fill => 0 }, bands => 'colours');
 ```
 
-`bands` names a feature property that holds a list of colours (`#rrggbb`),
-for an area that belongs to more than one group.  A polygon with one colour is
-drawn in it, at the width `style` gives.  With two, the line is twice as wide:
-the first colour on the outer half, the second on the inner half, so both can
-be told apart along the whole outline.  Each further colour is another line of
-that width, further inside.  A feature without the property, or with no colour
+`bands` names a feature property that holds a list of colours (`#rrggbb`).
+A polygon's outline is then drawn just inside its edge, not along the middle
+of it, in a line of the width `style` gives.  So where two polygons share a
+border, each one's colour is on its own side: the border reads as a line twice
+as wide, a different colour either side, and neither hides the other.
+
+A polygon with several colours, for an area that belongs to more than one
+group, gets a line of each, side by side: the first against the edge, each
+further one further inside.  A feature without the property, or with no colour
 that can be used, is drawn as `style` says.  Only polygons are banded; a line
 or point takes the first colour.
 
-The inner lines are cut to the inside of the polygon, which needs Leaflet's
-default SVG drawing.  A map drawn on a canvas shows them uncut: the last colour
-then runs down the middle of the line, with the others either side.  A popup
-opens from the outline as before.
+The lines are cut to the inside of the polygon, which needs Leaflet's default
+SVG drawing.  A map drawn on a canvas shows them uncut, along the middle of the
+edge, the first colour on top.  A popup opens from the outline as before.
+Neighbours' lines meet exactly only where their shared border is the same in
+both polygons; outlines simplified one at a time leave small gaps or overlaps.
 
 #### Examples
 
