@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 ## Version
 
-Version 0.17
+Version 0.18
 
 ## Synopsis
 
@@ -405,7 +405,8 @@ name  : string    Label of the layer's checkbox in the map's layer control
 show  : boolean   Whether a named layer is drawn when the map opens (default 1)
 key   : hashref   A key to the layer's colours, shown while the layer is
                   (see L</LAYER KEY>):
-                  { entries => [ { label, colour }, ... ], title?, position? }
+                  { entries => [ { label, colour }, ... ], title?, position?,
+                    shape? }
 bands : string    Feature property holding a list of colours, each drawn
                   as a line of its own just inside the outline, side by side
                   (see L</BANDS>)
@@ -479,6 +480,11 @@ shows.
 
     `bottomright` (the default), `bottomleft`, `topright` or `topleft`.  The
     marker key (`legend`) and the layer control are top right by default.
+
+- `shape`
+
+    `line` (the default) draws each entry's colour as a short line, for a layer
+    of outlines; `box` draws a filled box, for a layer whose areas are filled.
 
 Layers that share a name share one key: the first `key` given for that name.
 Every text reaches the page as text, never as HTML.

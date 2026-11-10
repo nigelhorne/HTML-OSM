@@ -24,11 +24,11 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 =head1 VERSION
 
-Version 0.17
+Version 0.18
 
 =cut
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 # CDN URLs pinned to tested versions.  Override via constructor params to use
 # a self-hosted copy or a different version.
@@ -82,6 +82,9 @@ Readonly::Scalar my $LEGEND_SWATCH_MAX       => 25;
 # Where a GeoJSON layer's key goes: away from the marker key and the layer
 # control, which are top right.
 Readonly::Scalar my $DEFAULT_KEY_POSITION    => 'bottomright';
+# How a layer key draws an entry's colour: a line, as an outline, or a filled
+# box, as a filled area.  The first is the default.
+Readonly::Array my @KEY_SHAPES => qw(line box);
 
 =head1 SYNOPSIS
 
@@ -608,7 +611,8 @@ Returns 1 on success.
   show  : boolean   Whether a named layer is drawn when the map opens (default 1)
   key   : hashref   A key to the layer's colours, shown while the layer is
                     (see L</LAYER KEY>):
-                    { entries => [ { label, colour }, ... ], title?, position? }
+                    { entries => [ { label, colour }, ... ], title?, position?,
+                      shape? }
   bands : string    Feature property holding a list of colours, each drawn
                     as a line of its own just inside the outline, side by side
                     (see L</BANDS>)
@@ -677,6 +681,11 @@ Text printed above the entries.
 
 C<bottomright> (the default), C<bottomleft>, C<topright> or C<topleft>.  The
 marker key (C<legend>) and the layer control are top right by default.
+
+=item C<shape>
+
+C<line> (the default) draws each entry's colour as a short line, for a layer
+of outlines; C<box> draws a filled box, for a layer whose areas are filled.
 
 =back
 
@@ -1941,8 +1950,13 @@ Readonly::Scalar my $LAYER_KEY_JS => <<'JS';
 							var row = document.createElement('div');
 							row.className = 'html-osm-legend-entry';
 							var swatch = document.createElement('span');
-							swatch.style.cssText = 'display: inline-block; vertical-align: middle; margin-right: 6px; width: 18px; height: 0;';
-							swatch.style.borderTop = '3px solid ' + e.colour;
+							if(k.shape === 'box') {
+								swatch.style.cssText = 'display: inline-block; vertical-align: middle; margin-right: 6px; width: 16px; height: 12px; border: 1px solid rgba(0,0,0,0.35);';
+								swatch.style.background = e.colour;
+							} else {
+								swatch.style.cssText = 'display: inline-block; vertical-align: middle; margin-right: 6px; width: 18px; height: 0;';
+								swatch.style.borderTop = '3px solid ' + e.colour;
+							}
 							row.appendChild(swatch);
 							row.appendChild(document.createTextNode(e.label));
 							div.appendChild(row);
@@ -2149,7 +2163,11 @@ sub _layer_key
 	croak 'add_geojson: key position must be one of ' . join(', ', @LEGEND_POSITIONS)
 		unless !ref($position) && grep { $_ eq $position } @LEGEND_POSITIONS;
 
-	my %out = (entries => \@checked, position => $position);
+	my $shape = $key->{shape} // $KEY_SHAPES[0];
+	croak 'add_geojson: key shape must be one of ' . join(', ', @KEY_SHAPES)
+		unless !ref($shape) && grep { $_ eq $shape } @KEY_SHAPES;
+
+	my %out = (entries => \@checked, position => $position, shape => $shape);
 	if(defined(my $title = $key->{title})) {
 		croak 'add_geojson: key title must be text' if ref($title);
 		$out{title} = "$title" if length($title);

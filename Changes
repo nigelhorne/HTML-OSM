@@ -1,5 +1,10 @@
 Revision history for HTML-OSM
 
+0.18	Tue Nov 10 08:51:19 AM EST 2026
+	[ Enhancements ]
+	- add_geojson()'s key takes shape => 'box': each entry's colour is drawn
+	  as a filled box instead of a line, for a layer whose areas are filled.
+
 0.17	Mon Nov  9 09:22:11 PM EST 2026
 	[ Enhancements ]
 	- add_geojson() takes bands: a feature property holding a list of
