@@ -4,7 +4,7 @@ HTML::OSM - Generate an interactive OpenStreetMap with Leaflet.js
 
 ## Version
 
-Version 0.18
+Version 0.19
 
 ## Synopsis
 
@@ -155,8 +155,17 @@ default is no scale bar.
     entries for what can be seen.  A marker hidden in a cluster still counts.
     An entry without a group is always listed.
 
+- `unless_layer`
+
+    The name of a GeoJSON layer (`add_geojson`'s `name`).  The entry is listed
+    only while that layer is hidden: for an entry the layer's own `key` stands in
+    for while the layer is shown, so the reader is not given the same colours
+    twice.  When the reader unticks the layer, its key goes and the entry comes
+    back.  A name no layer has leaves the entry always listed.
+
 When no entry is listed, the key says `legend_empty`, by default
-"Nothing in this view".
+"Nothing in this view".  When every entry is left out for a layer that is
+shown (`unless_layer`), the key is not drawn at all.
 
 `new()` croaks on an entry it cannot use, and on an unknown position.
 Values from a config file or a clone skip that check, so `onload_render()`
